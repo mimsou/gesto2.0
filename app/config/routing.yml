@@ -1,0 +1,83 @@
+ArticleBcn:
+    resource: "@AppBundle/articleBcnController"
+    type:     rest
+    prefix:   /api/
+
+Article:
+    resource: "@AppBundle/articleController"
+    type:     rest
+    prefix:   /api/
+    
+Bcn:
+    resource: "@AppBundle/bcnController"
+    type:     rest
+    prefix:   /api/
+
+Crb:
+    resource: "@AppBundle/crbController"
+    type:     rest
+    prefix:   /api/
+
+Etat:
+    resource: "@AppBundle/etatController"
+    type:     rest
+    prefix:   /api/
+
+Facture:
+    resource: "@AppBundle/factureController"
+    type:     rest
+    prefix:   /api/
+
+
+Fondtype:
+    resource: "@AppBundle/fondtypeController"
+    type:     rest
+    prefix:   /api/
+
+
+Fournisseur:
+    resource: "@AppBundle/fournisseurController"
+    type:     rest
+    prefix:   /api/
+
+
+Renouvellement:
+    resource: "@AppBundle/renouvellementController"
+    type:     rest
+    prefix:   /api/
+
+
+Service:
+    resource: "@AppBundle/serviceController"
+    type:     rest
+    prefix:   /api/
+
+
+Solde:
+    resource: "@AppBundle/soldeController"
+    type:     rest
+    prefix:   /api/
+    
+    
+User:
+    resource: "@AppBundle/userController"
+    type:     rest
+    prefix:   /api/
+
+Entity:
+    resource: "@AppBundle/modelParser"
+    type:     rest
+    prefix:   /api/
+
+Manager:
+    resource: "@AppBundle/managerController"
+    type:     rest
+    prefix:   /api/
+    
+api_login_check:
+    path: /api/login_check
+
+
+    
+
+

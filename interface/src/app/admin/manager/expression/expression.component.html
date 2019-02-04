@@ -1,0 +1,7 @@
+
+<div >
+    <button (click)="validateExpression()"  size="xsmall" class="btn btn-xs btn-dark" >Valider l'expression</button>
+</div>
+<div  style="height: 255px">
+    <textarea type="text"  [ngClass]="{'error':isValid()}"   class="expressionarea" style="width: 100%;height: 250px;"    ></textarea>
+</div>

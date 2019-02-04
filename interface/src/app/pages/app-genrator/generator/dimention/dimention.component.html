@@ -1,0 +1,29 @@
+<div class="row">
+<div class="col-md" *ngFor="let entDimData of entityDimData" containerFlex>
+
+  <div inlineelement style="font-size: 1rem;" >
+    {{entDimData.param.entityInterfaceName}}
+  </div>
+  <div inlineelement>
+    <ngx-autocombo (valueChange)="goToSearch($event)" [entity]="entDimData.param.entityEntity" [(value)]="entDimData.data" ></ngx-autocombo>
+  </div>
+
+
+</div>
+
+  <div class="col-md" *ngFor="let fldDimData of fieldDimData" containerFlex>
+
+    <div inlineelement style="font-size: 1rem;" >
+      {{fldDimData.param.fieldInterfaceName}}
+    </div>
+    <div inlineelement *ngIf="fldDimData.param.fieldType !== 'datetime'" >
+      <input (keyup)="goToSearch()" nbInput  fieldSize="xsmall"  [(value)]="fldDimData.data" >
+    </div>
+   <div inlineelement *ngIf="fldDimData.param.fieldType == 'datetime'" >
+      <input (onChange)="goToSearch()" nbInput [dpDayPicker]="datePickerConfig"  fieldSize="xsmall"  [(ngModel)]="fldDimData.data" >
+  </div>
+
+
+
+  </div>
+</div>

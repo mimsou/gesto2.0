@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="66969e83-e9fe-4eae-a6f1-e3f2f46aa0df" name="sgs" url="http://10.0.2.1">
+        <fileTransfer host="10.0.2.1" port="21" rootFolder="/INVENTAIRE">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" showHiddenFiles="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

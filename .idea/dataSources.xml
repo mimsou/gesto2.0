@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="AS400" uuid="eb00747e-e581-4f54-b1be-d0c9c6b80318">
+      <driver-ref>db2.jtopen</driver-ref>
+      <jdbc-driver>com.ibm.as400.access.AS400JDBCDriver</jdbc-driver>
+      <jdbc-url>jdbc:as400://10.1.1.1:50000/sgsfic</jdbc-url>
+      <explain-plan-config>
+        <provider>com.intellij.database.plan.ExplainPlanProvider.NullExplainPlanProvider</provider>
+      </explain-plan-config>
+      <driver-properties>
+        <property name="prompt" value="false" />
+      </driver-properties>
+    </data-source>
+  </component>
+</project>

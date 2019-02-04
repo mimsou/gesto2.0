@@ -1,0 +1,1327 @@
+<nb-reveal-card #revealpage full-heigth full-heigth-all-child>
+    <nb-card-front full-heigth full-heigth-all-child>
+        <nb-card nostylecard full-heigth full-heigth-all-child>
+
+            <div class="row" full-heigth>
+
+
+                <div class="col-md-5 row">
+
+
+                    <div class="col-md-6" half-heigth padingreversed>
+
+
+                        <nb-card full-heigth full-heigth-all-child>
+
+                            <nb-card-header noborder style="text-align: center !important">
+                                <div title>Roles</div>
+
+                                <ngx-one-input-form [placeholder]="roleplaceholder"
+                                                    (newItem)="onAddRole($event)"></ngx-one-input-form>
+
+                            </nb-card-header>
+
+
+                            <nb-card-body>
+
+                                <nb-list full-heigth>
+
+
+                                    <nb-list-item (click)="ToggleSelectedRole(role,$event)"
+                                                  [ngClass]="{'selectedListr' : role.roleId == selectedrole  }"
+                                                  menuPadding
+                                                  *ngFor="let role of roles" forceOverFlow>
+
+
+                                        <div containerFlex>
+                                            <div inlineelement>
+                                            </div>
+                                            <div inlineelement>
+                                                <input-edit [iseditable]="editable" (onSave)="saveRole(role)"
+                                                            [(value)]='role.roleLibelle'
+                                                            [full]="true"></input-edit>
+
+                                            </div>
+                                            <div inlineelement>
+                                                <i colorPrimary ActionIcone
+                                                   [ngClass]="{'fa-link' : role.roleId == selectedrole  }"
+                                                   class="fa "> </i>
+                                                <i colorPrimary ActionIcone (click)="deleteRole(role)"
+                                                   class="fa fa-times"> </i>
+                                            </div>
+                                        </div>
+
+                                    </nb-list-item>
+                                </nb-list>
+
+                            </nb-card-body>
+
+                        </nb-card>
+
+
+                    </div>
+
+                    <div class="col-md-6" half-heigth padingreversed>
+
+                        <nb-flip-card #flipuser full-heigth full-heigth-all-child>
+                            <nb-card-front full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header displayingride noborder style="text-align: center !important">
+                                        <div title>Utilisateurs</div>
+                                        <ngx-one-input-form [placeholder]="utilisateurplaceholder"
+                                                            (onkeyUp)="onSearchUser($event)"
+                                                            (newItem)="onAddUser($event)"></ngx-one-input-form>
+                                    </nb-card-header>
+                                    <nb-card-body>
+
+
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let usr of users"
+                                                          [ngClass]="{'selectedList' : roleInUserRole(usr.role)  }"
+                                                          (click)="ToggleSelectUser(usr,$event)" menuPadding>
+                                                <div containerFlex>
+                                                    <div inlineelement>
+                                                        <strong>{{usr.UserName}}</strong>
+                                                    </div>
+                                                    <div inlineelement>
+
+                                                        <i colorPrimary ActionIcone
+                                                           [ngClass]="{'fa-check-circle' : roleInUserRole(usr.role)}"
+                                                           *ngIf="selectedrole != ''" class="fa"></i>
+                                                        <i colorPrimary ActionIcone (click)="deleteUser(usr)"
+                                                           class="fa fa-times"> </i>
+
+
+                                                    </div>
+                                                </div>
+                                            </nb-list-item>
+                                        </nb-list>
+
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-front>
+                            <nb-card-back (click)="stopClick($event)" full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder>
+                                        <div title>Ajouter un utilisateur</div>
+                                    </nb-card-header>
+                                    <nb-card-body>
+
+                                        <form [formGroup]="userformcontrole" (ngSubmit)="onSubmitUserDetails()">
+                                            <input type="text" [(ngModel)]="userform.UserName" nbInput fullWidth
+                                                   fieldSize="medium" placeholder="Nom"
+                                                   formControlName="username"><br><br>
+                                            <input type="text" [(ngModel)]="userform.UserEmail" nbInput fullWidth
+                                                   fieldSize="medium" placeholder="E-mail"
+                                                   formControlName="useremail"><br><br>
+                                            <input type="password" [(ngModel)]="userform.UserPasworld" nbInput fullWidth
+                                                   fieldSize="medium" placeholder="Mot de passe"
+                                                   formControlName="userpasword"><br><br>
+                                            <input type="password" nbInput fullWidth fieldSize="medium"
+                                                   placeholder="Mot de passe" formControlName="secandpass"><br><br>
+                                            <button style="margin-right: 10px;" [disabled]="!userformcontrole.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Sauvegarder
+                                            </button>
+
+                                            <button (click)="flipusers.flipped = false" nbButton type="submit"
+                                                    size="xsmall">
+                                                Annuler
+                                            </button>
+                                        </form>
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-back>
+                        </nb-flip-card>
+
+                    </div>
+
+
+                    <div class="col-md-12" half-heigth>
+                        <nb-card full-heigth>
+
+                            <nb-card-header noborder>
+                                <div title>Liste des liens</div>
+                            </nb-card-header>
+
+                        </nb-card>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <nb-card full-heigth>
+
+
+                        <nb-card-header noborder>
+                            <div title>Menu principale</div>
+                            <ngx-one-input-form [placeholder]="menuplaceholder"
+                                                (newItem)="onAddMenu($event)"></ngx-one-input-form>
+
+                        </nb-card-header>
+
+
+                        <nb-card-body>
+
+
+                            <nb-list full-heigth>
+
+
+                                <nb-list-item menuPadding *ngFor="let menu of menus" forceOverFlow
+                                              (click)="stopClick($event)">
+
+
+                                    <div containerFlex>
+                                        <div inlineelement><i colorPrimary ActionIcone
+                                                              [nbPopover]="popContent"
+                                                              nbPopoverPlacement="right" class="fa fa-caret-down"></i>
+                                        </div>
+                                        <div inlineelement>
+                                            <input-edit [iseditable]="editable" (onSave)="saveMenu(menu)"
+                                                        [(value)]='menu.menuLibelle'
+                                                        [full]="true"></input-edit>
+
+                                        </div>
+                                        <div inlineelement>
+                                            <i colorPrimary ActionIcone (click)="deleteMenu(menu)"
+                                               class="fa fa-times"> </i>
+                                        </div>
+                                    </div>
+
+
+                                    <ng-template #popContent>
+
+
+                                        <div submenuheader> {{menu.menuLibelle}}</div>
+
+                                        <div style="height: 150px;">
+
+                                            <nb-list full-heigth style="width: 300px;" dndDropzone class="dndList"
+                                                     (dndDrop)="onDropMenuList($event, menu.link, menu)">
+
+                                                <nb-list-item [ngClass]="{'selectedList' : roleInLinkRole(lnk.role)  }"
+                                                              (click)="ToggleSelectLink(lnk,$event)" menuPadding
+                                                              *ngFor="let lnk of menu.link" forceOverFlow
+                                                              [dndDraggable]="lnk"
+                                                              dndEffectAllowed="move"
+                                                              (dndMoved)="onDragged(lnk,  menu.link)">
+
+
+                                                    <div containerFlex>
+
+                                                        <div inlineelement>
+                                                            <input-edit [iseditable]="editable" (onSave)="saveMenu(lnk)"
+                                                                        [(value)]='lnk.menuLibelle'
+                                                                        [full]="true"></input-edit>
+                                                        </div>
+
+                                                        <div inlineelement>
+                                                            <i colorPrimary ActionIcone
+                                                               [ngClass]="{'fa-check-circle' : roleInLinkRole(lnk.role)}"
+                                                               *ngIf="selectedrole != ''" class="fa"></i>
+                                                        </div>
+
+                                                    </div>
+
+                                                </nb-list-item>
+
+                                            </nb-list>
+                                        </div>
+
+
+                                    </ng-template>
+
+
+                                </nb-list-item>
+
+
+                            </nb-list>
+
+
+                        </nb-card-body>
+
+                    </nb-card>
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <nb-card full-heigth>
+
+                        <nb-card-header noborder>
+                            <div title>Interfaces</div>
+                        </nb-card-header>
+
+                        <nb-card-body>
+
+                            <nb-list dndDropzone class="dndList" (dndDrop)="onDropLinkList($event, link)" full-heigth>
+
+                                <nb-list-item [ngClass]="{'selectedList' : roleInLinkRole(lnk.role)  }"
+                                              (click)="ToggleSelectLink(lnk,$event)" menuPadding
+                                              *ngFor="let lnk of link"
+                                              forceOverFlow dndPlaceholderRef
+                                              [dndDraggable]="lnk"
+                                              dndEffectAllowed="move" (dndMoved)="onDragged(lnk, link)">
+                                    <div containerFlex>
+                                        <div inlineelement>
+                                            <input-edit [iseditable]="editable" (onSave)="saveMenu(lnk)"
+                                                        [(value)]='lnk.menuLibelle'
+                                                        [full]="true"></input-edit>
+                                        </div>
+                                        <div inlineelement>
+                                            <i colorPrimary ActionIcone
+                                               [ngClass]="{'fa-check-circle' : roleInLinkRole(lnk.role)}"
+                                               *ngIf="selectedrole != ''" class="fa"></i>
+                                        </div>
+                                    </div>
+
+                                </nb-list-item>
+
+
+                                <nb-list-item dndPlaceholderRef></nb-list-item>
+
+
+                            </nb-list>
+
+
+                        </nb-card-body>
+
+                    </nb-card>
+
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <nb-card full-heigth>
+
+                        <nb-card-header noborder>
+                            Actions
+                        </nb-card-header>
+
+                        <nb-card-body>
+
+                            <nb-list full-heigth>
+
+                                <nb-list-item [ngClass]="{'selectedList' : roleInLinkRole(ap.role)}"
+                                              (click)="ToggleSelectAp(ap,$event)" menuPadding *ngFor="let ap of aps"
+                                              forceOverFlow>
+                                    <div containerFlex>
+                                        <div inlineelement>
+                                            {{ap.apLibelle}}
+                                        </div>
+                                        <div inlineelement>
+                                            <i colorPrimary ActionIcone
+                                               [ngClass]="{'fa-check-circle' : roleInLinkRole(ap.role)}"
+                                               *ngIf="selectedrole != ''" class="fa"></i>
+                                        </div>
+                                    </div>
+
+                                </nb-list-item>
+
+                            </nb-list>
+
+
+                        </nb-card-body>
+
+                    </nb-card>
+
+
+                </div>
+
+
+            </div>
+        </nb-card>
+    </nb-card-front>
+
+    <nb-card-back full-heigth full-heigth-all-child>
+
+        <nb-card full-heigth full-heigth-all-child trasback>
+
+            <div class="row" full-heigth>
+
+
+                <div class="col-md-10 row" full-heigth>
+
+                    <div class="col-md-2" row style="height: 70%">
+
+
+                        <nb-card half-heigth full-heigth-all-child>
+
+
+                            <nb-card-header>
+                                <div title>Process</div>
+                                <ngx-one-input-form [placeholder]="pprocessplaceholder"
+                                                    (newItem)="onAddProcess($event)"></ngx-one-input-form>
+                            </nb-card-header>
+
+                            <nb-card-body>
+
+
+                                <nb-list>
+                                    <nb-list-item *ngFor="let proc of process" menuPadding
+                                                  (click)="selectProcess(proc,$event)"
+                                                  [ngClass]="{'selectedList' :  proc.processId == selectedProcess.processId  }">
+                                        <div containerFlex>
+
+                                            <div inlineelement>
+                                                <strong>{{proc.processDesignation}}</strong>
+                                            </div>
+
+                                            <div inlineelement>
+
+                                                <i colorPrimary ActionIcone
+                                                   (click)="deleteProcess(proc.processId,$event)"
+                                                   class="fa fa-times"> </i>
+
+                                            </div>
+                                        </div>
+                                    </nb-list-item>
+                                </nb-list>
+
+                            </nb-card-body>
+
+
+                        </nb-card>
+
+
+                        <nb-flip-card #flipdim half-heigth full-heigth-all-child>
+
+                            <nb-card-front full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder style="text-align: center !important">
+                                        <div title>Dimention</div>
+                                        <button nbButton size="xsmall" (click)="onAddDim($event)">+</button>
+                                    </nb-card-header>
+
+                                    <nb-card-body>
+
+
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let dimEnt of EntityDimention" menuPadding
+                                                          (click)="selectEntityDimention(dimEnt,$event)"
+                                                          [ngClass]="{'selectedList' :  dimEnt.entityId == selectedEntityDimention.entityId  }">
+                                                <div containerFlex>
+                                                    <div inlineelement>
+                                                        <strong>{{dimEnt.entityEntity}}</strong>
+                                                    </div>
+                                                    <div inlineelement>
+
+                                                        <i colorPrimary ActionIcone
+                                                           class="fa fa-times"
+                                                           (click)="deleteFldDim(dimEnt.entityId,'ent',$event)"> </i>
+
+
+                                                    </div>
+                                                </div>
+                                            </nb-list-item>
+                                        </nb-list>
+
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let fieldim of FieldDimention" menuPadding
+                                                          (click)="selectFieldDimention(fieldim,$event)"
+                                                          [ngClass]="{'selectedList' :  fieldim.fieldId == selectedFieldDimention.fieldId  }">
+                                                <div containerFlex>
+                                                    <div inlineelement>
+                                                        <strong>{{fieldim.fieldEntityName}}</strong>
+                                                    </div>
+                                                    <div inlineelement>
+
+                                                        <i colorPrimary ActionIcone
+                                                           class="fa fa-times"
+                                                           (click)="deleteFldDim(fieldim.fieldId,'fld',$event)"> </i>
+
+
+                                                    </div>
+                                                </div>
+                                            </nb-list-item>
+                                        </nb-list>
+
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-front>
+                            <nb-card-back (click)="stopClick($event)" full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder>
+                                        <div title>Ajouter une liste</div>
+                                    </nb-card-header>
+                                    <nb-card-body>
+
+                                        <form [formGroup]="dimformcontrole" (ngSubmit)="onSubmitDimDetails()">
+
+                                            <input type="text" *ngIf="dimform.type == 2"
+                                                   [ngModelOptions]="{standalone: true}" [(ngModel)]="dimform.fieldId"
+                                                   nbInput fullWidth
+                                                   fieldSize="xsmall" placeholder="Entity">
+
+                                            <input *ngIf="dimform.type == 1" type="text"
+                                                   [ngModelOptions]="{standalone: true}" [(ngModel)]="dimform.entityId"
+                                                   nbInput fullWidth
+                                                   fieldSize="xsmall" placeholder="Field">
+
+                                            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="dimform.type"
+                                                    nbInput fullWidth fieldSize="xsmall" placeholder="Type">
+                                                <option value="1">Entity field Asscoiation</option>
+                                                <option value="2">Field</option>
+                                            </select>
+
+                                            <br><br>
+
+                                            <button style="margin-right: 10px;"
+                                                    [disabled]="!dimformcontrole.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Ajouter
+                                            </button>
+
+                                            <button (click)="flipdim.flipped = false" nbButton type="submit"
+                                                    size="xsmall">
+                                                Annuler
+                                            </button>
+                                        </form>
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-back>
+                        </nb-flip-card>
+
+
+                    </div>
+
+
+                    <div id="plumbcontainer" class="col-md-10" style="height: 75%">
+                        <div entityoption>
+                            <i (click)="refrechRelationalEntity($event)"
+                                             style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
+                            Rafréchir
+                        </div>
+
+                        <div roleoption>
+                            <i (click)="refrechRelationalEntity($event)"
+                               style="font-size: 16px; margin-top: 10px;" class="fa fa-lock"></i>
+                            Role<br>
+                            <ng-select2 (click)="onRoleOptionClick($event)"  [width]="200"    [(ngModel)]="valueRole" (valueChanged)="setRoleValue($event)" ngControl="value"  [data]="dataRole" >
+
+                            </ng-select2>
+                        </div>
+
+                        <div (click)="onSelectEntity(entitie,$event )" entitiContainer *ngFor="let entitie of entities"
+                             id="ent_{{entitie.entityId}}" [id]='"ent_"+entitie.entityId'
+                             [style.top]="entitie.entityPos.split(',')[0]+'px'"
+                             [style.left]="entitie.entityPos.split(',')[1]+'px'"
+                             [ngClass]="{'ent_highlight' :  exist(entitie.entityId , selectedArborecence, 'entityId') ,'ent_highlight_action' :  exist(entitie.entityId , EntityAction, 'entityId')  ,'ent_highlight_list' :  exist(entitie.entityId , EntityList, 'entityId') }">
+
+                            <div entityHead><strong>{{entitie.entityEntity}}</strong></div>
+
+                            <div entityField>
+
+                                <div fieldItem *ngFor="let field of entitie.fields"
+                                     (click)="onSelectField(field,$event ) "
+                                     id="field_{{entitie.entityId}}_{{field.fieldEntityName}}" entityFieldHover>
+                                    <div containerFlex>
+                                        <div inlineelement>
+                                            {{field.fieldEntityName}}
+                                        </div>
+                                        <div inlineelement>
+
+                                            <i #editUpdate colorInactive ActionIcone
+                                               [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
+                                               *ngIf="entityInEntityAction(entitie.entityId) && viewFieldIsInAction(field)"
+                                               (click)="setExpression(field,$event)"
+                                               class="fa fa-info"></i>
+
+                                            <i #editUpdate colorInactive ActionIcone
+                                               [ngClass]="{'colorPrimary' :  updateFieldIsInAction(field)  }"
+                                               *ngIf="entityInEntityAction(entitie.entityId) && viewFieldIsInAction(field)"
+                                               (click)="updateFieldInAction(field)"
+                                               class="fa fa-edit"></i>
+
+                                            <i #viewUpdate colorInactive ActionIcone
+                                               [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
+                                               *ngIf="entityInEntityAction(entitie.entityId)"
+                                               (click)="viewFieldInAction(field)"
+                                               class="fa fa-th-list"></i>
+
+                                            <i #listUpdate colorInactive ActionIcone
+                                               [ngClass]="{'colorPrimary' :  fieldIsInList(field)  }"
+                                               *ngIf="entityInEntityList(entitie.entityId)"
+                                               (click)="updateFieldInList(field)"
+                                               class="fa fa-list-alt"></i>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--  <div *ngFor="let rel of relations" entityFieldHover>
+                                      <div fieldItem *ngIf="rel.relationEntitie.entityEntity == entitie.entityEntity"
+                                           id="field_{{entitie.entityId}}_{{rel.relationKey}}">
+                                          <div containerFlex>
+                                              <div inlineelement>
+                                                  {{rel.relationKey}}
+                                              </div>
+                                              <div inlineelement>
+                                                  <i colorPrimary ActionIcone
+                                                     class="fa fa-check-circle"></i>
+                                              </div>
+
+                                          </div>
+                                      </div>
+                                  </div> -->
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-2" style="height: 25%;">
+
+                        <nb-flip-card #fliplist full-heigth full-heigth-all-child>
+
+                            <nb-card-front full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder style="text-align: center !important">
+                                        <div title>View</div>
+                                        <button nbButton size="xsmall" (click)="onAddList($event)">+</button>
+                                    </nb-card-header>
+
+                                    <nb-card-body>
+
+
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let lst of allList" menuPadding
+                                                          [ngClass]="{'selectedList' :  lst.listId == selectedList.listId || listInStep( lst.listId ) }"
+                                                          (click)="selectList(lst,$event)">
+                                                <div containerFlex>
+                                                    <div inlineelement>
+                                                        <strong>{{lst.listName}}</strong>
+                                                    </div>
+                                                    <div inlineelement>
+
+                                                        <i *ngIf="lst.listIsMain != 1" colorPrimary ActionIcone
+                                                           class="fa fa-times"
+                                                           (click)="deleteView(lst.listId,$event)"></i>
+                                                        <i  ActionIcone colorInactive (click)="ToggleSelectList(lst,$event)"  [ngClass]="{'colorPrimary' : selectedroleInRoles(lst.role)}" *ngIf="selectedrole !==''"
+                                                            class="fa fa-user" >
+                                                            <span *ngIf="selectedroleInRoles(lst.role)"> Relier</span>
+                                                            <span *ngIf="!selectedroleInRoles(lst.role)"> Non Relier</span>
+                                                        </i>
+                                                    </div>
+                                                </div>
+                                            </nb-list-item>
+                                        </nb-list>
+
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-front>
+                            <nb-card-back (click)="stopClick($event)" full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder>
+                                        <div title>Ajouter une liste</div>
+                                    </nb-card-header>
+                                    <nb-card-body>
+
+                                        <form [formGroup]="listformcontrole" (ngSubmit)="onSubmitListDetails()">
+                                            <input type="text" [(ngModel)]="listform.listName" nbInput fullWidth
+                                                   fieldSize="xsmall" placeholder="Designation"
+                                                   formControlName="listName"><br>
+
+                                            <input type="text" [ngModelOptions]="{standalone: true}"
+                                                   [(ngModel)]="listform.listEntityName" nbInput fullWidth
+                                                   fieldSize="xsmall" placeholder="Entity"
+                                            ><br><br>
+
+                                            <button style="margin-right: 10px;"
+                                                    [disabled]="!listformcontrole.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Ajouter
+                                            </button>
+
+                                            <button (click)="fliplist.flipped = false" nbButton type="submit"
+                                                    size="xsmall">
+                                                Annuler
+                                            </button>
+                                        </form>
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-back>
+                        </nb-flip-card>
+                    </div>
+
+                    <div class="col-md-8" style="height: 25%;">
+
+                        <nb-card full-heigth full-heigth-all-child>
+
+                            <nb-card-header noborder style="text-align: left !important">
+                                <div title>Step</div>
+                                <ngx-one-input-form *ngIf="selectedProcess" [placeholder]="pprocessplaceholder"
+                                                    (newItem)="onAddStep($event)"></ngx-one-input-form>
+                            </nb-card-header>
+
+
+                            <nb-card-body>
+                                <div style="padding-left: 30px;padding-right: 30px; ">
+
+                                    <div class="stepper">
+
+                                        <div style="display: inline-block" (click)="selectStep(step,$event)"
+                                             *ngFor="let step of selectedProcess.steps">
+
+                                            <div class="divider"></div>
+                                            <div class="step " id="step_{{step.stepId}}"
+                                                 [ngClass]="{'active' :  step.stepId == selectedSteps.stepId  }">
+                                                <div class="circle">{{step.stepSequence}}</div>
+                                                <div class="label">{{step.stepName}}<i colorPrimary ActionIcone
+                                                                                       class="fa fa-times"
+                                                                                       (click)="deleteStep(step.stepId,$event)"></i>
+
+                                                    <i  ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"  [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}" *ngIf="selectedrole !==''"
+                                                       class="fa fa-user" >
+                                                        <span *ngIf="selectedroleInRoles(step.role)"> Relier</span>
+                                                        <span *ngIf="!selectedroleInRoles(step.role)"> Non Relier</span>
+                                                    </i>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </nb-card-body>
+
+
+                        </nb-card>
+                    </div>
+
+                    <div class="col-md-2" style="height: 25%;">
+                        <nb-flip-card #flipaction full-heigth full-heigth-all-child>
+                            <nb-card-front full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder style="text-align: center !important">
+                                        <div title>Action</div>
+                                        <button nbButton size="xsmall" (click)="onAddAction($event)">+</button>
+                                    </nb-card-header>
+                                    <nb-card-body>
+
+
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let act of allAction" menuPadding
+                                                          [ngClass]="{'selectedList' :  act.actionId == selectedActions.actionId || actionInStep( act.actionId ) }"
+                                                          (click)="selectAction(act,$event)">
+                                                <div containerFlex>
+                                                    <div inlineelement>
+                                                        <strong>{{act.actionName}}</strong>
+                                                    </div>
+                                                    <div inlineelement>
+
+                                                        <i *ngIf="act.actionType != 1" colorPrimary ActionIcone
+                                                           class="fa fa-times"
+                                                           (click)="deleteAction(act.actionId,$event)"></i>
+                                                        <i  ActionIcone colorInactive (click)="ToggleSelectAction(act,$event)"  [ngClass]="{'colorPrimary' : selectedroleInRoles(act.role)}" *ngIf="selectedrole !==''"
+                                                            class="fa fa-user" >
+                                                            <span *ngIf="selectedroleInRoles(act.role)"> Relier</span>
+                                                            <span *ngIf="!selectedroleInRoles(act.role)"> Non Relier</span>
+                                                        </i>
+
+
+                                                    </div>
+                                                </div>
+                                            </nb-list-item>
+                                        </nb-list>
+
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-front>
+                            <nb-card-back (click)="stopClick($event)" full-heigth full-heigth-all-child>
+
+
+                                <nb-card full-heigth full-heigth-all-child>
+
+                                    <nb-card-header noborder>
+                                        <div title>Ajouter une action</div>
+                                    </nb-card-header>
+                                    <nb-card-body>
+
+                                        <form [formGroup]="actionformcontrole" (ngSubmit)="onSubmitActionDetails()">
+                                            <input type="text" [(ngModel)]="actionform.actionName" nbInput fullWidth
+                                                   fieldSize="xsmall" placeholder="Designation"
+                                                   formControlName="actionName">
+                                            <div *ngIf="!hideActionType" class="panelFormGroup">
+
+                                                Type <select type="text"
+                                                             [(ngModel)]="actionform.actionType"
+                                                             nbInput
+                                                             fullWidth
+                                                             fieldSize="xsmall"
+                                                             formControlName="actionType">
+                                                <option value="2">Generate</option>
+                                                <option value="3">Update</option>
+                                                <option value="4">Delete</option>
+                                            </select></div>
+                                            <br>
+                                            <div *ngIf="!hideActionType" class="panelFormGroup">
+
+                                                Entité :<select type="text" [(ngModel)]="actionform.actionIsmainLevel"
+                                                                formControlName="actionLevelDepth"
+                                                                nbInput
+                                                                fullWidth
+                                                                fieldSize="xsmall"
+                                                                formControlName="actionIsmainLevel">
+                                                <option value="1">Pricipale</option>
+                                                <option value="0">Sub entity only</option>
+
+                                            </select></div>
+                                            <br>
+                                            <div panelFormGroup *ngIf="actionform.actionIsmainLevel==1">
+
+                                                Profondeur : <select type="text"
+                                                                     [(ngModel)]="actionform.actionLevelDepth" nbInput
+                                                                     formControlName="actionLevelDepth"
+                                                                     fullWidth
+                                                                     fieldSize="xsmall"
+                                            >
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+
+                                            </select></div>
+                                            <br>
+                                            <div panelFormGroup *ngIf="actionform.actionLevelDepth==2">
+
+                                                Mode selection : <select type="text"
+                                                                         [(ngModel)]="actionform.actionExistingSubEntity"
+                                                                         formControlName="actionExistingSubEntity"
+                                                                         nbInput
+                                                                         fullWidth
+                                                                         fieldSize="xsmall"
+                                            >
+                                                <option value="1">oui</option>
+                                                <option value="0">non</option>
+
+                                            </select></div>
+                                            <br>
+                                            <div panelFormGroup
+                                                 *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 0) || actionform.actionIsmainLevel == 0">
+
+                                                <input type="text" formControlName="actionEntityName"
+                                                       [(ngModel)]="actionform.actionSubEntity" nbInput fullWidth
+                                                       fieldSize="xsmall" placeholder="Entitée"> <br><br>
+
+                                            </div>
+                                            <br>
+
+                                            <div panelFormGroup
+                                                 *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 1)">
+
+                                                Sub Process : <select type="text"
+                                                                      [(ngModel)]="actionform.actionSubProcess"
+                                                                      formControlName="actionSubProcess"
+                                                                      (change)="SetStepSelection($event.target.value)"
+                                                                      nbInput
+                                                                      fullWidth
+                                                                      fieldSize="xsmall"
+                                            >
+
+                                                <option *ngFor="let pr of process" [value]="pr.processId">
+                                                    {{pr.processDesignation}}
+                                                </option>
+
+                                            </select>
+
+                                            </div>
+                                            <br>
+                                            <div panelFormGroup *ngIf="actionform.actionExistingSubEntity==1">
+
+                                                From step: <select type="text"
+                                                                   [(ngModel)]="actionform.actionFromStep"
+                                                                   formControlName="actionFromStep"
+                                                                   nbInput
+                                                                   fullWidth
+                                                                   fieldSize="xsmall">
+
+                                                <option [value]=""></option>
+                                                <option *ngFor="let stp of subStepSelection" [value]="stp.stepId">
+                                                    {{stp.stepName}}
+                                                </option>
+
+                                            </select>
+
+                                            </div>
+                                            <br>
+                                            <div panelFormGroup
+                                                 *ngIf="actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0">
+
+                                                Add SubEntity : <select type="text"
+                                                                        [(ngModel)]="actionform.actionAddSubEntity"
+                                                                        formControlName="actionAddSubEntity"
+                                                                        nbInput
+                                                                        fullWidth
+                                                                        fieldSize="xsmall"
+                                            >
+                                                <option value="1">oui</option>
+                                                <option value="0">non</option>
+
+                                            </select></div>
+
+
+                                            <div panelFormGroup>
+
+                                                Go to step: <select type="text"
+                                                                    [(ngModel)]="actionform.actionNextStep"
+                                                                    formControlName="actionNextStep"
+                                                                    nbInput
+                                                                    fullWidth
+                                                                    fieldSize="xsmall">
+
+                                                <option [value]=""></option>
+                                                <option *ngFor="let stp of selectedProcess.steps" [value]="stp.stepId">
+                                                    {{stp.stepName}}
+                                                </option>
+
+                                            </select>
+
+                                            </div>
+                                            <br>
+
+                                            <button style="margin-right: 10px;"
+                                                    [disabled]="!actionformcontrole.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Ajouter
+                                            </button>
+
+                                            <button (click)="flipaction.flipped = false" nbButton type="submit"
+                                                    size="xsmall">
+                                                Annuler
+                                            </button>
+                                        </form>
+
+                                    </nb-card-body>
+
+                                </nb-card>
+
+
+                            </nb-card-back>
+                        </nb-flip-card>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-2" full-heigth>
+
+                    <nb-card full-heigth full-heigth-all-child>
+
+                        <nb-card-header noborder style="text-align: center !important">
+                            <div title>Paramétre</div>
+                        </nb-card-header>
+
+
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='expression'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    Expression sur champ : {{selectedField.fieldEntityName}}
+                                </nb-accordion-item-header>
+
+                                <nb-accordion-item-body >
+
+                                    <div   style="height: 500px;">
+                                        <ngx-expression  [optionvar]="allFieldOption" #updateexpression (valueChange)="updateFieldInActionExp($event)" [(value)]="expValu"  ></ngx-expression>
+                                    </div>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+                            <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                    Champ {{selectedField.fieldEntityName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='action'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    Action {{selectedActions.actionName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+                                        <form [formGroup]="actionformcontrole" (ngSubmit)="onSubmitActionDetails()">
+                                            <input type="text" [(ngModel)]="actionform.actionName" nbInput fullWidth
+                                                   fieldSize="xsmall" placeholder="Designation"
+                                                   formControlName="actionName">
+                                            <div *ngIf="!hideActionType">
+
+                                                Type <select type="text"
+                                                             [(ngModel)]="actionform.actionType"
+                                                             nbInput
+                                                             fullWidth
+                                                             fieldSize="xsmall"
+                                                             formControlName="actionType">
+                                                <option value="2">Generate</option>
+                                                <option value="3">Update</option>
+                                                <option value="4">Delete</option>
+                                            </select></div>
+                                            <div *ngIf="!hideActionType">
+
+                                                Entité :<select type="text" [(ngModel)]="actionform.actionIsmainLevel"
+                                                                formControlName="actionLevelDepth"
+                                                                nbInput
+                                                                fullWidth
+                                                                fieldSize="xsmall"
+                                                                formControlName="actionIsmainLevel">
+                                                <option value="1">Pricipale</option>
+                                                <option value="0">Sub entity only</option>
+
+                                            </select></div>
+                                            <div *ngIf="actionform.actionIsmainLevel==1">
+
+                                                Profondeur : <select type="text"
+                                                                     [(ngModel)]="actionform.actionLevelDepth" nbInput
+                                                                     formControlName="actionLevelDepth"
+                                                                     fullWidth
+                                                                     fieldSize="xsmall"
+                                            >
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+
+                                            </select></div>
+                                            <div *ngIf="actionform.actionLevelDepth==2">
+
+                                                Mode selection : <select type="text"
+                                                                         [(ngModel)]="actionform.actionExistingSubEntity"
+                                                                         formControlName="actionExistingSubEntity"
+                                                                         nbInput
+                                                                         fullWidth
+                                                                         fieldSize="xsmall"
+                                            >
+                                                <option value="1">oui</option>
+                                                <option value="0">non</option>
+
+                                            </select></div>
+                                            <div *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 0) || actionform.actionIsmainLevel == 0">
+
+                                                <input type="text" formControlName="actionEntityName"
+                                                       [(ngModel)]="actionform.actionSubEntity" nbInput fullWidth
+                                                       fieldSize="xsmall" placeholder="Entitée">
+
+                                            </div>
+
+                                            <div *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 1)">
+
+                                                Sub Process : <select type="text"
+                                                                      [(ngModel)]="actionform.actionSubProcess"
+                                                                      formControlName="actionSubProcess"
+                                                                      (change)="SetStepSelection($event.target.value)"
+                                                                      nbInput
+                                                                      fullWidth
+                                                                      fieldSize="xsmall"
+                                            >
+
+                                                <option *ngFor="let pr of process" [value]="pr.processId">
+                                                    {{pr.processDesignation}}
+                                                </option>
+
+                                            </select>
+
+                                            </div>
+                                            <div *ngIf="actionform.actionExistingSubEntity==1">
+
+                                                From step: <select type="text"
+                                                                   [(ngModel)]="actionform.actionFromStep"
+                                                                   formControlName="actionFromStep"
+                                                                   nbInput
+                                                                   fullWidth
+                                                                   fieldSize="xsmall">
+
+                                                <option [value]=""></option>
+                                                <option *ngFor="let stp of subStepSelection" [value]="stp.stepId">
+                                                    {{stp.stepName}}
+                                                </option>
+
+                                            </select>
+
+                                            </div>
+                                            <div *ngIf="actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0">
+
+                                                Add SubEntity : <select type="text"
+                                                                        [(ngModel)]="actionform.actionAddSubEntity"
+                                                                        formControlName="actionAddSubEntity"
+                                                                        nbInput
+                                                                        fullWidth
+                                                                        fieldSize="xsmall"
+                                            >
+                                                <option value="1">oui</option>
+                                                <option value="0">non</option>
+
+                                            </select></div>
+
+
+                                            <div>
+
+                                                Go to step: <select type="text"
+                                                                    [(ngModel)]="actionform.actionNextStep"
+                                                                    formControlName="actionNextStep"
+                                                                    nbInput
+                                                                    fullWidth
+                                                                    fieldSize="xsmall">
+
+                                                <option [value]=""></option>
+                                                <option *ngFor="let stp of selectedProcess.steps" [value]="stp.stepId">
+                                                    {{stp.stepName}}
+                                                </option>
+
+                                            </select>
+
+                                            </div>
+
+                                            <button style="margin-right: 10px;"
+                                                    [disabled]="!actionformcontrole.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Ajouter
+                                            </button>
+
+                                            <button (click)="flipaction.flipped = false" nbButton type="submit"
+                                                    size="xsmall">
+                                                Annuler
+                                            </button>
+                                        </form>
+                                    </div>
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+                            <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                    Champ {{selectedField.fieldEntityName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='field'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    Champ {{selectedField.fieldEntityName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+                                        <form [formGroup]="settingFormControl" (ngSubmit)="onSubmitField()">
+
+                                            <strong> Id: </strong> <input paramInput type="text" readonly
+                                                                          [(ngModel)]="selectedField.fieldId" nbInput
+                                                                          fullWidth
+                                                                          fieldSize="xsmall"
+                                                                          [ngModelOptions]="{standalone: true}">
+                                            <br>
+                                            <strong> Nom de l'Entité: </strong><input paramInput type="text" readonly
+                                                                                      [(ngModel)]="selectedField.fieldEntityName"
+                                                                                      nbInput fullWidth
+                                                                                      fieldSize="xsmall"
+                                                                                      [ngModelOptions]="{standalone: true}">
+                                            <br>
+
+                                            <strong> Nom de l'interface: </strong> <input paramInput type="text"
+                                                                                          [(ngModel)]="selectedField.fieldInterfaceName"
+                                                                                          nbInput fullWidth
+                                                                                          fieldSize="xsmall"
+                                                                                          [ngModelOptions]="{standalone: true}">
+                                            <br>
+
+
+                                            <button style="margin-right: 10px;" [disabled]="!settingFormControl.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Valider
+                                            </button>
+
+                                        </form>
+                                    </div>
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+                            <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                    Champ {{selectedField.fieldEntityName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+
+                        <nb-accordion #entityparam *ngIf="paramPanel=='entity'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    Entité {{selectedEntity.entityEntity}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+                                        <form [formGroup]="settingFormControl" (ngSubmit)="onSubmitEntity()">
+
+                                            <strong> Id: </strong> <input paramInput type="text" readonly
+                                                                          [(ngModel)]="selectedEntity.entityId" nbInput
+                                                                          fullWidth
+                                                                          fieldSize="xsmall"
+                                                                          [ngModelOptions]="{standalone: true}">
+                                            <br>
+                                            <strong> Nom de l'Entité : </strong><input paramInput type="text" readonly
+                                                                                       [(ngModel)]="selectedEntity.entityEntity"
+                                                                                       nbInput fullWidth
+                                                                                       fieldSize="xsmall"
+                                                                                       [ngModelOptions]="{standalone: true}">
+                                            <br>
+
+                                            <strong> Nom de l'interface : </strong> <input paramInput type="text"
+                                                                                           [(ngModel)]="selectedEntity.entityInterfaceName"
+                                                                                           nbInput fullWidth
+                                                                                           fieldSize="xsmall"
+                                                                                           [ngModelOptions]="{standalone: true}">
+                                            <br>
+
+                                            <strong> Champ à Affiché: </strong> <select paramInput
+                                                                                        [(ngModel)]="selectedEntity.entityDisplayField"
+                                                                                        nbInput fullWidth
+                                                                                        fieldSize="xsmall"
+                                                                                        [ngModelOptions]="{standalone: true}">
+                                            <option *ngFor="let fld of selectedEntity.fields"
+                                                    [selected]="selectedEntity.entityDisplayField == fld.fieldEntityName"
+                                                    [value]="fld.fieldEntityName">{{fld.fieldEntityName}}
+                                            </option>
+                                        </select>
+                                            <br>
+
+
+                                            <strong> Champ Etat: </strong> <select paramInput
+                                                                                   [(ngModel)]="selectedEntity.entityStepperField"
+                                                                                   nbInput fullWidth
+                                                                                   fieldSize="xsmall"
+                                                                                   [ngModelOptions]="{standalone: true}">
+                                            <option *ngFor="let fld of selectedEntity.fields"
+                                                    [selected]="selectedEntity.entityStepperField == fld.fieldEntityName"
+                                                    [value]="fld.fieldEntityName">{{fld.fieldEntityName}}
+                                            </option>
+                                        </select>
+                                            <br>
+
+                                            <button style="margin-right: 10px;" [disabled]="!settingFormControl.valid"
+                                                    nbButton
+                                                    type="submit" size="xsmall">
+                                                Valider
+                                            </button>
+
+                                        </form>
+                                    </div>
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+                            <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                    Champ {{selectedField.fieldEntityName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+
+                    </nb-card>
+
+
+                </div>
+
+
+            </div>
+
+
+        </nb-card>
+
+    </nb-card-back>
+
+</nb-reveal-card>

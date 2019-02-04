@@ -1,0 +1,3005 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="AS400">
+  <database-model serializer="dbm" rdbms="DB2" format-version="4.8">
+    <root id="1">
+      <ServerVersion>5.4</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="ABNEXE20"/>
+    <schema id="3" parent="1" name="ABNFIC20"/>
+    <schema id="4" parent="1" name="ABNSRC20"/>
+    <schema id="5" parent="1" name="CPT000"/>
+    <schema id="6" parent="1" name="CPT001"/>
+    <schema id="7" parent="1" name="CPT002"/>
+    <schema id="8" parent="1" name="CPT003"/>
+    <schema id="9" parent="1" name="CPTEXE"/>
+    <schema id="10" parent="1" name="CPTFIC"/>
+    <schema id="11" parent="1" name="CPTSRC"/>
+    <schema id="12" parent="1" name="CTAEXE20"/>
+    <schema id="13" parent="1" name="CTAFICQRY"/>
+    <schema id="14" parent="1" name="DQSC"/>
+    <schema id="15" parent="1" name="ESPFIC"/>
+    <schema id="16" parent="1" name="EXTEXE"/>
+    <schema id="17" parent="1" name="EXTFIC"/>
+    <schema id="18" parent="1" name="EXTSRC"/>
+    <schema id="19" parent="1" name="GRSEXE"/>
+    <schema id="20" parent="1" name="GRSFIC"/>
+    <schema id="21" parent="1" name="GRSQRY"/>
+    <schema id="22" parent="1" name="GRSSRC"/>
+    <schema id="23" parent="1" name="H2TCRTFIC"/>
+    <schema id="24" parent="1" name="HA£ADEL"/>
+    <schema id="25" parent="1" name="HA£CRTFIC"/>
+    <schema id="26" parent="1" name="HA£XRUN"/>
+    <schema id="27" parent="1" name="HE£CRTFIC"/>
+    <schema id="28" parent="1" name="HOD19671"/>
+    <schema id="29" parent="1" name="HS£CRTFIC"/>
+    <schema id="30" parent="1" name="LAUNCHER"/>
+    <schema id="31" parent="1" name="MNTEXE"/>
+    <schema id="32" parent="1" name="MNTFIC"/>
+    <schema id="33" parent="1" name="MNTSRC"/>
+    <schema id="34" parent="1" name="MUTFIC"/>
+    <schema id="35" parent="1" name="PAIEXE"/>
+    <schema id="36" parent="1" name="PAIEXE20"/>
+    <schema id="37" parent="1" name="PAIFIC"/>
+    <schema id="38" parent="1" name="PAIFIC20"/>
+    <schema id="39" parent="1" name="PAISRC"/>
+    <schema id="40" parent="1" name="PAISRC20"/>
+    <schema id="41" parent="1" name="PRCEXE"/>
+    <schema id="42" parent="1" name="PRCFIC"/>
+    <schema id="43" parent="1" name="PRCSRC"/>
+    <schema id="44" parent="1" name="PRL"/>
+    <schema id="45" parent="1" name="PRLEXE"/>
+    <schema id="46" parent="1" name="PRLFIC"/>
+    <schema id="47" parent="1" name="PRLSRC"/>
+    <schema id="48" parent="1" name="PTCA01"/>
+    <schema id="49" parent="1" name="QCBL"/>
+    <schema id="50" parent="1" name="QCBLLE"/>
+    <schema id="51" parent="1" name="QCPPLE"/>
+    <schema id="52" parent="1" name="QDEVTOOLS"/>
+    <schema id="53" parent="1" name="QDNS"/>
+    <schema id="54" parent="1" name="QDSNX"/>
+    <schema id="55" parent="1" name="QEXPMTL"/>
+    <schema id="56" parent="1" name="QGPL"/>
+    <schema id="57" parent="1" name="QHTTPSVR"/>
+    <schema id="58" parent="1" name="QIWS"/>
+    <schema id="59" parent="1" name="QLBL"/>
+    <schema id="60" parent="1" name="QMGTC"/>
+    <schema id="61" parent="1" name="QMGTC2"/>
+    <schema id="62" parent="1" name="QNTAP"/>
+    <schema id="63" parent="1" name="QPDA"/>
+    <schema id="64" parent="1" name="QPFR"/>
+    <schema id="65" parent="1" name="QPFRDATA"/>
+    <schema id="66" parent="1" name="QPROG"/>
+    <schema id="67" parent="1" name="QRCL"/>
+    <schema id="68" parent="1" name="QRECOVERY"/>
+    <schema id="69" parent="1" name="QRPG"/>
+    <schema id="70" parent="1" name="QRPG38"/>
+    <schema id="71" parent="1" name="QRPGLE"/>
+    <schema id="72" parent="1" name="QRY"/>
+    <schema id="73" parent="1" name="QRY17944"/>
+    <schema id="74" parent="1" name="QRY2016"/>
+    <schema id="75" parent="1" name="QRY4620"/>
+    <schema id="76" parent="1" name="QRY4630"/>
+    <schema id="77" parent="1" name="QRY4640"/>
+    <schema id="78" parent="1" name="QRY4670"/>
+    <schema id="79" parent="1" name="QRYABA"/>
+    <schema id="80" parent="1" name="QRYABABK"/>
+    <schema id="81" parent="1" name="QRYAY_SV"/>
+    <schema id="82" parent="1" name="QRYBAABK"/>
+    <schema id="83" parent="1" name="QRYBS"/>
+    <schema id="84" parent="1" name="QRYCH4620"/>
+    <schema id="85" parent="1" name="QRYCHAMEKH"/>
+    <schema id="86" parent="1" name="QRYCHIBANI"/>
+    <schema id="87" parent="1" name="QRYCHMBK"/>
+    <schema id="88" parent="1" name="QRYDEMBK"/>
+    <schema id="89" parent="1" name="QRYDRZBK"/>
+    <schema id="90" parent="1" name="QRYHANENE"/>
+    <schema id="91" parent="1" name="QRYHATEM"/>
+    <schema id="92" parent="1" name="QRYHBK"/>
+    <schema id="93" parent="1" name="QRYIBT"/>
+    <schema id="94" parent="1" name="QRYJEBBK"/>
+    <schema id="95" parent="1" name="QRYJEMAA"/>
+    <schema id="96" parent="1" name="QRYJJ"/>
+    <schema id="97" parent="1" name="QRYKRBK"/>
+    <schema id="98" parent="1" name="QRYLATIFA"/>
+    <schema id="99" parent="1" name="QRYMANOUBI"/>
+    <schema id="100" parent="1" name="QRYMCHBK"/>
+    <schema id="101" parent="1" name="QRYMEDBK"/>
+    <schema id="102" parent="1" name="QRYMEHREZ"/>
+    <schema id="103" parent="1" name="QRYMHA"/>
+    <schema id="104" parent="1" name="QRYMOHSEN"/>
+    <schema id="105" parent="1" name="QRYMONDHER"/>
+    <schema id="106" parent="1" name="QRYMOZBK"/>
+    <schema id="107" parent="1" name="QRYNADIA"/>
+    <schema id="108" parent="1" name="QRYORASYS"/>
+    <schema id="109" parent="1" name="QRYP"/>
+    <schema id="110" parent="1" name="QRYPBK"/>
+    <schema id="111" parent="1" name="QRYS"/>
+    <schema id="112" parent="1" name="QRYSAM"/>
+    <schema id="113" parent="1" name="QRYSLOBK"/>
+    <schema id="114" parent="1" name="QRYSLSBK"/>
+    <schema id="115" parent="1" name="QRYSONIA"/>
+    <schema id="116" parent="1" name="QRYTECHBK"/>
+    <schema id="117" parent="1" name="QRYTPROV"/>
+    <schema id="118" parent="1" name="QS36F"/>
+    <schema id="119" parent="1" name="QS36FTMSJ"/>
+    <schema id="120" parent="1" name="QSPL"/>
+    <schema id="121" parent="1" name="QSQL"/>
+    <schema id="122" parent="1" name="QSRVAGT"/>
+    <schema id="123" parent="1" name="QSSP"/>
+    <schema id="124" parent="1" name="QSYS"/>
+    <schema id="125" parent="1" name="QSYS2"/>
+    <schema id="126" parent="1" name="QSYSINC"/>
+    <schema id="127" parent="1" name="QSYSV5R2M0"/>
+    <schema id="128" parent="1" name="QSYSV5R3M0"/>
+    <schema id="129" parent="1" name="QTCM"/>
+    <schema id="130" parent="1" name="QTCP"/>
+    <schema id="131" parent="1" name="QUSRDIRDB"/>
+    <schema id="132" parent="1" name="QUSRSYS"/>
+    <schema id="133" parent="1" name="QUSRTOOL"/>
+    <schema id="134" parent="1" name="RCTEXE20"/>
+    <schema id="135" parent="1" name="RCTFIC"/>
+    <schema id="136" parent="1" name="RCTFIC20"/>
+    <schema id="137" parent="1" name="RCTSRC"/>
+    <schema id="138" parent="1" name="RCTSRC20"/>
+    <schema id="139" parent="1" name="RCVFIC"/>
+    <schema id="140" parent="1" name="RCVSRC"/>
+    <schema id="141" parent="1" name="REAEXE"/>
+    <schema id="142" parent="1" name="REAFIC"/>
+    <schema id="143" parent="1" name="REASRC"/>
+    <schema id="144" parent="1" name="SEKCHEK"/>
+    <schema id="145" parent="1" name="SGSEXE"/>
+    <schema id="146" parent="1" name="SGSFIC">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="147" parent="1" name="SGSFICDEV"/>
+    <schema id="148" parent="1" name="SGSSRC"/>
+    <schema id="149" parent="1" name="SPREXE"/>
+    <schema id="150" parent="1" name="SPRFIC"/>
+    <schema id="151" parent="1" name="SPRSRC"/>
+    <schema id="152" parent="1" name="STKEXE20"/>
+    <schema id="153" parent="1" name="STKSRC20"/>
+    <schema id="154" parent="1" name="SUPEXE"/>
+    <schema id="155" parent="1" name="SUPFIC"/>
+    <schema id="156" parent="1" name="SUPFICN"/>
+    <schema id="157" parent="1" name="SYSIBM"/>
+    <schema id="158" parent="1" name="TUNIS1"/>
+    <schema id="159" parent="1" name="£CGULIB"/>
+    <schema id="160" parent="1" name="£COBLIB"/>
+    <schema id="161" parent="1" name="£DFULIB"/>
+    <schema id="162" parent="1" name="£DSULIB"/>
+    <schema id="163" parent="1" name="£LIBRARY"/>
+    <schema id="164" parent="1" name="£RPGLIB"/>
+    <schema id="165" parent="1" name="£SDALIB"/>
+    <schema id="166" parent="1" name="£SEULIB"/>
+    <table id="167" parent="146" name="AFANAL1"/>
+    <table id="168" parent="146" name="AFFANAL">
+      <Comment>Affectations analytiques</Comment>
+    </table>
+    <table id="169" parent="146" name="AFFANAP">
+      <Comment>Code affectation Analytique</Comment>
+    </table>
+    <table id="170" parent="146" name="AFFANAPS">
+      <Comment>Code affectation Analytique</Comment>
+    </table>
+    <table id="171" parent="146" name="AFFART">
+      <Comment>Affectation Analytique: Affectation/Article</Comment>
+    </table>
+    <table id="172" parent="146" name="AFFIND">
+      <Comment>FICHER COMPTE ORGANE</Comment>
+    </table>
+    <table id="173" parent="146" name="APPLICAT">
+      <Comment>Applications</Comment>
+    </table>
+    <table id="174" parent="146" name="APPUSR">
+      <Comment>applications/utilisateur SGS</Comment>
+    </table>
+    <table id="175" parent="146" name="ART">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="176" parent="146" name="ART2012">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="177" parent="146" name="ART2012B"/>
+    <table id="178" parent="146" name="ART2014">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="179" parent="146" name="ARTAFF">
+      <Comment>Jointure  articles  et Affectation analytiques</Comment>
+    </table>
+    <table id="180" parent="146" name="ARTAFF1">
+      <Comment>BMT non confirmés de 4610 à 4630</Comment>
+    </table>
+    <table id="181" parent="146" name="ARTAFFP">
+      <Comment>Affectation Analytique: Affectation/Article</Comment>
+    </table>
+    <table id="182" parent="146" name="ARTEXE"/>
+    <table id="183" parent="146" name="ARTI1">
+      <Comment>Fichier logique sur ART</Comment>
+    </table>
+    <table id="184" parent="146" name="ARTMAG">
+      <Comment>Jointure  articles  et Magasin</Comment>
+    </table>
+    <table id="185" parent="146" name="ARTQTEMAX"/>
+    <table id="186" parent="146" name="ARTQTEMAX2"/>
+    <table id="187" parent="146" name="ARTQTEP">
+      <Comment>ARTICLE ET QTE PROPOSEE</Comment>
+    </table>
+    <table id="188" parent="146" name="BCD">
+      <Comment>Bons de commandes DETAIL</Comment>
+    </table>
+    <table id="189" parent="146" name="BCDAMD">
+      <Comment>Bons de commandes DETAIL  pour DAM</Comment>
+    </table>
+    <table id="190" parent="146" name="BCDAME">
+      <Comment>Bons de commandes ENTETE  pour DAM</Comment>
+    </table>
+    <table id="191" parent="146" name="BCDAMETRD">
+      <Comment>Bons de commandes DETAIL  pour DAM Etrager</Comment>
+    </table>
+    <table id="192" parent="146" name="BCDAMETRE">
+      <Comment>Bons de commandes ENTETE  DAM Etranger</Comment>
+    </table>
+    <table id="193" parent="146" name="BCDSV">
+      <Comment>Bons de commandes DETAIL</Comment>
+    </table>
+    <table id="194" parent="146" name="BCE">
+      <Comment>Bons de commandes ENTETE</Comment>
+    </table>
+    <table id="195" parent="146" name="BCETRD">
+      <Comment>Bons de commandes DETAIL  Etranger</Comment>
+    </table>
+    <table id="196" parent="146" name="BCETRE">
+      <Comment>Bons de commandes ENTETE  Etranger</Comment>
+    </table>
+    <table id="197" parent="146" name="BCETRE1">
+      <Comment>Bons de commandes ENTETE  Etranger</Comment>
+    </table>
+    <table id="198" parent="146" name="BCFD">
+      <Comment>Bons de consommation fourniture bureau detail</Comment>
+    </table>
+    <table id="199" parent="146" name="BCFE">
+      <Comment>Bons de consommation fourniture bureau entete</Comment>
+    </table>
+    <table id="200" parent="146" name="BCMARCHED">
+      <Comment>Bons de commandes/Ordre de liv pour marché DETAIL</Comment>
+    </table>
+    <table id="201" parent="146" name="BCMARCHEE">
+      <Comment>Bons de commandes/Ordre de liv pour marché ENTETE</Comment>
+    </table>
+    <table id="202" parent="146" name="BCNBJ1">
+      <Comment>Jointure Consom. Bus</Comment>
+    </table>
+    <table id="203" parent="146" name="BCND">
+      <Comment>Bons de consommation normale DETAIL</Comment>
+    </table>
+    <table id="204" parent="146" name="BCNDB">
+      <Comment>Bons de consommation normale DETAIL (bus)</Comment>
+    </table>
+    <table id="205" parent="146" name="BCNDB2017"/>
+    <table id="206" parent="146" name="BCNDB2411">
+      <Comment>Bons de consommation normale DETAIL (bus)</Comment>
+    </table>
+    <table id="207" parent="146" name="BCNDB_INI">
+      <Comment>Bons de consommation normale DETAIL (bus)</Comment>
+    </table>
+    <table id="208" parent="146" name="BCNDHAB">
+      <Comment>Bons de consommation normale DETAIL (bus)</Comment>
+    </table>
+    <table id="209" parent="146" name="BCNE">
+      <Comment>Bons de consommation normale ENTETE</Comment>
+    </table>
+    <table id="210" parent="146" name="BCNEB">
+      <Comment>Bons de consommation normale ENTETE (bus)</Comment>
+    </table>
+    <table id="211" parent="146" name="BCNEB2811">
+      <Comment>Bons de consommation normale ENTETE (bus)</Comment>
+    </table>
+    <table id="212" parent="146" name="BCNEHAB">
+      <Comment>Bons de consommation normale ENTETE (bus)</Comment>
+    </table>
+    <table id="213" parent="146" name="BCNHABD">
+      <Comment>Bons de consommation normale DETAIL (bus)</Comment>
+    </table>
+    <table id="214" parent="146" name="BCNHABE">
+      <Comment>Bons de consommation normale ENTETE (habillement)</Comment>
+    </table>
+    <table id="215" parent="146" name="BCN_PNEU"/>
+    <table id="216" parent="146" name="BED">
+      <Comment>Bons d entrée DETAIL</Comment>
+    </table>
+    <table id="217" parent="146" name="BEDAMD">
+      <Comment>Bons d entrée DETAIL pour DAM</Comment>
+    </table>
+    <table id="218" parent="146" name="BEDAME">
+      <Comment>Bons d entrée ENTETE pour DAM</Comment>
+    </table>
+    <table id="219" parent="146" name="BEE">
+      <Comment>Bons d entrée ENTETE</Comment>
+    </table>
+    <table id="220" parent="146" name="BEETRD">
+      <Comment>Bons d entrée DETAIL  Etranger</Comment>
+    </table>
+    <table id="221" parent="146" name="BEETRE">
+      <Comment>oons d entrée ENTETE  Etranger</Comment>
+    </table>
+    <table id="222" parent="146" name="BEMARCHED">
+      <Comment>Bons d entrée DETAIL  Marche</Comment>
+    </table>
+    <table id="223" parent="146" name="BEMARCHEE">
+      <Comment>Bons d entrée ENTETE  Marche</Comment>
+    </table>
+    <table id="224" parent="146" name="BENMVT">
+      <Comment>ENTREE DETAILEES EN TERME DE VALORISATION</Comment>
+    </table>
+    <table id="225" parent="146" name="BLID">
+      <Comment>Bons de livraison interne    DETAIL</Comment>
+    </table>
+    <table id="226" parent="146" name="BLIE">
+      <Comment>Bons de livraison interne    ENTETE</Comment>
+    </table>
+    <table id="227" parent="146" name="BTID">
+      <Comment>Bons de transfert inter magasins DETAIL</Comment>
+    </table>
+    <table id="228" parent="146" name="BTIDB">
+      <Comment>Bons de transfert inter magasins DETAIL</Comment>
+    </table>
+    <table id="229" parent="146" name="BTIE">
+      <Comment>Bons de transfert inter magasins ENTETE</Comment>
+    </table>
+    <table id="230" parent="146" name="BUSMODELE">
+      <Comment>modele de bus</Comment>
+    </table>
+    <table id="231" parent="146" name="BUV00">
+      <Comment>FBU  2000  *******</Comment>
+    </table>
+    <table id="232" parent="146" name="BUV00SV">
+      <Comment>FBU  2000  *******</Comment>
+    </table>
+    <table id="233" parent="146" name="BUV2011">
+      <Comment>BUV</Comment>
+    </table>
+    <table id="234" parent="146" name="BUV2011S1">
+      <Comment>BUV</Comment>
+    </table>
+    <table id="235" parent="146" name="BUV2011SV">
+      <Comment>BUV</Comment>
+    </table>
+    <table id="236" parent="146" name="BUV99">
+      <Comment>FBU  2000  *******</Comment>
+    </table>
+    <table id="237" parent="146" name="BUV99SV">
+      <Comment>FBU  2000  *******</Comment>
+    </table>
+    <table id="238" parent="146" name="BUV_2010TL">
+      <Comment>BUV</Comment>
+    </table>
+    <table id="239" parent="146" name="CONST">
+      <Comment>constructeur et fabriquant article</Comment>
+    </table>
+    <table id="240" parent="146" name="CONTD">
+      <Comment>Contrat  approvisionnement DETAIL</Comment>
+    </table>
+    <table id="241" parent="146" name="CONTD_S">
+      <Comment>Contrat  approvisionnement DETAIL</Comment>
+    </table>
+    <table id="242" parent="146" name="CONTD_SS">
+      <Comment>Contrat  approvisionnement DETAIL</Comment>
+    </table>
+    <table id="243" parent="146" name="CONTE">
+      <Comment>Contrat  approvisionnement ENTETE</Comment>
+    </table>
+    <table id="244" parent="146" name="CONTETRD">
+      <Comment>Contrat  approvisionnement DETAIL</Comment>
+    </table>
+    <table id="245" parent="146" name="CONTETRE">
+      <Comment>Contrat  approvisionnement ENTETE</Comment>
+    </table>
+    <table id="246" parent="146" name="CONTE_SS">
+      <Comment>Contrat  approvisionnement ENTETE</Comment>
+    </table>
+    <table id="247" parent="146" name="CONTVAL">
+      <Comment>Valeur TTC du Contrat toutes les années</Comment>
+    </table>
+    <table id="248" parent="146" name="DAMD">
+      <Comment>Demande d achat de materiel DETAIL</Comment>
+    </table>
+    <table id="249" parent="146" name="DAMDSV">
+      <Comment>Demande d achat de materiel DETAIL</Comment>
+    </table>
+    <table id="250" parent="146" name="DAMD_SV">
+      <Comment>Demande d achat de materiel DETAIL</Comment>
+    </table>
+    <table id="251" parent="146" name="DAME">
+      <Comment>Demande d achat de materiel ENTETE</Comment>
+    </table>
+    <table id="252" parent="146" name="DAME_SV">
+      <Comment>Demande d achat de materiel ENTETE</Comment>
+    </table>
+    <table id="253" parent="146" name="DAPD">
+      <Comment>Demande d approvisionnement DETAIL</Comment>
+    </table>
+    <table id="254" parent="146" name="DAPD1">
+      <Comment>Demande d approvisionnement DETAIL</Comment>
+    </table>
+    <table id="255" parent="146" name="DAPE">
+      <Comment>Demande d approvisionnement ENTETE</Comment>
+    </table>
+    <table id="256" parent="146" name="DAPE_SAV">
+      <Comment>Demande d approvisionnement ENTETE</Comment>
+    </table>
+    <table id="257" parent="146" name="DEB2013"/>
+    <table id="258" parent="146" name="DEPATEL">
+      <Comment>Liste des depots et atelier</Comment>
+    </table>
+    <table id="259" parent="146" name="DEVISE">
+      <Comment>Liste des devises</Comment>
+    </table>
+    <table id="260" parent="146" name="DICTSV">
+      <Comment>dictionnaire</Comment>
+    </table>
+    <table id="261" parent="146" name="DIFINVD">
+      <Comment>Inventaire des stocks articles dans les magasins</Comment>
+    </table>
+    <table id="262" parent="146" name="DIFINVE">
+      <Comment>Inventaire des stocks articles dans les magasins</Comment>
+    </table>
+    <table id="263" parent="146" name="DOMAINE">
+      <Comment>domaines des fournissuers et des articles</Comment>
+    </table>
+    <table id="264" parent="146" name="DOMSGR">
+      <Comment>domaines des sous groupes des articles</Comment>
+    </table>
+    <table id="265" parent="146" name="DPD">
+      <Comment>Demande de prix DETAIL</Comment>
+    </table>
+    <table id="266" parent="146" name="DPD1">
+      <Comment>Demande de prix DETAIL</Comment>
+    </table>
+    <table id="267" parent="146" name="DPDAM">
+      <Comment>Jointure demande de prix dam</Comment>
+    </table>
+    <table id="268" parent="146" name="DPDAMD">
+      <Comment>1 0 0 P  Quaincaillerie  MANCHON</Comment>
+    </table>
+    <table id="269" parent="146" name="DPDAME">
+      <Comment>Demande de prix ENTETE  pour dam</Comment>
+    </table>
+    <table id="270" parent="146" name="DPDAMETR">
+      <Comment>Jointure demande de prix dam  Etranger</Comment>
+    </table>
+    <table id="271" parent="146" name="DPDAMETRD">
+      <Comment>Demande de prix DETAIL pour dam Etranger</Comment>
+    </table>
+    <table id="272" parent="146" name="DPDAMETRE">
+      <Comment>Demande de prix ENTETE pour dam  etranger</Comment>
+    </table>
+    <table id="273" parent="146" name="DPDAPP">
+      <Comment>Jointure demande de prix dapp</Comment>
+    </table>
+    <table id="274" parent="146" name="DPDAPPETR">
+      <Comment>Jointure demande de prix dapp  Etranger</Comment>
+    </table>
+    <table id="275" parent="146" name="DPE">
+      <Comment>Demande de prix ENTETE</Comment>
+    </table>
+    <table id="276" parent="146" name="DPE1">
+      <Comment>Demande de prix ENTETE</Comment>
+    </table>
+    <table id="277" parent="146" name="DPETRD">
+      <Comment>Demande de prix DETAIL Etranger</Comment>
+    </table>
+    <table id="278" parent="146" name="DPETRD1">
+      <Comment>Demande de prix DETAIL Etranger</Comment>
+    </table>
+    <table id="279" parent="146" name="DPETRE">
+      <Comment>Demande de prix ENTETE Etranger</Comment>
+    </table>
+    <table id="280" parent="146" name="DPFRS">
+      <Comment>Demande de prix au fournisseurs</Comment>
+    </table>
+    <table id="281" parent="146" name="DPFRSDAM">
+      <Comment>Demande de prix au fournisseurs   pour DAM</Comment>
+    </table>
+    <table id="282" parent="146" name="DPFRSETR">
+      <Comment>Demande de prix au fournisseurs  Etranger</Comment>
+    </table>
+    <table id="283" parent="146" name="DROIT">
+      <Comment>Liste des depots et atelier</Comment>
+    </table>
+    <table id="284" parent="146" name="DROIT1">
+      <Comment>Liste des depots et atelier</Comment>
+    </table>
+    <table id="285" parent="146" name="DROIT2">
+      <Comment>Liste des depots et atelier</Comment>
+    </table>
+    <table id="286" parent="146" name="ENTREE">
+      <Comment>ENTREE DETAILEES EN TERME DE VALORISATION</Comment>
+    </table>
+    <table id="287" parent="146" name="ENTREES">
+      <Comment>&apos;ENTREE DES ARTICLES NON MOUVEMENTES</Comment>
+    </table>
+    <table id="288" parent="146" name="ETAMVTART">
+      <Comment>fichier temporaire calcul PUMP</Comment>
+    </table>
+    <table id="289" parent="146" name="ETAMVTDYN">
+      <Comment>fichier temp calcul stock journalier</Comment>
+    </table>
+    <table id="290" parent="146" name="ETAPUMP">
+      <Comment>fichier etat PUMP par exercice</Comment>
+    </table>
+    <table id="291" parent="146" name="ETASTK">
+      <Comment>etat stock final</Comment>
+    </table>
+    <table id="292" parent="146" name="ETAT">
+      <Comment>Liste des depots et atelier</Comment>
+    </table>
+    <table id="293" parent="146" name="ETATBON">
+      <Comment>Liste des depots et atelier</Comment>
+    </table>
+    <table id="294" parent="146" name="EXERCICE">
+      <Comment>Exercices</Comment>
+    </table>
+    <table id="295" parent="146" name="EXON">
+      <Comment>Exoneration d articles</Comment>
+    </table>
+    <table id="296" parent="146" name="FOUR"/>
+    <table id="297" parent="146" name="FRS">
+      <Comment>Liste des fournisseurs</Comment>
+    </table>
+    <table id="298" parent="146" name="FRSART">
+      <Comment>Liste des fournisseurs</Comment>
+    </table>
+    <table id="299" parent="146" name="FRSDOM">
+      <Comment>Jointure domaine et fournisseurs</Comment>
+    </table>
+    <table id="300" parent="146" name="GRP">
+      <Comment>Liste des groupes ou familles d articles</Comment>
+    </table>
+    <table id="301" parent="146" name="GRPSF">
+      <Comment>Liste des groupes ou familles sans fiches</Comment>
+    </table>
+    <table id="302" parent="146" name="GRPSGR">
+      <Comment>Liste des groupes ou familles d articles</Comment>
+    </table>
+    <table id="303" parent="146" name="HISTALERT">
+      <Comment>Historique stock = stock alert article</Comment>
+    </table>
+    <table id="304" parent="146" name="HISTART">
+      <Comment>historique des articles supprimes</Comment>
+    </table>
+    <table id="305" parent="146" name="HISTINV">
+      <Comment>HISTORIQUE INVENTAIRE</Comment>
+    </table>
+    <table id="306" parent="146" name="HISTMAJART">
+      <Comment>Historique mise a jour / centralisation stock</Comment>
+    </table>
+    <table id="307" parent="146" name="HISTMAJSTK">
+      <Comment>Historique mise a jour / Depart du stock</Comment>
+    </table>
+    <table id="308" parent="146" name="HISTPRIX">
+      <Comment>HISTORIQUE DES PRIX</Comment>
+    </table>
+    <table id="309" parent="146" name="HISTPUMP">
+      <Comment>Historique pump article valorisee</Comment>
+    </table>
+    <table id="310" parent="146" name="HISTPUMP1">
+      <Comment>Historique pump article valorisee</Comment>
+    </table>
+    <table id="311" parent="146" name="HISTPUMPDH">
+      <Comment>sauv du 18042012</Comment>
+    </table>
+    <table id="312" parent="146" name="INIT">
+      <Comment>Stock initial des articles des magasins</Comment>
+    </table>
+    <table id="313" parent="146" name="INVART2013">
+      <Comment>Fichier des articles à inventorier</Comment>
+    </table>
+    <table id="314" parent="146" name="INVART2014"/>
+    <table id="315" parent="146" name="INVART2015"/>
+    <table id="316" parent="146" name="INVART2016"/>
+    <table id="317" parent="146" name="INVART2017"/>
+    <table id="318" parent="146" name="INVART2018"/>
+    <table id="319" parent="146" name="INVBRD1">
+      <Comment>Logique bordereau  inventaire</Comment>
+    </table>
+    <table id="320" parent="146" name="INVBRD13">
+      <Comment>Logique bordereau  inventaire</Comment>
+    </table>
+    <table id="321" parent="146" name="JOUR">
+      <Comment>journaux</Comment>
+    </table>
+    <table id="322" parent="146" name="KMVL">
+      <Comment>Bons de consommation normale DETAIL (bus)</Comment>
+    </table>
+    <table id="323" parent="146" name="MAG">
+      <Comment>Liste des magasins</Comment>
+    </table>
+    <table id="324" parent="146" name="MENU">
+      <Comment>MENU SGS</Comment>
+    </table>
+    <table id="325" parent="146" name="MENUSV">
+      <Comment>MENU SGS</Comment>
+    </table>
+    <table id="326" parent="146" name="MODGES">
+      <Comment>Mode de gestion</Comment>
+    </table>
+    <table id="327" parent="146" name="MODLIV">
+      <Comment>Mode de livraison</Comment>
+    </table>
+    <table id="328" parent="146" name="MODPAI">
+      <Comment>Mode de paiement</Comment>
+    </table>
+    <table id="329" parent="146" name="MODULE">
+      <Comment>FICHER COMPTE ORGANE</Comment>
+    </table>
+    <table id="330" parent="146" name="MTDEV">
+      <Comment>fichier devises Metro</Comment>
+    </table>
+    <table id="331" parent="146" name="MTDMD_ACHA">
+      <Comment>fichier demande achats Metro</Comment>
+    </table>
+    <table id="332" parent="146" name="MTFB_2010"/>
+    <table id="333" parent="146" name="MTFRS">
+      <Comment>fichier fournisseurs Metro</Comment>
+    </table>
+    <table id="334" parent="146" name="MTFRS1"/>
+    <table id="335" parent="146" name="MTFRS_FNC">
+      <Comment>fichier fournisseurs_finance Metro</Comment>
+    </table>
+    <table id="336" parent="146" name="MTHIST_FRS">
+      <Comment>historique fournisseurs Metro</Comment>
+    </table>
+    <table id="337" parent="146" name="MTLCC_CMD">
+      <Comment>fichier LCC_Commandes Metro</Comment>
+    </table>
+    <table id="338" parent="146" name="MTLGN_CMD">
+      <Comment>fichier lignes commandes Metro</Comment>
+    </table>
+    <table id="339" parent="146" name="MTLGN_CTRT">
+      <Comment>fichier lignes contrats Metro</Comment>
+    </table>
+    <table id="340" parent="146" name="MTLGN_RCPT">
+      <Comment>fichier lignes réception articles Metro</Comment>
+    </table>
+    <table id="341" parent="146" name="MTOFFR">
+      <Comment>fichier des offres Metro</Comment>
+    </table>
+    <table id="342" parent="146" name="MTRAP_DM">
+      <Comment>fichier rappel DM Metro</Comment>
+    </table>
+    <table id="343" parent="146" name="MTRCPT">
+      <Comment>fichier réception Metro</Comment>
+    </table>
+    <table id="344" parent="146" name="MTSTK_CPN">
+      <Comment>fichier Stock Coupon Metro</Comment>
+    </table>
+    <table id="345" parent="146" name="MTTAB_SRV">
+      <Comment>fichier Table Service Metro</Comment>
+    </table>
+    <table id="346" parent="146" name="MVT2013SV">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="347" parent="146" name="MVTART">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="348" parent="146" name="MVTART1"/>
+    <table id="349" parent="146" name="MVTART12S3">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="350" parent="146" name="MVTART12SV">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="351" parent="146" name="MVTART13S2">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="352" parent="146" name="MVTART13S3">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="353" parent="146" name="MVTART13SS">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="354" parent="146" name="MVTART13SV">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="355" parent="146" name="MVTART14S2">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="356" parent="146" name="MVTART14S3">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="357" parent="146" name="MVTART14SV">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="358" parent="146" name="MVTART2013">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="359" parent="146" name="MVTART2014">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="360" parent="146" name="MVTART2015">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="361" parent="146" name="MVTART2016">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="362" parent="146" name="MVTARTDYN">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="363" parent="146" name="MVTARTS"/>
+    <table id="364" parent="146" name="MVTDYN032017"/>
+    <table id="365" parent="146" name="MVTDYN062017"/>
+    <table id="366" parent="146" name="MVTNAT">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="367" parent="146" name="MVTNMVT">
+      <Comment>MVT ARTICLE (TABLE TEMPO)</Comment>
+    </table>
+    <table id="368" parent="146" name="NASCE"/>
+    <table id="369" parent="146" name="NASVC"/>
+    <table id="370" parent="146" name="NASVC_SV"/>
+    <table id="371" parent="146" name="NASVC_SV2"/>
+    <table id="372" parent="146" name="NBM">
+      <Comment>Fich.phy Num BM BCNCOD MAG</Comment>
+    </table>
+    <table id="373" parent="146" name="NBML">
+      <Comment>Fich.phy Num BM BCNCOD MAG</Comment>
+    </table>
+    <table id="374" parent="146" name="NBMSV">
+      <Comment>Fich.phy Num BM BCNCOD MAG</Comment>
+    </table>
+    <table id="375" parent="146" name="OFFD">
+      <Comment>Offres des fournisseurs DETAIL</Comment>
+    </table>
+    <table id="376" parent="146" name="OFFD1">
+      <Comment>Offres des fournisseurs DETAIL</Comment>
+    </table>
+    <table id="377" parent="146" name="OFFDAMD">
+      <Comment>Offres des fournisseurs DETAIL pour DAM</Comment>
+    </table>
+    <table id="378" parent="146" name="OFFDAMDS2">
+      <Comment>Offres des fournisseurs DETAIL pour DAM</Comment>
+    </table>
+    <table id="379" parent="146" name="OFFDAMDSV">
+      <Comment>Offres des fournisseurs DETAIL pour DAM</Comment>
+    </table>
+    <table id="380" parent="146" name="OFFDAME">
+      <Comment>Offres des fournisseurs ENTETE pour DAM</Comment>
+    </table>
+    <table id="381" parent="146" name="OFFDAMETRD">
+      <Comment>Offres des fournisseurs DETAIL pour DAM</Comment>
+    </table>
+    <table id="382" parent="146" name="OFFDAMETRE">
+      <Comment>Offres des fournisseurs ENTETE Etranger</Comment>
+    </table>
+    <table id="383" parent="146" name="OFFDAMETRS">
+      <Comment>Offres des fournisseurs DETAIL pour DAM</Comment>
+    </table>
+    <table id="384" parent="146" name="OFFDSV">
+      <Comment>Offres des fournisseurs DETAIL</Comment>
+    </table>
+    <table id="385" parent="146" name="OFFE">
+      <Comment>Offres des fournisseurs ENTETE</Comment>
+    </table>
+    <table id="386" parent="146" name="OFFE1">
+      <Comment>Offres des fournisseurs ENTETE</Comment>
+    </table>
+    <table id="387" parent="146" name="OFFETRD">
+      <Comment>Offres des fournisseurs DETAIL Etranger</Comment>
+    </table>
+    <table id="388" parent="146" name="OFFETRE">
+      <Comment>Offres des fournisseurs ENTETE Etranger</Comment>
+    </table>
+    <table id="389" parent="146" name="OFFETRE1">
+      <Comment>Offres des fournisseurs ENTETE Etranger</Comment>
+    </table>
+    <table id="390" parent="146" name="OFFETRE2">
+      <Comment>Offres des fournisseurs ENTETE Etranger</Comment>
+    </table>
+    <table id="391" parent="146" name="OFFRED">
+      <Comment>Offres des fournisseurs DETAIL</Comment>
+    </table>
+    <table id="392" parent="146" name="OFFREE">
+      <Comment>Offres des fournisseurs ENTETE</Comment>
+    </table>
+    <table id="393" parent="146" name="OLD">
+      <Comment>Ordre de liv pour marché DETAIL</Comment>
+    </table>
+    <table id="394" parent="146" name="OLD050116">
+      <Comment>Ordre de liv pour marché DETAIL</Comment>
+    </table>
+    <table id="395" parent="146" name="OLDUDIST">
+      <Comment>OLD UNIT DIST</Comment>
+    </table>
+    <table id="396" parent="146" name="OLE">
+      <Comment>Ordre de liv pour marché ENTETE</Comment>
+    </table>
+    <table id="397" parent="146" name="OLETRD">
+      <Comment>Ordre de liv pour marché DETAIL</Comment>
+    </table>
+    <table id="398" parent="146" name="OLETRE">
+      <Comment>Ordre de liv pour marché ENTETE</Comment>
+    </table>
+    <table id="399" parent="146" name="OLE_S">
+      <Comment>Ordre de liv pour marché ENTETE</Comment>
+    </table>
+    <table id="400" parent="146" name="OPERAT">
+      <Comment>liste des operations :ajout suppression m.a.j</Comment>
+    </table>
+    <table id="401" parent="146" name="OPR">
+      <Comment>liste des operations :ajout suppression m.a.j</Comment>
+    </table>
+    <table id="402" parent="146" name="ORG1"/>
+    <table id="403" parent="146" name="ORGKIT">
+      <Comment>Jointure organe kit pieces</Comment>
+    </table>
+    <table id="404" parent="146" name="P1IN"/>
+    <table id="405" parent="146" name="P1IN2008">
+      <Comment>P1IND  REFERENCES ARTICLES 2006</Comment>
+    </table>
+    <table id="406" parent="146" name="P1IN2009">
+      <Comment>P1IND  REFERENCES ARTICLES 2006</Comment>
+    </table>
+    <table id="407" parent="146" name="P1IN2011">
+      <Comment>CHARGUIA</Comment>
+    </table>
+    <table id="408" parent="146" name="P1SMLT11">
+      <Comment>Fichier Article  Snt  V1</Comment>
+    </table>
+    <table id="409" parent="146" name="P2INDC08">
+      <Comment>P2 cent COMPT 2008  PUMP 2007</Comment>
+    </table>
+    <table id="410" parent="146" name="P2INDP11">
+      <Comment>stk physique 2011 au pump 2011</Comment>
+    </table>
+    <table id="411" parent="146" name="P2INDP2011">
+      <Comment>stk physique 2011 au pump 2011</Comment>
+    </table>
+    <table id="412" parent="146" name="P2INP2011S">
+      <Comment>sauv p2indp2011  dans sgsfic</Comment>
+    </table>
+    <table id="413" parent="146" name="P2_GR13"/>
+    <table id="414" parent="146" name="PCAISD">
+      <Comment>Piesse de Caisse pour DP &lt; 50 DT Detail</Comment>
+    </table>
+    <table id="415" parent="146" name="PCAISE">
+      <Comment>Piesse de Caisse pour DP &lt; 50 DT Entete</Comment>
+    </table>
+    <table id="416" parent="146" name="PLEIN_HGE"/>
+    <table id="417" parent="146" name="POMPE">
+      <Comment>POMPE GAS-OIL BUS</Comment>
+    </table>
+    <table id="418" parent="146" name="PRCZH"/>
+    <table id="419" parent="146" name="PRD2"/>
+    <table id="420" parent="146" name="PRIX"/>
+    <table id="421" parent="146" name="PROFIL">
+      <Comment>Profil utilisateur</Comment>
+    </table>
+    <table id="422" parent="146" name="PROFILSGS"/>
+    <table id="423" parent="146" name="PUMP">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="424" parent="146" name="PUMP1213"/>
+    <table id="425" parent="146" name="PUMP12S3">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="426" parent="146" name="PUMP12SV">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="427" parent="146" name="PUMP13S2">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="428" parent="146" name="PUMP13S3">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="429" parent="146" name="PUMP13SS">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="430" parent="146" name="PUMP13SV">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="431" parent="146" name="PUMP14S2">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="432" parent="146" name="PUMP14S3">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="433" parent="146" name="PUMP14SV">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="434" parent="146" name="PUMP2011">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="435" parent="146" name="PUMP2012">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="436" parent="146" name="PUMP2013">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="437" parent="146" name="PUMP2014">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="438" parent="146" name="PUMP2015">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="439" parent="146" name="PUMP2016">
+      <Comment>Liste des articles</Comment>
+    </table>
+    <table id="440" parent="146" name="PUMP30_14"/>
+    <table id="441" parent="146" name="PUMPFIN">
+      <Comment>PUMP fin annee</Comment>
+    </table>
+    <table id="442" parent="146" name="PUMPFIN_10">
+      <Comment>PUMP fin annee</Comment>
+    </table>
+    <table id="443" parent="146" name="PUMPFIN_AS">
+      <Comment>PUMP fin annee</Comment>
+    </table>
+    <table id="444" parent="146" name="RDSMOTIF">
+      <Comment>motif redressement</Comment>
+    </table>
+    <table id="445" parent="146" name="RDSSTK">
+      <Comment>Redressement Stock (BUZ, BUY)</Comment>
+    </table>
+    <table id="446" parent="146" name="RDSSTK2402">
+      <Comment>Redressement Stock (BUZ, BUY)</Comment>
+    </table>
+    <table id="447" parent="146" name="REF">
+      <Comment>REFERENCE te de création Nb/V S.A S.S U.D Domaine</Comment>
+    </table>
+    <table id="448" parent="146" name="REF0"/>
+    <table id="449" parent="146" name="REF10"/>
+    <table id="450" parent="146" name="REF15"/>
+    <table id="451" parent="146" name="REFART">
+      <Comment>Jointure refernence art constructeur</Comment>
+    </table>
+    <table id="452" parent="146" name="REFART2">
+      <Comment>Jointure refernence art constructeur</Comment>
+    </table>
+    <table id="453" parent="146" name="RLT">
+      <Comment>FICHIER RELATIONS nouv version</Comment>
+    </table>
+    <table id="454" parent="146" name="SAFT2011SV">
+      <Comment>fichier physique consomma annuelle / vehicule</Comment>
+    </table>
+    <table id="455" parent="146" name="SAFT2012">
+      <Comment>fichier physique consomma annuelle / vehicule</Comment>
+    </table>
+    <table id="456" parent="146" name="SAFT2012S">
+      <Comment>fichier physique consomma annuelle / vehicule</Comment>
+    </table>
+    <table id="457" parent="146" name="SAFT2013">
+      <Comment>fichier physique consomma annuelle / vehicule</Comment>
+    </table>
+    <table id="458" parent="146" name="SAFT2013B">
+      <Comment>fichier physique consomma annuelle / vehicule</Comment>
+    </table>
+    <table id="459" parent="146" name="SASS"/>
+    <table id="460" parent="146" name="SF"/>
+    <table id="461" parent="146" name="SGRP">
+      <Comment>Liste des sous groupes ou sous familles d articles</Comment>
+    </table>
+    <table id="462" parent="146" name="SGRPGRP">
+      <Comment>les sous groupes des groupes d&apos;articles jointure</Comment>
+    </table>
+    <table id="463" parent="146" name="SGRPGRPSF">
+      <Comment>les sous groupes des groupes d&apos;articles jointure</Comment>
+    </table>
+    <table id="464" parent="146" name="SGRPSF">
+      <Comment>Liste des sous groupes ou sous familles d articles</Comment>
+    </table>
+    <table id="465" parent="146" name="SGSPARMP">
+      <Comment>Membre ajouté par copie de fichier</Comment>
+    </table>
+    <table id="466" parent="146" name="STK">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="467" parent="146" name="STK030912">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="468" parent="146" name="STK100413">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="469" parent="146" name="STK19522"/>
+    <table id="470" parent="146" name="STK2">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="471" parent="146" name="STK2010"/>
+    <table id="472" parent="146" name="STK2010FER"/>
+    <table id="473" parent="146" name="STK2011SV">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="474" parent="146" name="STK27OLD"/>
+    <table id="475" parent="146" name="STK311214">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="476" parent="146" name="STKART_BK">
+      <Comment>STK DES ARTICLES</Comment>
+    </table>
+    <table id="477" parent="146" name="STKART_SV">
+      <Comment>STK DES ARTICLES</Comment>
+    </table>
+    <table id="478" parent="146" name="STKC2012">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="479" parent="146" name="STKDEPART">
+      <Comment>Stock depart d exe  des articles dans les magasins</Comment>
+    </table>
+    <table id="480" parent="146" name="STKDEV">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="481" parent="146" name="STKDEV_M">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="482" parent="146" name="STKDYN">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="483" parent="146" name="STKEC">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="484" parent="146" name="STKF.CONS"/>
+    <table id="485" parent="146" name="STKF.INV11"/>
+    <table id="486" parent="146" name="STKF.REC"/>
+    <table id="487" parent="146" name="STKGRP27">
+      <Comment>nv stock billetterie apres virement</Comment>
+    </table>
+    <table id="488" parent="146" name="STKINI"/>
+    <table id="489" parent="146" name="STKINI17"/>
+    <table id="490" parent="146" name="STKINI2"/>
+    <table id="491" parent="146" name="STKINI2012"/>
+    <table id="492" parent="146" name="STKINIT">
+      <Comment>Stock Initial au transfert AS400 et / ou Vax à SGS</Comment>
+    </table>
+    <table id="493" parent="146" name="STKINIT_SV">
+      <Comment>sauvgarde Stock Initial 2010</Comment>
+    </table>
+    <table id="494" parent="146" name="STKINV">
+      <Comment>Stock des articles dans les magasins pour inv</Comment>
+    </table>
+    <table id="495" parent="146" name="STKP">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="496" parent="146" name="STKPC">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="497" parent="146" name="STKS011012">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="498" parent="146" name="STKS031012">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="499" parent="146" name="STKS091012">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="500" parent="146" name="STKS1">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="501" parent="146" name="STKS120413">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="502" parent="146" name="STKS121012">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="503" parent="146" name="STKS160513">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="504" parent="146" name="STKS220413">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="505" parent="146" name="STKS250413">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="506" parent="146" name="STKS290313">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="507" parent="146" name="STKTEST">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="508" parent="146" name="STKTSTEC">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="509" parent="146" name="STK_080312">
+      <Comment>sauv du 08/03/2012</Comment>
+    </table>
+    <table id="510" parent="146" name="STK_22">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="511" parent="146" name="STK_CC">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="512" parent="146" name="STK_COP">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="513" parent="146" name="STK_FAUX">
+      <Comment>Stock des articles 09-10-2012 suite manipulation</Comment>
+    </table>
+    <table id="514" parent="146" name="STK_P13">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="515" parent="146" name="STK_R">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="516" parent="146" name="STK_SV2010">
+      <Comment>sauvgarde stk 2010</Comment>
+    </table>
+    <table id="517" parent="146" name="STK_SV2011">
+      <Comment>Stock des articles dans les magasins</Comment>
+    </table>
+    <table id="518" parent="146" name="STOCK_BUS_P_2017"/>
+    <table id="519" parent="146" name="STOCK_FERRE_P_2017"/>
+    <table id="520" parent="146" name="SUTIL">
+      <Comment>Services utilisateurs</Comment>
+    </table>
+    <table id="521" parent="146" name="SUTILP">
+      <Comment>Services utilisateurs</Comment>
+    </table>
+    <table id="522" parent="146" name="SUTILP_SV">
+      <Comment>Services utilisateurs</Comment>
+    </table>
+    <table id="523" parent="146" name="SUTIL_SAUV">
+      <Comment>sauv le 16/05/2012</Comment>
+    </table>
+    <table id="524" parent="146" name="SVC"/>
+    <table id="525" parent="146" name="SVCAFF">
+      <Comment>Jointure  Service  et Affectation Analytiques</Comment>
+    </table>
+    <table id="526" parent="146" name="SVCAFF1">
+      <Comment>BMT non confirmés de 4610 à 4630</Comment>
+    </table>
+    <table id="527" parent="146" name="SVCAFF2"/>
+    <table id="528" parent="146" name="SVCBUS">
+      <Comment>Services utilisateurs</Comment>
+    </table>
+    <table id="529" parent="146" name="SVCE6">
+      <Comment>usr GCC Table sprfic/prg</Comment>
+    </table>
+    <table id="530" parent="146" name="SVCMAG">
+      <Comment>Jointure  service  et Magasin</Comment>
+    </table>
+    <table id="531" parent="146" name="SVCMAG1">
+      <Comment>BMT non confirmés de 4610 à 4630</Comment>
+    </table>
+    <table id="532" parent="146" name="SVCMAG2"/>
+    <table id="533" parent="146" name="SVCNA">
+      <Comment>Services utilisateurs</Comment>
+    </table>
+    <table id="534" parent="146" name="SVCSTT1"/>
+    <table id="535" parent="146" name="TD1">
+      <Comment>Fichier BE détail: BED BEETRD BEMARCHED BEDAMD</Comment>
+    </table>
+    <table id="536" parent="146" name="TD2">
+      <Comment>Fichier BE détail: BED BEETRD BEMARCHED BEDAMD</Comment>
+    </table>
+    <table id="537" parent="146" name="TD3">
+      <Comment>Fichier BE détail: BED BEETRD BEMARCHED BEDAMD</Comment>
+    </table>
+    <table id="538" parent="146" name="TE1">
+      <Comment>Fichier BE entete: BEE BEETRE BEMARCHEE BEDAME</Comment>
+    </table>
+    <table id="539" parent="146" name="TE2">
+      <Comment>Fichier BE entete: BEE BEETRE BEMARCHEE BEDAME</Comment>
+    </table>
+    <table id="540" parent="146" name="TE3">
+      <Comment>Fichier BE entete: BEE BEETRE BEMARCHEE BEDAME</Comment>
+    </table>
+    <table id="541" parent="146" name="TEST5">
+      <Comment>oons d entrée ENTETE  Etranger</Comment>
+    </table>
+    <table id="542" parent="146" name="TITRE"/>
+    <table id="543" parent="146" name="TMPBE">
+      <Comment>LISTE DES ENTREES PU</Comment>
+    </table>
+    <table id="544" parent="146" name="TMPBS">
+      <Comment>LISTE DES SORTIE</Comment>
+    </table>
+    <table id="545" parent="146" name="TMPCONS">
+      <Comment>TMP CONSOM (TABLE TEMPO)</Comment>
+    </table>
+    <table id="546" parent="146" name="TMPMVT">
+      <Comment>LISTE DES MOUVEMETS E/S</Comment>
+    </table>
+    <table id="547" parent="146" name="TYPACHAT">
+      <Comment>Type achat</Comment>
+    </table>
+    <table id="548" parent="146" name="TYPAFF">
+      <Comment>Type des affectations analytiques</Comment>
+    </table>
+    <table id="549" parent="146" name="TYPART">
+      <Comment>Type d article</Comment>
+    </table>
+    <table id="550" parent="146" name="TYPMAG">
+      <Comment>Types des magasins</Comment>
+    </table>
+    <table id="551" parent="146" name="TYPTVA">
+      <Comment>Types des tva</Comment>
+    </table>
+    <table id="552" parent="146" name="UDIST">
+      <Comment>Liste des unités de distribution</Comment>
+    </table>
+    <table id="553" parent="146" name="USRMENU">
+      <Comment>ASSOCIATION USR MENU</Comment>
+    </table>
+    <table id="554" parent="146" name="UTIL">
+      <Comment>liste des utilisateur du SGS</Comment>
+    </table>
+    <table id="555" parent="146" name="UTIL1">
+      <Comment>liste des utilisateur du SGS</Comment>
+    </table>
+    <table id="556" parent="146" name="VALFIN">
+      <Comment>valeur finale</Comment>
+    </table>
+    <table id="557" parent="146" name="VALFIN1">
+      <Comment>valeur finale</Comment>
+    </table>
+    <table id="558" parent="146" name="VALFIN2">
+      <Comment>valeur finale</Comment>
+    </table>
+    <table id="559" parent="146" name="VALSTK">
+      <Comment>Agregat pour valeur du stock chaque fin d&apos;ann{e</Comment>
+    </table>
+    <table id="560" parent="146" name="VALSTK4314">
+      <Comment>Agregat pour valeur du stock chaque fin d&apos;ann{e</Comment>
+    </table>
+    <table id="561" parent="146" name="VALSTKB14">
+      <Comment>Inventaire des stocks articles dans les magasins</Comment>
+    </table>
+    <table id="562" parent="146" name="VALSTKF"/>
+    <table id="563" parent="146" name="VALSTKM14">
+      <Comment>Inventaire des stocks articles dans les magasins</Comment>
+    </table>
+    <table id="564" parent="146" name="VALSTKP">
+      <Comment>Agregat pour valeur du stock chaque fin d&apos;ann{e</Comment>
+    </table>
+    <table id="565" parent="146" name="VALSTKPSV">
+      <Comment>Agregat pour valeur du stock chaque fin d&apos;ann{e</Comment>
+    </table>
+    <table id="566" parent="146" name="VALSTKS213">
+      <Comment>Agregat pour valeur du stock chaque fin d&apos;ann{e</Comment>
+    </table>
+    <table id="567" parent="146" name="VALSTKT">
+      <Comment>Agregat pour valeur du stock chaque fin d&apos;ann{e</Comment>
+    </table>
+    <table id="568" parent="146" name="VALTOT_GRP">
+      <Comment>bons validés mai non existant dans stock</Comment>
+    </table>
+    <table id="569" parent="146" name="VBEF2010"/>
+    <table id="570" parent="146" name="VBEF2010E"/>
+    <table id="571" parent="146" name="VIDANGE"/>
+    <table id="572" parent="146" name="VISITE1"/>
+    <index id="573" parent="168" name="AFFANAL">
+      <ColNames>AFFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="574" parent="172" name="AFFIND">
+      <ColNames>AFF</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="575" parent="173" name="APPLICAT">
+      <ColNames>APPLICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="576" parent="175" name="ART">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="577" parent="175" name="ARTI1">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="578" parent="175" name="ARTREF">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="579" parent="175" name="DESART">
+      <ColNames>ARTLIB</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="580" parent="176" name="ART2012">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="581" parent="178" name="ART2014">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="582" parent="179" name="ARTAFF">
+      <ColNames>AFFTYPE
+AFFCOD
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="583" parent="182" name="NEWTABLE_ARTCOD_IDX">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="584" parent="184" name="ARTMAG">
+      <ColNames>ARTCOD
+MAGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="585" parent="187" name="ARTQTEP">
+      <ColNames>ARTCOD
+QTEPROP</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="586" parent="188" name="BCD">
+      <ColNames>BCCOD
+BCEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="587" parent="189" name="BCDAMD">
+      <ColNames>BCCOD
+BCEXE
+BCSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="588" parent="190" name="BCDAME">
+      <ColNames>BCCOD
+BCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="589" parent="191" name="BCDAMETRD">
+      <ColNames>BCCOD
+BCEXE
+BCSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="590" parent="192" name="BCDAMETRE">
+      <ColNames>BCCOD
+BCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="591" parent="193" name="BCDSV">
+      <ColNames>BCCOD
+BCEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="592" parent="194" name="BCE">
+      <ColNames>BCCOD
+BCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="593" parent="195" name="BCETRD">
+      <ColNames>BCCOD
+BCEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="594" parent="196" name="BCETRE">
+      <ColNames>BCCOD
+BCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="595" parent="197" name="BCETRE1">
+      <ColNames>BCCOD
+BCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="596" parent="198" name="BCFD">
+      <ColNames>BCFCOD
+BCFEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="597" parent="199" name="BCFE">
+      <ColNames>BCFCOD
+BCFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="598" parent="200" name="BCMARCHED">
+      <ColNames>BCCOD
+BCEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="599" parent="201" name="BCMARCHEE">
+      <ColNames>BCCOD
+BCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="600" parent="203" name="BCND">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="601" parent="204" name="BCNDB">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="602" parent="206" name="BCNDB2411">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="603" parent="207" name="BCNDB_INI">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="604" parent="208" name="BCNDHAB">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="605" parent="209" name="BCNE">
+      <ColNames>BCNCOD
+BCNEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="606" parent="210" name="BCNEB">
+      <ColNames>BCNCOD
+BCNEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="607" parent="211" name="BCNEB2811">
+      <ColNames>BCNCOD
+BCNEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="608" parent="212" name="BCNEHAB">
+      <ColNames>BCNCOD
+BCNEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="609" parent="213" name="BCNHABD">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="610" parent="214" name="BCNHABE">
+      <ColNames>BCNCOD
+BCNEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="611" parent="216" name="BED">
+      <ColNames>BECOD
+BEEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="612" parent="217" name="BEDAMD">
+      <ColNames>BECOD
+BEEXE
+BESEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="613" parent="218" name="BEDAME">
+      <ColNames>BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="614" parent="219" name="BEE">
+      <ColNames>BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="615" parent="220" name="BEETRD">
+      <ColNames>BECOD
+BEEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="616" parent="221" name="BEETRE">
+      <ColNames>BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="617" parent="222" name="BEMARCHED">
+      <ColNames>BECOD
+BEEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="618" parent="223" name="BEMARCHEE">
+      <ColNames>BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="619" parent="224" name="BENMVT">
+      <ColNames>NAT
+BECOD
+BESEQ
+BEEXE
+BEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="620" parent="225" name="BLID">
+      <ColNames>BLICOD
+BCNCOD
+BCNEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="621" parent="226" name="BLIE">
+      <ColNames>BTICOD
+BTIEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="622" parent="227" name="BTID">
+      <ColNames>BTICOD
+BTIEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="623" parent="228" name="BTIDB">
+      <ColNames>BTICOD
+BTIEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="624" parent="229" name="BTIE">
+      <ColNames>BTICOD
+BTIEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="625" parent="231" name="BUV00">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="626" parent="232" name="BUV00SV">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="627" parent="233" name="BUV2011">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="628" parent="234" name="BUV2011S1">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="629" parent="235" name="BUV2011SV">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="630" parent="236" name="BUV99">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="631" parent="237" name="BUV99SV">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="632" parent="238" name="BUV2010TL">
+      <ColNames>CLEBORD
+CLEMAG
+CLETYP
+CLEFOL
+CLESEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="633" parent="238" name="BUV_2010TL">
+      <ColNames>CLEBORD
+CLEFOL
+CLESEQ
+CLETYP
+CLEMAG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="634" parent="238" name="QUV2010TL">
+      <ColNames>ART
+TYPBU
+AABU
+MMBU
+JJBU</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="635" parent="239" name="CONST">
+      <ColNames>CONSTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="636" parent="240" name="CONTD">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC
+ARTCOD
+EXENUM</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="637" parent="241" name="CONTD_S">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC
+ARTCOD
+EXENUM</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="638" parent="242" name="CONTD_SS">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC
+ARTCOD
+EXENUM</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="639" parent="243" name="CONTE">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="640" parent="244" name="CONTETRD">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC
+ARTCOD
+EXENUM</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="641" parent="245" name="CONTETRE">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="642" parent="246" name="CONTE_SS">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="643" parent="247" name="CONTVAL">
+      <ColNames>CONTCOD
+CONTEXE
+CONTDATC
+CONTNUM</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="644" parent="248" name="DAMD">
+      <ColNames>DAMCOD
+DAMEXE
+ARTSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="645" parent="249" name="DAMDSV">
+      <ColNames>DAMCOD
+DAMEXE
+ARTSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="646" parent="250" name="DAMD_SV">
+      <ColNames>DAMCOD
+DAMEXE
+ARTSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="647" parent="251" name="DAME">
+      <ColNames>DAMCOD
+DAMEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="648" parent="252" name="DAME_SV">
+      <ColNames>DAMCOD
+DAMEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="649" parent="253" name="DAPD">
+      <ColNames>DAPCOD
+DAPEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="650" parent="254" name="DAPD1">
+      <ColNames>DAPCOD
+DAPEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="651" parent="255" name="DAPE">
+      <ColNames>DAPCOD
+DAPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="652" parent="256" name="DAPE_SAV">
+      <ColNames>DAPCOD
+DAPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="653" parent="258" name="DEPATEL">
+      <ColNames>DEPCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="654" parent="259" name="DEVISE">
+      <ColNames>DEVCOD
+DEVEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="655" parent="261" name="DIFINVD">
+      <ColNames>DIFCOD
+DIFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="656" parent="262" name="DIFINVE">
+      <ColNames>DIFCOD
+DIFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="657" parent="263" name="DOMAINE">
+      <ColNames>DOMCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="658" parent="264" name="DOMSGR">
+      <ColNames>DOMCOD
+SGRCOD
+GRPCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="659" parent="265" name="DPD">
+      <ColNames>DPCOD
+DPEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="660" parent="266" name="DPD1">
+      <ColNames>DPCOD
+DPEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="661" parent="267" name="DPDAM">
+      <ColNames>DPCOD
+DPEXE
+DAMCOD
+DAMEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="662" parent="268" name="DPDAMD">
+      <ColNames>DPCOD
+DPEXE
+DPSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="663" parent="269" name="DPDAME">
+      <ColNames>DPCOD
+DPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="664" parent="270" name="DPDAMETR">
+      <ColNames>DPCOD
+DPEXE
+DAMCOD
+DAMEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="665" parent="271" name="DPDAMETRD">
+      <ColNames>DPCOD
+DPEXE
+DPSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="666" parent="272" name="DPDAMETRE">
+      <ColNames>DPCOD
+DPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="667" parent="273" name="DPDAPP">
+      <ColNames>DPCOD
+DPEXE
+DAPCOD
+DAPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="668" parent="274" name="DPDAPPETR">
+      <ColNames>DPCOD
+DPEXE
+DAPCOD
+DAPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="669" parent="275" name="DPE">
+      <ColNames>DPCOD
+DPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="670" parent="276" name="DPE1">
+      <ColNames>DPCOD
+DPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="671" parent="277" name="DPETRD">
+      <ColNames>DPCOD
+DPEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="672" parent="278" name="DPETRD1">
+      <ColNames>DPCOD
+DPEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="673" parent="279" name="DPETRE">
+      <ColNames>DPCOD
+DPEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="674" parent="280" name="DPFRS">
+      <ColNames>DPCOD
+DPEXE
+FRSCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="675" parent="281" name="DPFRSDAM">
+      <ColNames>DPCOD
+DPEXE
+FRSCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="676" parent="282" name="DPFRSETR">
+      <ColNames>DPCOD
+DPEXE
+FRSCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="677" parent="283" name="DROIT">
+      <ColNames>PROFCOD
+APPLICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="678" parent="284" name="DROIT1">
+      <ColNames>PROFCOD
+APPLICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="679" parent="285" name="DROIT2">
+      <ColNames>PROFCOD
+APPLICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="680" parent="286" name="ENTREE">
+      <ColNames>NAT
+BECOD
+BESEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="681" parent="287" name="ENTREES">
+      <ColNames>NAT
+BECOD
+BESEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="682" parent="288" name="ETAMVTART">
+      <ColNames>MVTEXE
+MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="683" parent="289" name="ETAMVTDYN">
+      <ColNames>MVTEXE
+MVTCOD
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="684" parent="290" name="ETAPUMP">
+      <ColNames>STKEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="685" parent="291" name="ETASTK">
+      <ColNames>STKEXE
+STKMAG
+DATEDIT
+STKART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="686" parent="292" name="ETAT">
+      <ColNames>ETATCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="687" parent="293" name="ETATBON">
+      <ColNames>ETBONCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="688" parent="294" name="EXERCICE">
+      <ColNames>EXECOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="689" parent="295" name="EXON">
+      <ColNames>EXOCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="690" parent="297" name="FRS">
+      <ColNames>FRSCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="691" parent="298" name="FRSART">
+      <ColNames>FRSCOD
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="692" parent="299" name="FRSDOM">
+      <ColNames>FRSCOD
+DOMCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="693" parent="300" name="GRP">
+      <ColNames>GRPCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="694" parent="301" name="GRPSF">
+      <ColNames>GSFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="695" parent="302" name="GRPSGR">
+      <ColNames>SGRCOD
+GRPCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="696" parent="303" name="HISTALERT">
+      <ColNames>ALEEXE
+ALESEQ
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="697" parent="304" name="HISTART">
+      <ColNames>HISCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="698" parent="305" name="HISTINV">
+      <ColNames>HSTART
+HSTMAG
+HSTJJI
+HSTMMI
+HSTAAI</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="699" parent="306" name="HISTMAJART">
+      <ColNames>GRPCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="700" parent="307" name="HISTMAJSTK">
+      <ColNames>GRPCOD
+MAGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="701" parent="309" name="HISTPUMP">
+      <ColNames>ARTCOD
+NATBON
+CODBON</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="702" parent="310" name="HISTPUMP1">
+      <ColNames>ARTCOD
+SEQPUMP</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="703" parent="311" name="HISTPUMPDH">
+      <ColNames>ARTCOD
+SEQPUMP</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="704" parent="312" name="INIT">
+      <ColNames>MAGCOD
+ARTCOD
+EXEPRE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="705" parent="313" name="INVART2013">
+      <ColNames>ARTMAG
+ARTART
+ARTAAI
+ARTMMI
+ARTJJI</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="706" parent="313" name="INVBRD1">
+      <ColNames>ARTBRD
+ARTMAG
+ARTART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="707" parent="313" name="INVBRD13">
+      <ColNames>ARTBRD
+ARTMAG
+ARTART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="708" parent="321" name="JOUR">
+      <ColNames>JOUCOD
+JOUEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="709" parent="322" name="KMVL">
+      <ColNames>BCNCOD
+BCNEXE
+BCNSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="710" parent="323" name="MAG">
+      <ColNames>MAGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="711" parent="324" name="MENU">
+      <ColNames>IDMENU</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="712" parent="325" name="MENUSV">
+      <ColNames>IDMENU</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="713" parent="326" name="MODGES">
+      <ColNames>MGECOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="714" parent="327" name="MODLIV">
+      <ColNames>MLIVCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="715" parent="328" name="MODPAI">
+      <ColNames>MPAICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="716" parent="329" name="MODULE">
+      <ColNames>AFF</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="717" parent="346" name="MVT2013SV">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="718" parent="347" name="MVTART">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="719" parent="349" name="MVTART12S3">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="720" parent="350" name="MVTART12SV">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="721" parent="351" name="MVTART13S2">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="722" parent="352" name="MVTART13S3">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="723" parent="353" name="MVTART13SS">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="724" parent="354" name="MVTART13SV">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="725" parent="355" name="MVTART14S2">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="726" parent="356" name="MVTART14S3">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="727" parent="357" name="MVTART14SV">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="728" parent="358" name="MVTART2013">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="729" parent="359" name="MVTART2014">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="730" parent="360" name="MVTART2015">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="731" parent="361" name="MVTART2016">
+      <ColNames>MVTCOD
+MVTSEQ
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="732" parent="362" name="MVTARTDYN">
+      <ColNames>MVTEXE
+MVTCOD
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="733" parent="364" name="MVTDYN032017_MVTEXE_IDX">
+      <ColNames>MVTEXE
+MVTCOD
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="734" parent="367" name="MVTNMVT">
+      <ColNames>MVTEXE
+MVTCOD
+NATURE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="735" parent="368" name="NASCE">
+      <ColNames>NSVC</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="736" parent="372" name="NBM">
+      <ColNames>BM
+MAGCOD
+BMEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="737" parent="372" name="NBML">
+      <ColNames>BCNCOD
+MAGCOD
+BMEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="738" parent="374" name="NBMSV">
+      <ColNames>BM
+MAGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="739" parent="375" name="OFFD">
+      <ColNames>OFFCOD
+OFFEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="740" parent="376" name="OFFD1">
+      <ColNames>OFFCOD
+OFFEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="741" parent="377" name="OFFDAMD">
+      <ColNames>OFFCOD
+OFFEXE
+OFFSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="742" parent="378" name="OFFDAMDS2">
+      <ColNames>OFFCOD
+OFFEXE
+OFFSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="743" parent="379" name="OFFDAMDSV">
+      <ColNames>OFFCOD
+OFFEXE
+OFFSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="744" parent="380" name="OFFDAME">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="745" parent="381" name="OFFDAMETRD">
+      <ColNames>OFFCOD
+OFFEXE
+OFFSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="746" parent="382" name="OFFDAMETRE">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="747" parent="383" name="OFFDAMETRS">
+      <ColNames>OFFCOD
+OFFEXE
+OFFSEQ</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="748" parent="384" name="OFFDSV">
+      <ColNames>OFFCOD
+OFFEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="749" parent="385" name="OFFE">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="750" parent="386" name="OFFE1">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="751" parent="387" name="OFFETRD">
+      <ColNames>OFFCOD
+OFFEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="752" parent="388" name="OFFETRE">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="753" parent="389" name="OFFETRE1">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="754" parent="390" name="OFFETRE2">
+      <ColNames>OFFCOD
+OFFEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="755" parent="391" name="OFFRED">
+      <ColNames>OFFCOD
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="756" parent="392" name="OFFREE">
+      <ColNames>OFFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="757" parent="393" name="OLD">
+      <ColNames>OLCOD
+OLEXE
+CONTCOD
+CONTEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="758" parent="394" name="OLD050116">
+      <ColNames>OLCOD
+OLEXE
+CONTCOD
+CONTEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="759" parent="395" name="OLDUDIST">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="760" parent="396" name="OLE">
+      <ColNames>OLCOD
+OLEXE
+CONTCOD
+CONTEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="761" parent="397" name="OLETRD">
+      <ColNames>OLCOD
+OLEXE
+CONTCOD
+CONTEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="762" parent="398" name="OLETRE">
+      <ColNames>OLCOD
+OLEXE
+CONTCOD
+CONTEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="763" parent="399" name="OLE_S">
+      <ColNames>OLCOD
+OLEXE
+CONTCOD
+CONTEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="764" parent="400" name="OPERAT">
+      <ColNames>OPECOD
+OPEEXE
+OPETYP</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="765" parent="401" name="OPR">
+      <ColNames>OPECOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="766" parent="403" name="ORGKIT">
+      <ColNames>KITCOD
+ORGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="767" parent="405" name="P1IN2008">
+      <ColNames>P1CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="768" parent="406" name="P1IN2009">
+      <ColNames>P1CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="769" parent="407" name="P1IN2011">
+      <ColNames>P1CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="770" parent="408" name="P1SMLT11">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="771" parent="409" name="P2INDC08">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="772" parent="410" name="P2INDP11">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="773" parent="411" name="P2INDP2011">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="774" parent="412" name="P2INP2011S">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="775" parent="414" name="PCAISD">
+      <ColNames>PCCOD
+PCEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="776" parent="415" name="PCAISE">
+      <ColNames>PCCOD
+PCEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="777" parent="417" name="POMPE">
+      <ColNames>MAGCOD
+NPOMPE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="778" parent="421" name="PROFIL">
+      <ColNames>PROFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="779" parent="423" name="PUMP">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="780" parent="425" name="PUMP12S3">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="781" parent="426" name="PUMP12SV">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="782" parent="427" name="PUMP13S2">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="783" parent="428" name="PUMP13S3">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="784" parent="429" name="PUMP13SS">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="785" parent="430" name="PUMP13SV">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="786" parent="431" name="PUMP14S2">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="787" parent="432" name="PUMP14S3">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="788" parent="433" name="PUMP14SV">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="789" parent="434" name="PUMP2011">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="790" parent="435" name="PUMP2012">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="791" parent="436" name="PUMP2013">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="792" parent="437" name="PUMP2014">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="793" parent="438" name="PUMP2015">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="794" parent="439" name="PUMP2016">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="795" parent="441" name="PUMPFIN">
+      <ColNames>ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="796" parent="442" name="PUMPFIN_10">
+      <ColNames>ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="797" parent="443" name="PUMPFIN_AS">
+      <ColNames>ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="798" parent="444" name="RDSMOTIF">
+      <ColNames>RDSMOTIF</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="799" parent="445" name="RDSSTK">
+      <ColNames>RDSCOD
+RDSEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="800" parent="446" name="RDSSTK2402">
+      <ColNames>RDSCOD
+RDSEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="801" parent="447" name="REF">
+      <ColNames>CDREF
+COD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="802" parent="451" name="REFART">
+      <ColNames>CONSTCOD
+ARTCOD
+REF</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="803" parent="452" name="REFART2">
+      <ColNames>CONSTCOD
+ARTCOD
+REF</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="804" parent="453" name="RLT">
+      <ColNames>RELNUM</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="805" parent="454" name="SAFT2011SV">
+      <ColNames>AFF
+VEH
+AFF3</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="806" parent="455" name="SAFT2012">
+      <ColNames>AFF
+VEH
+AFF3</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="807" parent="456" name="SAFT2012S">
+      <ColNames>AFF
+VEH
+AFF3</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="808" parent="457" name="SAFT2013">
+      <ColNames>AFF
+VEH
+AFF3</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="809" parent="458" name="SAFT2013B">
+      <ColNames>AFF
+VEH
+AFF3</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="810" parent="461" name="SGRP">
+      <ColNames>SGRCOD
+GRPCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="811" parent="462" name="SGRPGRP">
+      <ColNames>GRPCOD
+SGRCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="812" parent="463" name="SGRPGRPSF">
+      <ColNames>GSFCOD
+SGSFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="813" parent="464" name="SGRPSF">
+      <ColNames>SGSFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="814" parent="465" name="SGSPARMP">
+      <ColNames>STKEXERC</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="815" parent="466" name="STK">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="816" parent="467" name="STK030912">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="817" parent="468" name="STK100413">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="818" parent="470" name="STK2">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="819" parent="473" name="STK2011SV">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="820" parent="475" name="STK311214">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="821" parent="476" name="STKART_BK">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="822" parent="477" name="STKART_SV">
+      <ColNames>CODART</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="823" parent="478" name="STKC2012">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="824" parent="479" name="STKDEPART">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="825" parent="480" name="STKDEV">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="826" parent="481" name="STKDEV_M">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="827" parent="482" name="STKDYN">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="828" parent="483" name="STKEC">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="829" parent="492" name="STKINIT">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="830" parent="493" name="STKINIT_SV">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="831" parent="494" name="STKINV">
+      <ColNames>MAGCOD
+ARTCOD
+INVDATE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="832" parent="495" name="STKP">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="833" parent="496" name="STKPC">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="834" parent="497" name="STKS011012">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="835" parent="498" name="STKS031012">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="836" parent="499" name="STKS091012">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="837" parent="500" name="STKS1">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="838" parent="501" name="STKS120413">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="839" parent="502" name="STKS121012">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="840" parent="503" name="STKS160513">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="841" parent="504" name="STKS220413">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="842" parent="505" name="STKS250413">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="843" parent="506" name="STKS290313">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="844" parent="507" name="STKTEST">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="845" parent="508" name="STKTSTEC">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="846" parent="509" name="STK_080312">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="847" parent="510" name="STK_22">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="848" parent="511" name="STK_CC">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="849" parent="512" name="STK_COP">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="850" parent="513" name="STK_FAUX">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="851" parent="514" name="STK_P13">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="852" parent="515" name="STK_R">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="853" parent="516" name="STK_SV2010">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="854" parent="517" name="STK_SV2011">
+      <ColNames>MAGCOD
+ARTCOD
+STKEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="855" parent="518" name="STOCK_BUS_P_2017_ARTCOD_IDX">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="856" parent="519" name="STOCK_FERRE_P_2017_ARTCOD_IDX">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="857" parent="521" name="SUTIL">
+      <ColNames>SUTICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="858" parent="521" name="SUTILP">
+      <ColNames>SUTICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="859" parent="521" name="SVCBUS">
+      <ColNames>SUTICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="860" parent="522" name="SUTILP_SV">
+      <ColNames>SUTICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="861" parent="523" name="SUTIL_SAUV">
+      <ColNames>SUTICOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="862" parent="525" name="SVCAFF">
+      <ColNames>SUTICOD
+AFFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="863" parent="530" name="SVCMAG">
+      <ColNames>SUTICOD
+MAGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="864" parent="533" name="SVCNA">
+      <ColNames>NSVC</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="865" parent="535" name="TD1">
+      <ColNames>BETYPE
+BECOD
+BEEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="866" parent="536" name="TD2">
+      <ColNames>BETYPE
+BECOD
+BEEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="867" parent="537" name="TD3">
+      <ColNames>BETYPE
+BECOD
+BEEXE
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="868" parent="538" name="TE1">
+      <ColNames>BETYPE
+BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="869" parent="539" name="TE2">
+      <ColNames>BETYPE
+BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="870" parent="540" name="TE3">
+      <ColNames>BETYPE
+BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="871" parent="541" name="TEST5">
+      <ColNames>BECOD
+BEEXE</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="872" parent="545" name="TMPCONS">
+      <ColNames>AFFCODB
+PUMP</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="873" parent="547" name="TYPACHAT">
+      <ColNames>TACHACOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="874" parent="548" name="TYPAFF">
+      <ColNames>TAFFCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="875" parent="549" name="TYPART">
+      <ColNames>TARCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="876" parent="550" name="TYPMAG">
+      <ColNames>TMAGCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="877" parent="551" name="TYPTVA">
+      <ColNames>TTVACOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="878" parent="552" name="UDIST">
+      <ColNames>UDCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="879" parent="553" name="USRMENU">
+      <ColNames>LOGIN
+IDMENU</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="880" parent="554" name="UTIL">
+      <ColNames>UTILOG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="881" parent="555" name="UTIL1">
+      <ColNames>UTILOG</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="882" parent="556" name="VALFIN">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="883" parent="557" name="VALFIN1">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="884" parent="558" name="VALFIN2">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="885" parent="559" name="VALSTK">
+      <ColNames>STKEXE
+RESEAU
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="886" parent="560" name="VALSTK4314">
+      <ColNames>STKEXE
+RESEAU
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="887" parent="561" name="VALSTKB14">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="888" parent="563" name="VALSTKM14">
+      <ColNames>ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="889" parent="564" name="VALSTKP">
+      <ColNames>STKEXE
+RESEAU
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="890" parent="565" name="VALSTKPSV">
+      <ColNames>STKEXE
+RESEAU
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="891" parent="566" name="VALSTKS213">
+      <ColNames>STKEXE
+RESEAU
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="892" parent="567" name="VALSTKT">
+      <ColNames>STKEXE
+RESEAU
+ARTCOD</ColNames>
+      <Unique>1</Unique>
+    </index>
+  </database-model>
+</dataSource>

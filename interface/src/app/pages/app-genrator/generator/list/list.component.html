@@ -1,0 +1,47 @@
+<nb-card full-heigth full-heigth-all-child>
+
+    <nb-card-header>
+        <div class="row">
+            <div class="col-md-2" title>{{listTtile}}</div>
+            <div class="col-md-7">
+                <ngx-dimention   (filterChange)="setDemFilter($event)"  #dimention ></ngx-dimention>
+            </div>
+            <div class="col-md-3">
+
+                <button style="margin-right: 5px;" class="pull-right" (click)="refrechListData()" nbButton size="small">
+                  Actualiser
+                </button>
+                <button  style="margin-right: 5px;" class="pull-right" (click)="doCreateAction()" nbButton size="small">
+                    {{createAction.actionName}}
+                </button>
+            </div>
+        </div>
+    </nb-card-header>
+
+
+    <nb-card-body style="padding-top: 0px;">
+
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr>
+                <th *ngFor="let fld of field">{{fld.fieldInterfaceName}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of listData">
+                <td *ngFor="let fld of field">
+                    <span >{{data[fld.fieldEntityName]}}</span>
+                </td>
+                <td *ngIf="getStepActionCount(data) > 0">
+                    <button style="margin-right: 3px;" *ngFor="let act of getStepAction(data)" class="pull-right" (click)="doAction(act,data)"
+                            nbButton size="xsmall">{{act.actionName}}
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </nb-card-body>
+
+</nb-card>

@@ -1,0 +1,12 @@
+<div class="row" vspace >
+    <div class="col-md-8"  paddingzero>
+        <input #smartinput (click)="stopClick($event)"   nbInput fullWidth fieldSize="small" shape="rectangle" placeholder="{{placeholder}}" [(ngModel)]="item">
+    </div>
+
+    <div class="col-md-4" paddingzero>
+        <button nbButton fullWidth size="xsmall" (click)="addItem($event)">+</button>
+    </div>
+
+</div>
+
+

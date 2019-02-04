@@ -1,0 +1,211 @@
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+nb-card-header{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+[smallbtn-padding]{
+  padding: 2px 8px !important;
+}
+
+
+[forceOverFlow]{
+  overflow: hidden;
+}
+
+[noborder]{
+  border-bottom: 0px;
+}
+
+[ActionIcone]{
+  margin: 1px;
+  padding: 2px;
+}
+
+[menuPadding]{
+  padding: 8px !important;
+}
+
+[inlineelement]{
+  display: inline-block;
+}
+
+[containerFlex]{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.colorPrimary{
+  color:#1598ff !important;
+}
+
+[colorPrimary]{
+  color:#1598ff !important;
+}
+
+[colorInactive]{
+  color: #d0e2ee;
+}
+
+[displayingride]{
+  display: inline-grid !important;
+}
+
+[submenuheader]{
+  font-size: 12px;
+  padding: 4px 8px;
+  display: inline-block;
+  margin: 0px;
+  background-color: #c0d8eb;
+  border-radius: 4px;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.selectedList{
+  background-color: #f3faff;
+  border-bottom: 1px #9ac4ff solid;
+}
+
+.selectedListr{
+  background-color: #f3faff;
+}
+
+[padingreversed]{
+   padding-bottom: 30px !important;
+  padding-top: 0px !important;
+}
+
+[reversepadin]{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+
+  padding-bottom: 30px !important;
+  padding-top: 0px !important;
+}
+
+[nopaddin]{
+  padding: 0px !important;
+}
+
+[roleuser]{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: lighter;
+  font-size: 12px;
+}
+
+[nostylecard] {
+  background-color: transparent;
+}
+
+[trasback]{
+  background-color: #ebeff5;
+}
+[entitiContainer]{
+  width: fit-content;
+  background-color: #ffffff;
+  padding: 5px;
+  margin: 5px;
+  display: inline-block;
+  border-radius: 5px;
+  position: absolute;
+  box-shadow: 0 2px 12px 0 #dfe3eb;
+}
+
+[entityHead]{
+  display: block;
+}
+[entityField]{
+  display: block;
+}
+
+
+
+[entityFieldHover]:hover{
+  background-color: #c5e5f6;
+  border-radius: 3px;
+}
+
+.ent_highlight{
+    box-shadow: 0 3px 12px 0 #ff5490;
+  }
+
+.ent_highlight_pending{
+  box-shadow: 0 3px 12px 0 #3458b5;
+}
+
+.ent_highlight_action{
+  box-shadow: 0 3px 12px 0 #56b525;
+}
+
+
+.ent_highlight_update_action{
+  box-shadow: 0 3px 12px 0 #9a46d8;
+}
+
+.ent_highlight_list{
+  box-shadow: 0 3px 12px 0 #5dafd8;
+}
+
+.ent_highlight_update_list{
+  box-shadow: 0 3px 12px 0 #d8943c;
+}
+
+[paramInput]{
+  margin-bottom: 5px;
+}
+
+
+[fieldItem]{
+
+}
+
+.qheigth {
+  height: 23%;
+}
+
+[title]{
+  display: inline-block;
+  padding: 10px;
+}
+
+
+/*Stepper CSS */
+
+
+.stepper { clear: left; float: left; margin: 20px; }
+
+.step { float: left; font-size: 15px; margin: 0 12px; }
+
+.divider { border-bottom: 1px solid #cfcfcf; float: left; height: 25px; margin: 0 12px; width: 45px; }
+
+.circle {
+  background: #cfcfcf; border-radius: 50%; color: #ffffff; float: left; font-size: 13px; height: 50px; line-height: 50px; text-align: center; width: 50px;
+}
+
+.label { color: #cfcfcf; float: left; line-height: 24px; margin-left: 8px; }
+
+.active {
+  .circle{ background: #1598ff; }
+  .label{ color: #5b5b5b; font-weight: 400; }
+}
+
+
+[entityoption]{
+  float: right;
+}
+
+[roleoption]{
+  float: left;
+}
+.panelFormGroup{
+  margin-bottom: 5px;
+}

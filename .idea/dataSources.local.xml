@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="AS400" uuid="eb00747e-e581-4f54-b1be-d0c9c6b80318">
+      <database-info product="DB2 UDB for AS/400" version="05.04.0000 V5R4m0" jdbc-version="3.0" driver-name="AS/400 Toolbox for Java JDBC Driver" driver-version="11.4">
+        <extra-name-characters>$@#</extra-name-characters>
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>SMI19633</user-name>
+      <introspection-schemas>*:@</introspection-schemas>
+    </data-source>
+  </component>
+</project>

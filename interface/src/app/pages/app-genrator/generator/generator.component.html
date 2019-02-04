@@ -1,0 +1,12 @@
+<div class="row" full-heigth full-heigth-all-child>
+
+    <div class="listWarp col-md-12  showElement" full-heigth full-heigth-all-child  >
+        <ngx-list #list (fireAction)="doAction($event)" (fireCretateAction)="createAction()"></ngx-list>
+    </div>
+
+    <div class="formWarp col-md-0 hideElement" full-heigth full-heigth-all-child >
+        <ngx-form (refrechMainView)="refrechView()" #form></ngx-form>
+    </div>
+
+
+</div>
