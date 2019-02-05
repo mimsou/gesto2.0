@@ -11,7 +11,7 @@
 
 /*
  * Users of PHP 5.2 should be able to run the requirements checks.
- * This is why the file and MenuAll classes must be compatible with PHP 5.2+
+ * This is why the file and all classes must be compatible with PHP 5.2+
  * (e.g. not using namespaces and closures).
  *
  * ************** CAUTION **************
@@ -276,7 +276,7 @@ class RequirementCollection implements IteratorAggregate
     }
 
     /**
-     * Returns MenuAll mandatory requirements.
+     * Returns all mandatory requirements.
      *
      * @return Requirement[]
      */
@@ -310,7 +310,7 @@ class RequirementCollection implements IteratorAggregate
     }
 
     /**
-     * Returns MenuAll optional recommendations.
+     * Returns all optional recommendations.
      *
      * @return Requirement[]
      */
@@ -371,7 +371,7 @@ class RequirementCollection implements IteratorAggregate
 }
 
 /**
- * This class specifies MenuAll requirements and optional recommendations that
+ * This class specifies all requirements and optional recommendations that
  * are necessary to run the Symfony Standard Edition.
  *
  * @author Tobias Schultze <http://tobion.de>
@@ -394,7 +394,7 @@ class SymfonyRequirements extends RequirementCollection
 
         $this->addRecommendation(
             $requiredPhpVersion,
-            'Vendors should be installed in order to check MenuAll requirements.',
+            'Vendors should be installed in order to check all requirements.',
             'Run the <code>composer install</code> command.',
             'Run the "composer install" command.'
         );
@@ -603,7 +603,7 @@ class SymfonyRequirements extends RequirementCollection
             ||
             version_compare($installedPhpVersion, '5.4.8', '>='),
             'You should use PHP 5.3.18+ or PHP 5.4.8+ to always get nice error messages for fatal errors in the development environment due to PHP bug #61767/#60909',
-            'Install PHP 5.3.18+ or PHP 5.4.8+ if you want nice error messages for MenuAll fatal errors in the development environment.'
+            'Install PHP 5.3.18+ or PHP 5.4.8+ if you want nice error messages for all fatal errors in the development environment.'
         );
 
         if (null !== $pcreVersion) {
