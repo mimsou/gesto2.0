@@ -338,6 +338,15 @@ class managerController extends FOSRestController
 
     public function getMenuFrontAction()
     {
+
+
+        $user = $this->getCurrentUser();
+        $iduser = $user->getId();
+
+        $em = $this->getDoctrine()->getManager();
+
+
+
         $restresult = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuTag" => "m"));
 
 
@@ -353,7 +362,18 @@ class managerController extends FOSRestController
             $itemmenu->link = $item->getMenuInterface();
             $itemmenu->children = array();
 
-            $subrest = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
+            $qb = $em->createQueryBuilder();
+            $subrest = $qb->select('u','a','o')
+                ->from('AppBundle:GestMenu', 'u')
+                ->join('u.role','a')
+                ->join('a.user','o')
+                ->where("o.id = $iduser")
+                ->andWhere('u.menuParent = '.$item->getMenuId())
+                ->getQuery()->getResult();
+
+            //die(var_dump($subrest));
+
+           // $subrest = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
 
             foreach ($subrest as $keys => $itemchild) {
                 $itemmenuchild = new Menu\Menu();
@@ -373,6 +393,22 @@ class managerController extends FOSRestController
 
         return $menu;
 
+    }
+
+
+    protected function getCurrentUser()
+    {
+
+        if (!$this->container->has('security.token_storage')) {
+            throw new \LogicException('The Security Bundle is not registered in your application.');
+        }
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
+            return;
+        }
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+        return $user;
     }
 
     /**

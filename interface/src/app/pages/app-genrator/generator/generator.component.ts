@@ -27,7 +27,7 @@ export class GeneratorComponent implements OnInit {
     mainEntity: any;
     mainCreateAction:Action = new Action();
     mainList: any;
-    varti:any;
+    varti:any; 
 
     constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService) {
     }

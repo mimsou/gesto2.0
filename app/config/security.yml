@@ -29,14 +29,14 @@ security:
            stateless: true
            anonymous: true
            lexik_jwt:
-            authorization_header: 
+            authorization_header:
                 enabled: true
                 prefix: Bearer
-            query_parameter: 
+            query_parameter:
                 enabled: false
                 name: bearer
-            throw_exceptions: false 
-            create_entry_point: true 
+            throw_exceptions: false
+            create_entry_point: true
             authentication_provider: lexik_jwt_authentication.security.authentication.provider
             
 
