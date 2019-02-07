@@ -20,9 +20,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StopClickDirective } from './stop-click.directive';
 
 
-
 @NgModule({
-  declarations: [AppComponent, StopClickDirective],
+  declarations: [AppComponent,StopClickDirective],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -31,7 +30,7 @@ import { StopClickDirective } from './stop-click.directive';
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
-    NbAuthModule.forRoot({ 
+    NbAuthModule.forRoot({
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',

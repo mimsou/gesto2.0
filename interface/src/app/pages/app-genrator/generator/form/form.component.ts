@@ -262,8 +262,7 @@ export class FormComponent implements OnInit {
             }
         }
 
-
-        if (this.action.actionLevelDepth == 2) {
+        if (this.action.actionLevelDepth == 2 || this.action.actionIsmainLevel == 0) {
 
             for (let dat of data["subEntityData"]) {
 

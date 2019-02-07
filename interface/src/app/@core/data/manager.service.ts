@@ -158,6 +158,11 @@ export class ManagerService {
         return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/process/${id}`);
     }
 
+    getSingleStep(id){
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/step/${id}`);
+    }
+
+
     addAction(param) {
     return this.http.post(`${this.apiLink.MANAGER_BASE_URL}/action/`, JSON.stringify(param));
     }

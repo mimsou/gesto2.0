@@ -150,4 +150,12 @@ export class ListComponent implements OnInit {
         this.fireCretateAction.emit();
     }
 
+    isStepperField(fld){
+        if( this.entity.entityStepperField == fld.fieldEntityName ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

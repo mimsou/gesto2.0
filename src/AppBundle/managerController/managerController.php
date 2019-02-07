@@ -1407,6 +1407,24 @@ class managerController extends FOSRestController
 
     }
 
+
+    /**
+     * @Rest\Get("/step/{id}")
+     */
+
+    public function getSignleStepAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('u')
+            ->from('AppBundle:GestSteps', 'u')
+            ->where('u.stepId =:stpid')->setParameter('stpid', $id);
+        $step = $qb->getQuery()->getArrayResult();
+        return $step;
+
+    }
+
     /**
      * @Rest\Post("/step/")
      */

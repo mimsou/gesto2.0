@@ -30,7 +30,9 @@
             <tbody>
             <tr *ngFor="let data of listData">
                 <td *ngFor="let fld of field">
-                    <span >{{data[fld.fieldEntityName]}}</span>
+                    <span *ngIf="fld.fieldType !== 'datetime' && !isStepperField(fld)" >{{data[fld.fieldEntityName]}}</span>
+                    <span *ngIf="fld.fieldType == 'datetime' && !isStepperField(fld)" >{{data[fld.fieldEntityName] | date:'dd/MM/yyyy' }}</span>
+                    <span *ngIf="fld.fieldType != 'datetime' && isStepperField(fld)" >{{data[fld.fieldEntityName] | step:step }}</span>
                 </td>
                 <td *ngIf="getStepActionCount(data) > 0">
                     <button style="margin-right: 3px;" *ngFor="let act of getStepAction(data)" class="pull-right" (click)="doAction(act,data)"

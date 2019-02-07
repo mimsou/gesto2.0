@@ -13,6 +13,7 @@ import { ListComponent } from './app-genrator/generator/list/list.component';
 import { FormComponent } from './app-genrator/generator/form/form.component';
 import { AutocomboComponent } from './app-genrator/generator/autocombo/autocombo.component';
 import { DimentionComponent } from './app-genrator/generator/dimention/dimention.component';
+import { StepPipe } from './app-genrator/generator/step.pipe';
 
 
 const PAGES_COMPONENTS = [
@@ -33,6 +34,7 @@ const PAGES_COMPONENTS = [
     FormComponent,
     AutocomboComponent,
     DimentionComponent,
+    StepPipe,
   ],
   providers:[
     AuthGuard
