@@ -22,12 +22,13 @@ export class ListComponent implements OnInit {
     @ViewChild('dimention') DimComponent: any;
     listTtile: string = "Loading...";
     step: any;
-    createAction: Action = new Action();
+    createAction: Action = null;
     entity: any;
     list: any;
     listData: any;
     dimfilter: any;
     field: any = Array();
+    user:any;
     @Output() fireAction: EventEmitter<any> = new EventEmitter();
     @Output() fireCretateAction: EventEmitter<any> = new EventEmitter();
 
@@ -39,7 +40,7 @@ export class ListComponent implements OnInit {
     }
 
     initList(list, entity, step, createAct, process,user) {
-console.log("lst",user);
+         this.user = user;
         this.createAction = createAct;
         this.field = [];
         this.step = step;
@@ -51,6 +52,18 @@ console.log("lst",user);
         this.DimComponent.initDimention(process);
         this.refrechListData();
 
+    }
+
+    hasAccess(role) {
+        var userRole = this.user.roles;
+        for (let rl of role) {
+            for (let rls of userRole) {
+                if (rls == rl.roleLibelle.toUpperCase()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     getListfield() {
@@ -69,7 +82,9 @@ console.log("lst",user);
                 var acts = [];
                 for (let act of  stp.action) {
                     if (act.actionType !== 1) {
-                        acts.push(act)
+                        if(this.hasAccess(act.role)){
+                            acts.push(act)
+                        }
                     }
                     ;
                 }

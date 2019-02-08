@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import {NbAuthJWTToken, NbAuthService} from '@nebular/auth';
 import {
     GestAccessPath,
     GestMenu,
@@ -26,12 +26,12 @@ export class GeneratorComponent implements OnInit {
     @ViewChild('form') formComponent: any;
     process: any;
     mainEntity: any;
-    mainCreateAction:Action = new Action();
+    mainCreateAction: Action = new Action();
     mainList: any;
-    user:any;
-    varti:any; 
+    user: any;
+    varti: any;
 
-    constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService,private authService: NbAuthService) {
+    constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService, private authService: NbAuthService) {
         this.authService.onTokenChange()
             .subscribe((token: NbAuthJWTToken) => {
                 if (token.isValid()) {
@@ -54,10 +54,12 @@ export class GeneratorComponent implements OnInit {
         this.process = process;
         console.log(this.process)
         this.setMainEntity();
-        $(".formWarp").switchClass( "showElement", "hideElement", 50);
-        $(".listWarp").addClass(   "col-md-12" );   $(".listWarp").removeClass( "col-md-0");
-        $(".formWarp").addClass(   "col-md-0" );   $(".formWarp").removeClass( "col-md-12");
-        $(".listWarp").switchClass( "hideElement", "showElement", 1000);
+        $(".formWarp").switchClass("showElement", "hideElement", 50);
+        $(".listWarp").addClass("col-md-12");
+        $(".listWarp").removeClass("col-md-0");
+        $(".formWarp").addClass("col-md-0");
+        $(".formWarp").removeClass("col-md-12");
+        $(".listWarp").switchClass("hideElement", "showElement", 1000);
 
     }
 
@@ -69,8 +71,12 @@ export class GeneratorComponent implements OnInit {
                 for (let ent of this.process[0].gestEntity) {
                     if (ent.entityId == act.actionEntity.entityId && act.actionType == 1) {
                         this.mainEntity = ent;
-                        this.mainCreateAction = act;
-                        console.log("main act", act)
+
+                        if (this.hasAccess(act.role)) {
+                            this.mainCreateAction = act;
+                        } else {
+                            this.mainCreateAction = null;
+                        }
                         for (let lst of this.process[0].list) {
                             if (lst.listEntityName == ent.entityId) {
                                 this.mainList = lst;
@@ -80,28 +86,44 @@ export class GeneratorComponent implements OnInit {
                 }
             }
         }
-
-        this.listCompenent.initList(this.mainList, this.mainEntity, this.process[0].steps,this.mainCreateAction,this.process,this.user);
+        console.log(this.user);
+        this.listCompenent.initList(this.mainList, this.mainEntity, this.process[0].steps, this.mainCreateAction, this.process, this.user);
         //this.formComponent.initAction(this.mainCreateAction, this.process.steps,null,this.user);
 
     }
 
+    hasAccess(role) {
+        var userRole = this.user.roles;
+        for (let rl of role) {
+            for (let rls of userRole) {
+                console.log("rl",rls,rl.roleLibelle)
+                if (rls == rl.roleLibelle.toUpperCase()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-    createAction(){
+    createAction() {
         this.formComponent.initAction(this.mainCreateAction, this.process.steps);
-        $(".listWarp").switchClass( "showElement", "hideElement", 50);
-        $(".listWarp").addClass(   "col-md-0" );   $(".listWarp").removeClass( "col-md-12");
-        $(".formWarp").addClass(   "col-md-12" );   $(".formWarp").removeClass( "col-md-0");
-        $(".formWarp").switchClass( "hideElement", "showElement", 1000);
+        $(".listWarp").switchClass("showElement", "hideElement", 50);
+        $(".listWarp").addClass("col-md-0");
+        $(".listWarp").removeClass("col-md-12");
+        $(".formWarp").addClass("col-md-12");
+        $(".formWarp").removeClass("col-md-0");
+        $(".formWarp").switchClass("hideElement", "showElement", 1000);
 
     }
 
     refrechView() {
 
-        $(".formWarp").switchClass( "showElement", "hideElement", 50);
-        $(".listWarp").addClass(   "col-md-12" );   $(".listWarp").removeClass( "col-md-0");
-        $(".formWarp").addClass(   "col-md-0" );   $(".formWarp").removeClass( "col-md-12");
-        $(".listWarp").switchClass( "hideElement", "showElement", 1000);
+        $(".formWarp").switchClass("showElement", "hideElement", 50);
+        $(".listWarp").addClass("col-md-12");
+        $(".listWarp").removeClass("col-md-0");
+        $(".formWarp").addClass("col-md-0");
+        $(".formWarp").removeClass("col-md-12");
+        $(".listWarp").switchClass("hideElement", "showElement", 1000);
 
 
         this.listCompenent.refrechListData();
@@ -109,23 +131,25 @@ export class GeneratorComponent implements OnInit {
     }
 
     doAction(actionData) {
-        $(".listWarp").switchClass( "showElement", "hideElement", 50);
-        $(".listWarp").addClass(   "col-md-0" );   $(".listWarp").removeClass( "col-md-12");
-        $(".formWarp").addClass(   "col-md-12" );   $(".formWarp").removeClass( "col-md-0");
-        $(".formWarp").switchClass( "hideElement", "showElement", 1000);
+        $(".listWarp").switchClass("showElement", "hideElement", 50);
+        $(".listWarp").addClass("col-md-0");
+        $(".listWarp").removeClass("col-md-12");
+        $(".formWarp").addClass("col-md-12");
+        $(".formWarp").removeClass("col-md-0");
+        $(".formWarp").switchClass("hideElement", "showElement", 1000);
         var acts: any;
         for (let act of this.process[0].actions) {
             if (act.actionId == actionData[0].actionId) {
                 acts = act;
             }
-        } 
+        }
 
         if (acts.actionType == 3) {
             this.formComponent.initAction(acts, this.process.steps, actionData[1]);
-        }else if(acts.actionType == 4) {
+        } else if (acts.actionType == 4) {
             var param = {};
             param.data = actionData[1];
-            param.action  = act;
+            param.action = act;
             this.manager.deleteEntityData(param).subscribe(result => this.refrechView());
         }
 

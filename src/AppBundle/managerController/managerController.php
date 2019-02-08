@@ -935,7 +935,7 @@ class managerController extends FOSRestController
      * @Rest\Post("/roleaddlist/")
      */
 
-    public function postRoleAddList(Request $request)
+    public function postRoleAddListAction(Request $request)
     {
         $data = new GestRole();
 
@@ -963,7 +963,7 @@ class managerController extends FOSRestController
      * @Rest\Patch("/roleremovelist/")
      */
 
-    public function postRoleRemoveList(Request $request)
+    public function postRoleRemoveListAction(Request $request)
     {
         $data = new GestRole();
 
@@ -1395,13 +1395,14 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry','xe','xi','xa','rt','et')
+
+        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry','xe', 'xi','rt','xa')
             ->from('AppBundle:GestProcess', 'u')
             ->leftJoin('u.gestEntity', 'p')
             ->leftJoin('u.gestEntityDimention', 't')
             ->leftJoin('u.gestFieldDimention', 's')
             ->leftJoin('u.steps', 'o')
-            ->join('o.role','xe')
+            ->leftJoin('o.role','xe')
             ->leftJoin('o.action', 'r')
             ->leftJoin('r.role','xi')
             ->leftJoin('r.actionNextStep', 'ra')
@@ -1421,13 +1422,14 @@ class managerController extends FOSRestController
             ->leftJoin('o.list', 'm')
             ->leftJoin('m.role','rt')
             ->leftJoin('u.list', 'g')
-            ->leftJoin('g.role','et')
             ->leftJoin('g.field', 'f')
             ->leftJoin('m.field', 'na')
             ->leftJoin('na.fieldTargetEntityId', 'ta')
             ->leftJoin('f.fieldTargetEntityId', 'ya')
             ->leftJoin('f.fieldEntity', 'q')
-            ->andWhere('u.processId =:proc')->setParameter('proc', $id);
+            ->andWhere('u.processId =:proc')
+            ->setParameter('proc', $id);
+
         $process = $qb->getQuery()->getArrayResult();
 
         return $process;

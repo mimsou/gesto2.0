@@ -11,7 +11,7 @@
                 <button style="margin-right: 5px;" class="pull-right" (click)="refrechListData()" nbButton size="small">
                   Actualiser
                 </button>
-                <button  style="margin-right: 5px;" class="pull-right" (click)="doCreateAction()" nbButton size="small">
+                <button *ngIf="createAction!==null" style="margin-right: 5px;" class="pull-right" (click)="doCreateAction()" nbButton size="small">
                     {{createAction.actionName}}
                 </button>
             </div>
