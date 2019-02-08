@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import {
     GestAccessPath,
     GestMenu,
@@ -27,9 +28,16 @@ export class GeneratorComponent implements OnInit {
     mainEntity: any;
     mainCreateAction:Action = new Action();
     mainList: any;
+    user:any;
     varti:any; 
 
-    constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService) {
+    constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService,private authService: NbAuthService) {
+        this.authService.onTokenChange()
+            .subscribe((token: NbAuthJWTToken) => {
+                if (token.isValid()) {
+                    this.user = token.getPayload();
+                }
+            });
     }
 
     ngOnInit() {
@@ -73,8 +81,8 @@ export class GeneratorComponent implements OnInit {
             }
         }
 
-        this.listCompenent.initList(this.mainList, this.mainEntity, this.process[0].steps,this.mainCreateAction,this.process);
-        this.formComponent.initAction(this.mainCreateAction, this.process.steps);
+        this.listCompenent.initList(this.mainList, this.mainEntity, this.process[0].steps,this.mainCreateAction,this.process,this.user);
+        //this.formComponent.initAction(this.mainCreateAction, this.process.steps,null,this.user);
 
     }
 

@@ -643,6 +643,8 @@ class managerController extends FOSRestController
 
         $param = json_decode($request->getContent());
 
+        $em = $this->getDoctrine()->getManager();
+
         $role = $param->role;
 
         $user = $param->user;
@@ -651,9 +653,19 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:User')->find($user)
         );
 
-        $em = $this->getDoctrine()->getManager();
+        $usr =  $this->getDoctrine()->getRepository('AppBundle:User')->find($user);
+
+        $rolname = $role->getRoleLibelle();
+
+        $usr->addRole($rolname);
+
+        $em->persist($usr);
+        $em->flush();
+
         $em->persist($role);
         $em->flush();
+
+
 
 
         return new View("user Added from role Successfully", Response::HTTP_OK);
@@ -678,6 +690,12 @@ class managerController extends FOSRestController
         $role = $this->getDoctrine()->getRepository('AppBundle:Gestrole')->find($role)->removeUser(
             $this->getDoctrine()->getRepository('AppBundle:User')->find($user)
         );
+
+        $usr =  $this->getDoctrine()->getRepository('AppBundle:User')->find($user);
+
+        $rolname = $role->getRoleLibelle();
+
+        $usr->removeRole($rolname);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
@@ -1370,18 +1388,25 @@ class managerController extends FOSRestController
     public function getSignleProcessAction($id)
     {
 
+
+        $user = $this->getCurrentUser();
+        $iduser = $user->getId();
+
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry')
+        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry','xe','xi','xa','rt','et')
             ->from('AppBundle:GestProcess', 'u')
             ->leftJoin('u.gestEntity', 'p')
             ->leftJoin('u.gestEntityDimention', 't')
             ->leftJoin('u.gestFieldDimention', 's')
             ->leftJoin('u.steps', 'o')
+            ->join('o.role','xe')
             ->leftJoin('o.action', 'r')
+            ->leftJoin('r.role','xi')
             ->leftJoin('r.actionNextStep', 'ra')
             ->leftJoin('u.actions', 'k')
+            ->leftJoin('k.role','xa')
             ->leftJoin('k.actionNextStep', 'ri')
             ->leftJoin('k.actionFromStep', 'ry')
             ->leftJoin('k.actionEntity', 'l')
@@ -1394,13 +1419,15 @@ class managerController extends FOSRestController
             ->leftJoin('j.fieldEntity', 'b')
             ->leftJoin('j.fieldTargetEntityId', 'ba')
             ->leftJoin('o.list', 'm')
+            ->leftJoin('m.role','rt')
             ->leftJoin('u.list', 'g')
+            ->leftJoin('g.role','et')
             ->leftJoin('g.field', 'f')
             ->leftJoin('m.field', 'na')
             ->leftJoin('na.fieldTargetEntityId', 'ta')
             ->leftJoin('f.fieldTargetEntityId', 'ya')
             ->leftJoin('f.fieldEntity', 'q')
-            ->where('u.processId =:proc')->setParameter('proc', $id);
+            ->andWhere('u.processId =:proc')->setParameter('proc', $id);
         $process = $qb->getQuery()->getArrayResult();
 
         return $process;

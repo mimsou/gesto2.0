@@ -51,9 +51,9 @@ export class FormComponent implements OnInit {
 
     }
 
-    initAction(action, steps, data) {
+    initAction(action, steps, data,user) {
 
-        if (typeof data !== 'undefined') {
+        if (typeof data !== 'undefined' && data !== null) {
             var param = {};
             param.action = action;
             param.id = data[0][action.actionEntity.entityKey];
@@ -73,6 +73,7 @@ export class FormComponent implements OnInit {
             this.listMainentityform = this.action.actionEntity.entityInterfaceName;
             this.entity = this.action.actionEntity;
         } else {
+            this.entity = this.action.actionEntity;
             this.setActionSubField();
             this.subentity = this.action.actionSubEntity;
         }
@@ -249,6 +250,7 @@ export class FormComponent implements OnInit {
 
     populateform(data) {
 
+        //console.log("actdata",data["entityData"][0]);
         this.actionData[this.entity.entityKey] = data["entityData"][0][this.entity.entityKey];
 
         for (let fld of this.field) {

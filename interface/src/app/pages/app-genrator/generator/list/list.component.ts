@@ -38,8 +38,8 @@ export class ListComponent implements OnInit {
 
     }
 
-    initList(list, entity, step, createAct, process) {
-
+    initList(list, entity, step, createAct, process,user) {
+console.log("lst",user);
         this.createAction = createAct;
         this.field = [];
         this.step = step;
