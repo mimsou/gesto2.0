@@ -621,7 +621,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             for (let fld of ent.fields) {
                 var objvar = new Object();
                 objvar.variableId = fld.fieldId;
-                objvar.name = fld.fieldEntityName;
+                objvar.name = ent.entityEntity+"_"+fld.fieldEntityName;
                 arrvar.push(objvar);
             }
         }
@@ -1238,14 +1238,14 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
         $event.stopPropagation();
 
-
-        if (typeof this.selectedActions.updateField != 'undefined') {
+        if (typeof this.selectedActions.updateField !== 'undefined') {
             var exps = "";
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
-                    console.log("dd", fld.updateExpression)
+                   if(typeof fld.updateExpression !== 'undefined'){
                     var exp = JSON.parse(fld.updateExpression);
                     exps = exp.expression;
+                   }
                 }
             }
             this.expValu = exps;
@@ -1256,7 +1256,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.paramPanel = 'expression'
 
         this.selectedField = field;
-
 
     }
 

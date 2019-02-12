@@ -200,7 +200,9 @@ export class FormComponent implements OnInit {
         var entitySub = {}
         var error = false;
         for (let fld of this.subfield) {
-            if (this.validationField(fld, this.actionsubData[fld.fieldEntityName])) {
+            fld = this.validationRequireField(fld, this.actionsubData[fld.fieldEntityName]);
+            console.log("msg", fld.errormsg);
+            if (fld.errormsg == "") {
                 fld.error = false;
                 if (fld.fieldNature != 1) {
                     entitySub[fld.fieldEntityName] = this.actionsubData[fld.fieldEntityName];
@@ -217,19 +219,85 @@ export class FormComponent implements OnInit {
         }
     }
 
-    validationField(conf, data) {
-        console.log("ddd", conf, data);
-        if (conf.fieldNature == 1) {
-            if (((data !== "" || data !== null) && conf.require == 1)) {
-                console.log("yes");
-                return true;
+    validationRequireField(conf, data) {
+        var valid = false;
+        if (conf.require !== 1) {
+            if (conf.fieldNature == 1) {
+                valid = true;
             } else {
-                console.log("no");
-                return false;
-            }
-        } else {
+                if (conf.fieldNature == 1) {
+                    if (typeof data.value !== 'undefined') {
+                        if (data.value !== "") {
+                            return this.validationTypeField(conf, data.value);
+                        } else {
+                            valid = true;
+                        }
+                    } else {
+                        valid = true;
+                    }
+                } else {
+                    if (typeof data !== "object") {
+                        if (data !== "") {
+                            return this.validationTypeField(conf, data);
+                        } else {
+                            valid = true;
+                        }
+                    } else {
+                        valid = true;
+                    }
+                }
 
+            }
+
+        } else {
+            if (conf.fieldNature == 1) {
+                if (typeof data.value !== 'undefined') {
+                    if (data.value !== "") {
+                        return this.validationTypeField(conf, data.value);
+                    } else {
+                        valid = false;
+                    }
+                } else {
+                    valid = false;
+                }
+            } else {
+                if (typeof data !== "object") {
+                    if (data !== "") {
+                        return this.validationTypeField(conf, data);
+                    } else {
+                        valid = false;
+                    }
+                } else {
+                    valid = false;
+                }
+            }
         }
+
+        if (!valid) {
+            conf.errormsg = "Se champ est obligatoire"
+        } else {
+            conf.errormsg = "";
+        }
+        return conf;
+
+    }
+
+    validationTypeField(conf, data) {
+
+        var type = conf.fieldType;
+        conf.errormsg = "";
+        if (type == "integer" || type == "float") {
+            var regex = /^\d+$/;
+            if (!regex.test(data)) {
+                conf.errormsg = "Merci d'introduire un nombre valide";
+            }
+        } else if (type == "datetime") {
+            var regex = /^(0[1-9]|[12][0-9]|3[01])[-](0[1-9]|1[012])[-](19|20)\d\d$/;
+            if (!regex.test(data)) {
+                conf.errormsg = "Merci d'introduire une date valide";
+            }
+        }
+        return conf;
     }
 
     updateSubEntityData() {
@@ -254,20 +322,44 @@ export class FormComponent implements OnInit {
 
     doAction() {
 
-        var param = {};
-        param.action = this.action;
-        param.data = this.actionData;
-        param.entity = this.entity;
-
-        if (typeof this.action.actionSubEntity != 'undefined') {
-            param.subentity = this.subentity;
-            param.subdata = this.actionsubdatacollection;
-        } else {
-            param.subdata = this.choiceDataValidate;
-            param.subprocess = this.subprocess;
+        var error = false;
+        for (let fld of this.field) {
+            fld = this.validationRequireField(fld, this.actionData[fld.fieldEntityName]);
+            console.log("msg", fld.errormsg);
+            if (fld.errormsg == "") {
+                fld.error = false;
+            } else {
+                error = true;
+                fld.error = true;
+            }
         }
 
-        this.manager.doAction(param).subscribe(action => this.refrechMainView.emit(action));
+        if (typeof this.action.actionSubEntity != 'undefined') {
+            if (this.actionsubdatacollection.length == 0) {
+                error = true;
+            }
+        } else {
+            if (this.choiceDataValidate.length == 0) {
+                error = true;
+            }
+        }
+
+        if (!error) {
+            var param = {};
+            param.action = this.action;
+            param.data = this.actionData;
+            param.entity = this.entity;
+
+            if (typeof this.action.actionSubEntity != 'undefined') {
+                param.subentity = this.subentity;
+                param.subdata = this.actionsubdatacollection;
+            } else {
+                param.subdata = this.choiceDataValidate;
+                param.subprocess = this.subprocess;
+            }
+
+            this.manager.doAction(param).subscribe(action => this.refrechMainView.emit(action));
+        }
     }
 
     switchView() {
