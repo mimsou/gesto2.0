@@ -207,6 +207,10 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/fieldlistaction/`, JSON.stringify(param));
     }
 
+    updateFieldRequire(param) {
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/fieldrequireaction/`, JSON.stringify(param));
+    }
+
     updateField(param){
         var id = param.fieldId;
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/field/${id}`, JSON.stringify(param));

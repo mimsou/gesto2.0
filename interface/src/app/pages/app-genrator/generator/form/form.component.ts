@@ -51,7 +51,7 @@ export class FormComponent implements OnInit {
 
     }
 
-    initAction(action, steps, data,user) {
+    initAction(action, steps, data, user) {
 
         if (typeof data !== 'undefined' && data !== null) {
             var param = {};
@@ -142,19 +142,20 @@ export class FormComponent implements OnInit {
                 var isExpression = false;
                 for (let ufld of  this.action.updateField) {
                     if (ufld.updateFieldId.fieldId == vfld.fieldId) {
+                        vfld.require = ufld.updateRequire;
                         isEditble = false;
-                        if (typeof ufld.updateExpression !== "undefined") {    console.log("yes");
+                        if (typeof ufld.updateExpression !== "undefined") {
+                            console.log("yes");
                             isExpression = true;
                         }
                     }
                 }
 
-                console.log("ddsss",(isExpression));
 
                 vfld.isEditeble = (isEditble || isExpression);
-                if(isExpression){
-                    this.actionData[vfld.fieldEntityName] =  '-gen-';
-                }else{
+                if (isExpression) {
+                    this.actionData[vfld.fieldEntityName] = '-gen-';
+                } else {
                     this.actionData[vfld.fieldEntityName] = "";
                 }
 
@@ -178,6 +179,7 @@ export class FormComponent implements OnInit {
                 var isExpression = false;
                 for (let ufld of  this.action.updateField) {
                     if (ufld.updateFieldId.fieldId == vfld.fieldId) {
+                        vfld.require = ufld.updateRequire;
                         isEditble = false
                         if (ufld.updateExpression !== "") {
                             isExpression = true
@@ -187,6 +189,7 @@ export class FormComponent implements OnInit {
                 }
                 vfld.isEditeble = isEditble;
                 vfld.isExpression = isExpression;
+
                 this.actionsubData[vfld.fieldEntityName] = new Array();
                 this.subfield.push(vfld);
             }
@@ -195,15 +198,38 @@ export class FormComponent implements OnInit {
 
     addSubEntityData() {
         var entitySub = {}
+        var error = false;
         for (let fld of this.subfield) {
-            if (fld.fieldNature != 1) {
-                entitySub[fld.fieldEntityName] = this.actionsubData[fld.fieldEntityName];
+            if (this.validationField(fld, this.actionsubData[fld.fieldEntityName])) {
+                fld.error = false;
+                if (fld.fieldNature != 1) {
+                    entitySub[fld.fieldEntityName] = this.actionsubData[fld.fieldEntityName];
+                } else {
+                    entitySub[fld.fieldEntityName] = this.actionsubData[fld.fieldEntityName];
+                }
             } else {
-                entitySub[fld.fieldEntityName] = this.actionsubData[fld.fieldEntityName];
+                error = true;
+                fld.error = true;
             }
         }
+        if (!error) {
+            this.actionsubdatacollection.push(entitySub);
+        }
+    }
 
-        this.actionsubdatacollection.push(entitySub);
+    validationField(conf, data) {
+        console.log("ddd", conf, data);
+        if (conf.fieldNature == 1) {
+            if (((data !== "" || data !== null) && conf.require == 1)) {
+                console.log("yes");
+                return true;
+            } else {
+                console.log("no");
+                return false;
+            }
+        } else {
+
+        }
     }
 
     updateSubEntityData() {
@@ -244,7 +270,7 @@ export class FormComponent implements OnInit {
         this.manager.doAction(param).subscribe(action => this.refrechMainView.emit(action));
     }
 
-    switchView(){
+    switchView() {
         this.refrechMainView.emit();
     }
 

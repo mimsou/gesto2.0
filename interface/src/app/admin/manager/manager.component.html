@@ -569,6 +569,12 @@
                                                (click)="updateFieldInAction(field)"
                                                class="fa fa-edit"></i>
 
+                                            <i #editUpdate colorInactive ActionIcone
+                                               [ngClass]="{'colorPrimary' :  updateFieldRequireIsInAction(field)  }"
+                                               *ngIf="entityInEntityAction(entitie.entityId) && updateFieldIsInAction(field)"
+                                               (click)="updateFieldRequireInAction(field)"
+                                               class="fa fa-lock"></i>
+
                                             <i #viewUpdate colorInactive ActionIcone
                                                [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
                                                *ngIf="entityInEntityAction(entitie.entityId)"

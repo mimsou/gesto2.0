@@ -1146,6 +1146,13 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.menuService.updateFieldInAction(param).subscribe(field => this.loadProcess());
     }
 
+    updateFieldRequireInAction(field) {
+        var param = {};
+        param.field = field;
+        param.action = this.selectedActions;
+        this.menuService.updateFieldRequire(param).subscribe(field => this.loadProcess());
+    }
+
     updateFieldInActionExp($event) {
         console.log("ee", $event)
         var param = {};
@@ -1183,6 +1190,25 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
                     return true;
+                }
+            }
+
+            return false;
+        } else {
+            return false;
+        }
+
+    }
+
+    updateFieldRequireIsInAction(field) {
+        if (typeof this.selectedActions.updateField != 'undefined') {
+            for (let fld of this.selectedActions.updateField) {
+                if (field.fieldId == fld.updateFieldId.fieldId) {
+                   if(fld.updateRequire==1){
+                       return true;
+                   }else{
+                       return false;
+                   }
                 }
             }
 

@@ -9,17 +9,17 @@
         <div class="row">
             <div class="col-md-3" *ngFor="let flds of field" containerFlex InputFormGroup>
                 <div inlineelement style="font-size: 1.125rem;font-weight: 600;">{{flds.fieldInterfaceName}}</div>
-                <div inlineelement *ngIf="flds.fieldType !== 'datetime' && flds.fieldNature != 1"><input [value]="flds.val"
+                <div inlineelement *ngIf="flds.fieldType !== 'datetime' && flds.fieldNature != 1"><input [ngClass]="{'inputError':flds.error}" [value]="flds.val"
                         [readonly]="flds.isEditeble" [(ngModel)]="actionData[flds.fieldEntityName]" nbInput
                         fieldSize="medium" type="text"></div>
-                <div inlineelement *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 && flds.isEditeble!=true"><input [value]="flds.val"
+                <div inlineelement *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 && flds.isEditeble!=true"><input [ngClass]="{'inputError':flds.error}" [value]="flds.val"
                         [readonly]="flds.isEditeble" [(ngModel)]="actionData[flds.fieldEntityName]"
                         [dpDayPicker]="datePickerConfig" nbInput fieldSize="medium" type="text"></div>
-                <div inlineelement *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 && flds.isEditeble==true"><input [value]="flds.val"
+                <div inlineelement *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 && flds.isEditeble==true"><input [ngClass]="{'inputError':flds.error}" [value]="flds.val"
                         [readonly]="flds.isEditeble" [(ngModel)]="actionData[flds.fieldEntityName]"
                         nbInput fieldSize="medium" type="text"></div>
                 <div inlineelement *ngIf="flds.fieldNature == 1">
-                    <ngx-autocombo [entity]="flds.fieldTargetEntity"   [value]="actionData[flds.fieldEntityName].value" [(valueObject)]="actionData[flds.fieldEntityName]"
+                    <ngx-autocombo [entity]="flds.fieldTargetEntity" [ngClass]="{'inputError':flds.error}"   [value]="actionData[flds.fieldEntityName].value" [(valueObject)]="actionData[flds.fieldEntityName]"
                                    [readonly]="flds.isEditeble"></ngx-autocombo>
                 </div>
 
@@ -47,15 +47,15 @@ ligne Details :
                     {{flds.fieldInterfaceName}}
                 </div>
                 <div inlineelement
-                     *ngIf="flds.fieldType !== 'datetime' && flds.fieldNature != 1 "><input
-                        [readonly]="flds.isEditeble" [(ngModel)]="actionsubData[flds.fieldEntityName]" nbInput
+                     *ngIf="flds.fieldType !== 'datetime' && flds.fieldNature != 1 "><input [ngClass]="{'inputError':flds.error}"
+                                                                                            [readonly]="flds.isEditeble" [(ngModel)]="actionsubData[flds.fieldEntityName]" nbInput
                         fieldSize="small" type="text"></div>
                 <div inlineelement
-                     *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 "><input
-                        [readonly]="flds.isEditeble" [(ngModel)]="actionsubData[flds.fieldEntityName]"
+                     *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 "><input [ngClass]="{'inputError':flds.error}"
+                                                                                           [readonly]="flds.isEditeble" [(ngModel)]="actionsubData[flds.fieldEntityName]"
                         [dpDayPicker]="datePickerConfig" nbInput fieldSize="small" type="text"></div>
                 <div inlineelement *ngIf="flds.fieldNature == 1">
-                    <ngx-autocombo [entity]="flds.fieldTargetEntity" [value]="actionsubData[flds.fieldEntityName].value" [(valueObject)]="actionsubData[flds.fieldEntityName]"
+                    <ngx-autocombo [entity]="flds.fieldTargetEntity" [ngClass]="{'inputError':flds.error}"  [value]="actionsubData[flds.fieldEntityName].value" [(valueObject)]="actionsubData[flds.fieldEntityName]"
                                    [readonly]="flds.isEditeble"></ngx-autocombo>
                 </div>
 

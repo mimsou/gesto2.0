@@ -51,7 +51,6 @@ class managerController extends FOSRestController
             ->from('AppBundle:GestRole', 'u')->getQuery()->getArrayResult();
 
 
-
         if ($restresult === null) {
             return new View("there are no role exist", Response::HTTP_NOT_FOUND);
         }
@@ -346,7 +345,6 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
 
-
         $restresult = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuTag" => "m"));
 
 
@@ -363,17 +361,17 @@ class managerController extends FOSRestController
             $itemmenu->children = array();
 
             $qb = $em->createQueryBuilder();
-            $subrest = $qb->select('u','a','o')
+            $subrest = $qb->select('u', 'a', 'o')
                 ->from('AppBundle:GestMenu', 'u')
-                ->join('u.role','a')
-                ->join('a.user','o')
+                ->join('u.role', 'a')
+                ->join('a.user', 'o')
                 ->where("o.id = $iduser")
-                ->andWhere('u.menuParent = '.$item->getMenuId())
+                ->andWhere('u.menuParent = ' . $item->getMenuId())
                 ->getQuery()->getResult();
 
             //die(var_dump($subrest));
 
-           // $subrest = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
+            // $subrest = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
 
             foreach ($subrest as $keys => $itemchild) {
                 $itemmenuchild = new Menu\Menu();
@@ -489,16 +487,15 @@ class managerController extends FOSRestController
         }
 
 
-
-       // $restresult = $this->getDoctrine()->getRepository('AppBundle:GestAccessPath')->findAll();
+        // $restresult = $this->getDoctrine()->getRepository('AppBundle:GestAccessPath')->findAll();
 
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
 
-        $restresult = $qb->select('u','a')
+        $restresult = $qb->select('u', 'a')
             ->from('AppBundle:GestAccessPath', 'u')
-            ->leftJoin('u.role','a')->getQuery()->getArrayResult();
+            ->leftJoin('u.role', 'a')->getQuery()->getArrayResult();
 
         if ($restresult === null) {
             return new View("there are no controller exist", Response::HTTP_NOT_FOUND);
@@ -653,7 +650,7 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:User')->find($user)
         );
 
-        $usr =  $this->getDoctrine()->getRepository('AppBundle:User')->find($user);
+        $usr = $this->getDoctrine()->getRepository('AppBundle:User')->find($user);
 
         $rolname = $role->getRoleLibelle();
 
@@ -664,8 +661,6 @@ class managerController extends FOSRestController
 
         $em->persist($role);
         $em->flush();
-
-
 
 
         return new View("user Added from role Successfully", Response::HTTP_OK);
@@ -691,7 +686,7 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:User')->find($user)
         );
 
-        $usr =  $this->getDoctrine()->getRepository('AppBundle:User')->find($user);
+        $usr = $this->getDoctrine()->getRepository('AppBundle:User')->find($user);
 
         $rolname = $role->getRoleLibelle();
 
@@ -996,8 +991,8 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('u','r','y','i')
-            ->from('AppBundle:Gestmenu', 'u')->leftJoin("u.link",'r')->leftJoin('r.role','i')->leftJoin('r.menuParent','y')->where("u.menuTag = 'm'");
+        $qb->select('u', 'r', 'y', 'i')
+            ->from('AppBundle:Gestmenu', 'u')->leftJoin("u.link", 'r')->leftJoin('r.role', 'i')->leftJoin('r.menuParent', 'y')->where("u.menuTag = 'm'");
 
         $restresult = $qb->getQuery()->getArrayResult();
 
@@ -1006,11 +1001,11 @@ class managerController extends FOSRestController
             return new View("there are no menus exist", Response::HTTP_NOT_FOUND);
         }
 
-     /*   foreach ($restresult as $key => $item) {
-            $lik = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
-            die(var_dump($lik[0]->getMenuId()));
-            $restresult[$key]->link = $lik;
-        } */
+        /*   foreach ($restresult as $key => $item) {
+               $lik = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
+               die(var_dump($lik[0]->getMenuId()));
+               $restresult[$key]->link = $lik;
+           } */
 
         return $restresult;
 
@@ -1030,8 +1025,8 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('u','t','i')
-            ->from('AppBundle:Gestmenu', 'u')->leftJoin('u.menuParent','t')->leftJoin('u.role','i')->where("u.menuTag like 'i' or u.menuTag like 'p'")->where("u.menuParent is null")->andWhere("u.menuTag !='m'");
+        $qb->select('u', 't', 'i')
+            ->from('AppBundle:Gestmenu', 'u')->leftJoin('u.menuParent', 't')->leftJoin('u.role', 'i')->where("u.menuTag like 'i' or u.menuTag like 'p'")->where("u.menuParent is null")->andWhere("u.menuTag !='m'");
         $restresult = $qb->getQuery()->getArrayResult();
 
         return $restresult;
@@ -1330,7 +1325,7 @@ class managerController extends FOSRestController
         }
 
 
-        $process = $this->getDoctrine()->getRepository('AppBundle:GestMenu')->findBy(array("menuProcess"=>$process->getProcessId()));
+        $process = $this->getDoctrine()->getRepository('AppBundle:GestMenu')->findBy(array("menuProcess" => $process->getProcessId()));
 
         $em->remove($process);
 
@@ -1350,7 +1345,7 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 's', 'l', 'y', 'z', 'ha', 'yu', 'ra', 'rb','oa','ao','al')
+        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 's', 'l', 'y', 'z', 'ha', 'yu', 'ra', 'rb', 'oa', 'ao', 'al')
             ->from('AppBundle:GestProcess', 'u')
             ->leftJoin('u.gestEntity', 'p')
             ->leftJoin('u.gestEntityDimention', 't')
@@ -1396,18 +1391,18 @@ class managerController extends FOSRestController
 
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry','xe', 'xi','rt','xa')
+        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry', 'xe', 'xi', 'rt', 'xa')
             ->from('AppBundle:GestProcess', 'u')
             ->leftJoin('u.gestEntity', 'p')
             ->leftJoin('u.gestEntityDimention', 't')
             ->leftJoin('u.gestFieldDimention', 's')
             ->leftJoin('u.steps', 'o')
-            ->leftJoin('o.role','xe')
+            ->leftJoin('o.role', 'xe')
             ->leftJoin('o.action', 'r')
-            ->leftJoin('r.role','xi')
+            ->leftJoin('r.role', 'xi')
             ->leftJoin('r.actionNextStep', 'ra')
             ->leftJoin('u.actions', 'k')
-            ->leftJoin('k.role','xa')
+            ->leftJoin('k.role', 'xa')
             ->leftJoin('k.actionNextStep', 'ri')
             ->leftJoin('k.actionFromStep', 'ry')
             ->leftJoin('k.actionEntity', 'l')
@@ -1420,7 +1415,7 @@ class managerController extends FOSRestController
             ->leftJoin('j.fieldEntity', 'b')
             ->leftJoin('j.fieldTargetEntityId', 'ba')
             ->leftJoin('o.list', 'm')
-            ->leftJoin('m.role','rt')
+            ->leftJoin('m.role', 'rt')
             ->leftJoin('u.list', 'g')
             ->leftJoin('g.field', 'f')
             ->leftJoin('m.field', 'na')
@@ -1730,6 +1725,44 @@ class managerController extends FOSRestController
             }
 
         }
+
+
+        return new View("update Field association updated under action Successfully", Response::HTTP_OK);
+
+    }
+
+    /**
+     * @Rest\Patch("/fieldrequireaction/")
+     */
+
+    public function patchFieldrequireactionAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $action = $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($param->action->actionId);
+
+        $field = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($param->field->fieldId);
+
+
+        $upform = $this->getDoctrine()->getRepository('AppBundle:UpdateForm')->findOneBy(array(
+            "updateActionId" => $action,
+            "updateFieldId" => $field
+        ));
+
+        if ($upform->getUpdateRequire() == 1) {
+            $upform->setUpdateRequire(0);
+        } else if ($upform->getUpdateRequire() == 0) {
+            $upform->setUpdateRequire(1);
+        } else {
+            $upform->setUpdateRequire(1);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($upform);
+
+        $em->flush();
 
 
         return new View("update Field association updated under action Successfully", Response::HTTP_OK);
@@ -2363,7 +2396,7 @@ class managerController extends FOSRestController
                             if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
                                 if (isset($params->updateExpression)) {
                                     if ($params->updateExpression !== "") {
-                                        $rs = $this->_getExpressionRestult($params,$request);
+                                        $rs = $this->_getExpressionRestult($params, $request);
                                         $entityAction->$functionName($rs);
                                     } else {
                                         $entityAction->$functionName($prm);
@@ -2520,7 +2553,7 @@ class managerController extends FOSRestController
 
     }
 
-    private function _getExpressionRestult($param,$req)
+    private function _getExpressionRestult($param, $req)
     {
         $expression = json_decode($param->updateExpression);
         $type = $param->updateFieldId->fieldType;
@@ -2608,21 +2641,21 @@ class managerController extends FOSRestController
         return $rs;
     }
 
-    private function _recurcive_get_where($param,$req)
+    private function _recurcive_get_where($param, $req)
     {
 
     }
 
-    private function _get_php_result($ent, $field){
-        $ex = str_replace('"',"",$field);
+    private function _get_php_result($ent, $field)
+    {
+        $ex = str_replace('"', "", $field);
         $arrstr = explode(".", $ex);
         $rsex = "";
         foreach ($arrstr as $str) {
             $rsex .= $str;
         }
-         return eval($rsex);
+        return eval($rsex);
     }
-
 
 
     private
@@ -2690,9 +2723,6 @@ class managerController extends FOSRestController
             array_push($fldlist, $fieldconf);
 
         }
-
-
-
 
 
         foreach ($fldlist as $fld) {

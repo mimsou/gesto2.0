@@ -49,6 +49,15 @@ class UpdateForm
 
 
     /**
+     * @var integer|null
+     *
+     * @ORM\Column(name="update_require", type="integer",  nullable=true)
+     */
+    private $updateRequire;
+
+
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="update_expression", type="string",   nullable=true)
@@ -99,6 +108,18 @@ class UpdateForm
     public function setUpdateExpression(?string $updateExpression): self
     {
         $this->updateExpression = $updateExpression;
+
+        return $this;
+    }
+
+    public function getUpdateRequire(): ?int
+    {
+        return $this->updateRequire;
+    }
+
+    public function setUpdateRequire(?int $updateRequire): self
+    {
+        $this->updateRequire = $updateRequire;
 
         return $this;
     }
