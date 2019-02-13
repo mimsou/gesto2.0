@@ -105,8 +105,9 @@ export class GeneratorComponent implements OnInit {
         return false;
     }
 
-    createAction() {
-        this.formComponent.initAction(this.mainCreateAction, this.process.steps);
+    createAction(dim) {
+
+        this.formComponent.initAction(this.mainCreateAction, this.process.steps,null,dim);
         $(".listWarp").switchClass("showElement", "hideElement", 50);
         $(".listWarp").addClass("col-md-0");
         $(".listWarp").removeClass("col-md-12");
@@ -145,7 +146,7 @@ export class GeneratorComponent implements OnInit {
         }
 
         if (acts.actionType == 3) {
-            this.formComponent.initAction(acts, this.process.steps, actionData[1]);
+            this.formComponent.initAction(acts, this.process.steps, actionData[1],actionData[2]);
         } else if (acts.actionType == 4) {
             var param = {};
             param.data = actionData[1];

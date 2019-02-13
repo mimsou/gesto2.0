@@ -154,6 +154,7 @@ jQuery.fn.extend({
                     var r = this.right.compute();
                     switch (this.op) {
                         //computational operators
+                        case "=": return l + r;
                         case "+": return l + r;
                         case "-": return l - r;
                         case "*": return l * r;
@@ -166,7 +167,7 @@ jQuery.fn.extend({
                     if (parseVariables === void 0) { parseVariables = false; }
                     return this.left.toString(parseVariables) + this.op + this.right.toString(parseVariables);
                 };
-                BinaryNode.operators = ["*", "/", "+", "-","."];
+                BinaryNode.operators = ["*", "/", "+", "-",".","="];
                 return BinaryNode;
             }(GraphNode));
             function parse(str) {
@@ -652,7 +653,7 @@ jQuery.fn.extend({
         }
         //validations
         function isOperator(char) {
-            return ['-', '+', '*', '/'].indexOf(char) >= 0;
+            return ['-', '+', '*', '/','='].indexOf(char) >= 0;
         }
         function isInvalidCharacter(char) {
             return ['~', '!', '@', '#', '$', '%', '^', '&', '=', '{', '}', '<', '>', '|', '\\', '`', '\'', ';', ':'].indexOf(char) >= 0;

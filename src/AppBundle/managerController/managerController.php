@@ -2106,31 +2106,86 @@ class managerController extends FOSRestController
                 foreach ($param->dimfilter->fld as $flddim) {
                     $field = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($flddim->param->fieldId);
                     $dimentity = $field->getFieldEntity();
-                    $relconfig = $this->getRelationEntityConfig($entity, $dimentity);
-                    $prevalias = "";
 
-                    foreach ($relconfig as $key => $relroute) {
+                    //die(var_dump($dimentity->getEntityEntity()));
+                    if ($dimentity->getEntityEntity() !== $entity->getEntityEntity()) {
+                        $relconfig = $this->getRelationEntityConfig($entity, $dimentity);
+                        $prevalias = "";
 
-                        $qb = $qb->addSelect($relroute["al"]);
-                        if ($key != 1) {
-                            $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
+                        foreach ($relconfig as $key => $relroute) {
 
-                        } else {
-                            $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+                            $qb = $qb->addSelect($relroute["al"]);
+                            if ($key != 1) {
+                                $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
 
+                            } else {
+                                $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+
+                            }
+
+                            $prevalias = $relroute["al"];
                         }
 
-                        $prevalias = $relroute["al"];
-                    }
+                        array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
 
-                    array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
+                        array_push($whereArray, array($prevalias . "." . $field->getFieldEntityName() . " = :val" . $prevalias, 'val' . $prevalias, $flddim->data, $flddim->param->fieldType));
+
+                    } else {
+
+                        array_push($rel, array($dimentity->getEntityEntity(), "same"));
+
+                        $id = uniqid();
+
+                        array_push($whereArray, array("a" . "." . $field->getFieldEntityName() . " = :val" . $id, 'val' . $id, $flddim->data, $flddim->param->fieldType));
+
+                    }
                 }
             }
 
         }
+        // die(var_dump($whereArray));
+        if (empty($whereArray)) {
+            return array();
+        }
 
         foreach ($whereArray as $warr) {
-            $qb = $qb->andWhere($warr[0])->setParameter($warr[1], $warr[2]);
+            if ($warr[3] !== "datetime") {
+                $qb = $qb->andWhere($warr[0])->setParameter($warr[1], $warr[2]);
+            } else {
+                $default = false;
+                if (strpos($warr[2], ':') !== false) {
+                    $dates = explode(":", $warr[2]);
+                    if ($dates[0] !== "" && $dates[1] !== "") {
+                       $fieldvals = explode("=",$warr[0]);
+                        $fieldval = $fieldvals[0];
+                        $alias1 = $this->uniq_char();
+                        $alias2 = $this->uniq_char();
+                        $qb = $qb->andWhere($fieldval."> :".$alias1)->setParameter($alias1, new \DateTime($dates[0]));
+                        $qb = $qb->andWhere($fieldval."< :".$alias2)->setParameter($alias2, new \DateTime($dates[1]));
+                    }
+                } else if ($warr[2][0]==">") {
+                    $fieldvals = explode("=",$warr[0]);
+                    $fieldval = $fieldvals[0];
+                    $alias = $this->uniq_char();
+                    $dateval = str_replace(">","");
+                    $qb = $qb->andWhere($fieldval."> :".$alias)->setParameter($alias, new \DateTime($dateval));
+                } else if ($warr[2][0]=="<") {
+                    $fieldvals = explode("=",$warr[0]);
+                    $fieldval = $fieldvals[0];
+                    $alias = $this->uniq_char();
+                    $dateval = str_replace("<","");
+                    $qb = $qb->andWhere($fieldval."< :".$alias)->setParameter($alias, new \DateTime($dateval));
+                }else{
+                    $qb = $qb->andWhere($warr[0])->setParameter($warr[1], new \DateTime($warr[2]));
+                }
+
+
+
+                if ($default) {
+                    $qb = $qb->andWhere($warr[0])->setParameter($warr[1], new \DateTime($warr[2]));
+                }
+
+            }
         }
 
         if ($entity->getEntityStepperField() != NULL) {
@@ -2372,6 +2427,12 @@ class managerController extends FOSRestController
 
         $class = "\AppBundle\Entity\\" . $entity;
 
+        if (property_exists($param, "dimfilter")) {
+            $dimfilter = $param->dimfilter;
+        } else {
+            $dimfilter = array();
+        }
+
         if ($param->action->actionType == 1) {
             $entityAction = new $class;
         } else {
@@ -2396,7 +2457,7 @@ class managerController extends FOSRestController
                             if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
                                 if (isset($params->updateExpression)) {
                                     if ($params->updateExpression !== "") {
-                                        $rs = $this->_getExpressionRestult($params, $request);
+                                        $rs = $this->_getExpressionRestult($params, $request, $dimfilter);
                                         $entityAction->$functionName($rs);
                                     } else {
                                         $entityAction->$functionName($prm);
@@ -2553,72 +2614,19 @@ class managerController extends FOSRestController
 
     }
 
-    private function _getExpressionRestult($param, $req)
+    private function _getExpressionRestult($param, $req, $dim)
     {
         $expression = json_decode($param->updateExpression);
         $type = $param->updateFieldId->fieldType;
         $entity = $param->updateFieldId->fieldEntity;
 
-        preg_match_all("/get(\(((?>[^()]+|(?1))*)\))(?!\s*.where(\(((?>[^()]+|(?1))*)\)))/", $expression->expression, $match);
+        $expression->expression = $this->resolve_dim_expression($expression->expression, $dim);
 
-        //search for get without where;
-        foreach ($match[2] as $key => $conf) {
-            $get = array();
-            $get["patern"] = $match[0][$key];
-            $result = $this->_get_result($entity, $conf);
-            if ($result !== null) {
-                $get["result"] = $result;
-            } else {
-                $get["result"] = 1;
-            }
-            if ($type == "string") {
-                $expression->expression = str_replace($get["patern"], "(string)'" . $get["result"] . "'", $expression->expression);
-            } else {
-                $expression->expression = str_replace($get["patern"], $get["result"], $expression->expression);
-            }
-        }
+        $expression->expression = $this->resolve_get_expression($expression->expression, $entity, $type, $dim);
 
-        //search for get with where;
-        preg_match_all("/get(\(((?>[^()]+|(?1))*)\))(\s*.where(\(((?>[^()]+|(?1))*)\)))/", $expression->expression, $match);
+        $expression->expression = $this->resolve_get_where_expression($expression->expression, $entity, $type, $dim);
 
-        foreach ($match[2] as $key => $conf) {
-            $get = array();
-            $get["patern"] = $match[0][$key];
-
-            $result = $this->_get_where_result($entity, $conf);
-            if ($result !== null) {
-                $get["result"] = $result;
-            } else {
-                $get["result"] = 1;
-            }
-            if ($type == "string") {
-                $expression->expression = str_replace($get["patern"], "(string)'" . $get["result"] . "'", $expression->expression);
-            } else {
-                $expression->expression = str_replace($get["patern"], $get["result"], $expression->expression);
-            }
-        }
-
-
-        preg_match_all("/php(\(((?>[^()]+|(?1))*)\))/", $expression->expression, $matchs);
-
-        foreach ($matchs[2] as $key => $conf) {
-            $get = array();
-
-            $get["patern"] = $matchs[0][$key];
-
-            $result = $this->_get_php_result($entity, $conf);
-
-            if ($result !== null) {
-                $get["result"] = $result;
-            } else {
-                $get["result"] = 1;
-            }
-            if ($type == "string") {
-                $expression->expression = str_replace($get["patern"], "(string)'" . $get["result"] . "'", $expression->expression);
-            } else {
-                $expression->expression = str_replace($get["patern"], $get["result"], $expression->expression);
-            }
-        }
+        $expression->expression = $this->resolve_php_expression($expression->expression, $entity, $type, $dim);
 
         if ($type == "float" || $type == "integer") {
 
@@ -2641,13 +2649,138 @@ class managerController extends FOSRestController
         return $rs;
     }
 
-    private function _recurcive_get_where($param, $req)
+    private function resolve_dim_expression($expr, $dim)
     {
+        preg_match_all("/dim(\(((?>[^()]+|(?1))*)\))/", $expr, $matchdims);
+
+        foreach ($matchdims[2] as $key => $conf) {
+
+            $dimrs = array();
+
+            $dimrs["patern"] = $matchdims[0][$key];
+
+            $result = $this->_get_dim_result($conf, $dim);
+
+            if ($result !== null) {
+                $dimrs["result"] = $result;
+                $expr = str_replace($dimrs["patern"], $dimrs["result"], $expr);
+            } else {
+                $expr = str_replace($dimrs["patern"], null, $expr);
+            }
+
+        }
+
+        return $expr;
+    }
+
+    private function _get_dim_result($conf, $dim)
+    {
+        preg_match_all("/\[([^\]]+)]/", $conf, $matchfld);
+        $fld = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($matchfld[1][0]);
+
+        foreach ($dim->ent as $diment) {
+            if ($diment->param->entityKey == $fld->getFieldEntityName()) {
+                return $diment->data;
+            }
+        }
+
+        foreach ($dim->fld as $dimfld) {
+            if ($dimfld->param->fieldEntityName == $fld->getFieldEntityName()) {
+                return $dimfld->data;
+            };
+        }
+
+        return null;
+    }
+
+    private function resolve_php_expression($expr, $entity, $type, $dim)
+    {
+
+        preg_match_all("/php(\(((?>[^()]+|(?1))*)\))/", $expr, $matchs);
+
+        foreach ($matchs[2] as $key => $conf) {
+            $get = array();
+
+            $get["patern"] = $matchs[0][$key];
+
+            $result = $this->_get_php_result($entity, $conf, $dim);
+
+            if ($result !== null) {
+                $get["result"] = $result;
+            } else {
+                $get["result"] = 1;
+            }
+            if ($type == "string") {
+                $expr = str_replace($get["patern"], "(string)'" . $get["result"] . "'", $expr);
+            } else {
+                $expr = str_replace($get["patern"], $get["result"], $expr);
+            }
+        }
+
+        return $expr;
 
     }
 
-    private function _get_php_result($ent, $field)
+
+    private function resolve_get_expression($expr, $entity, $type, $dim)
     {
+
+
+        preg_match_all("/get(\(((?>[^()]+|(?1))*)\))(?!\s*.where(\(((?>[^()]+|(?1))*)\)))/", $expr, $match);
+
+        foreach ($match[2] as $key => $conf) {
+            $get = array();
+            $get["patern"] = $match[0][$key];
+            $where = $match[5][$key];
+
+            $result = $this->_get_result($entity, $conf, $type, $dim);
+            if ($result !== null) {
+                $get["result"] = $result;
+            } else {
+                $get["result"] = 1;
+            }
+            if ($type == "string") {
+                $expr = str_replace($get["patern"], $get["result"], $expr);
+            } else {
+                $expr = str_replace($get["patern"], $get["result"], $expr);
+            }
+        }
+
+        return $expr;
+    }
+
+    private function resolve_get_where_expression($expr, $entity, $type, $dim)
+    {
+
+
+        preg_match_all("/get(\(((?>[^()]+|(?1))*)\))(\s*.where(\(((?>[^()]+|(?1))*)\)))/", $expr, $match);
+
+        foreach ($match[2] as $key => $conf) {
+            $get = array();
+            $get["patern"] = $match[0][$key];
+            $where = $match[5][$key];
+
+            $result = $this->_get_where_result($entity, $conf, $where, $type, $dim);
+            if ($result !== null) {
+                $get["result"] = $result;
+            } else {
+                $get["result"] = 1;
+            }
+            if ($type == "string") {
+                $expr = str_replace($get["patern"], "(string)'" . $get["result"] . "'", $expr);
+            } else {
+                $expr = str_replace($get["patern"], $get["result"], $expr);
+            }
+        }
+
+        return $expr;
+    }
+
+
+    private function _get_php_result($ent, $field, $dim)
+    {
+
+
         $ex = str_replace('"', "", $field);
         $arrstr = explode(".", $ex);
         $rsex = "";
@@ -2659,8 +2792,24 @@ class managerController extends FOSRestController
 
 
     private
-    function _get_result($ent, $field)
+    function _get_where_result($ent, $field, $where, $type, $dim)
     {
+
+        $field = $this->resolve_dim_expression($field, $dim);
+
+        $field = $this->resolve_get_expression($field, $ent, $type, $dim);
+
+        $field = $this->resolve_get_where_expression($field, $ent, $type, $dim);
+
+        $field = $this->resolve_php_expression($field, $ent, $type, $dim);
+
+
+        $where = $this->resolve_get_expression($where, $ent, $type, $dim);
+
+        $where = $this->resolve_get_where_expression($where, $ent, $type, $dim);
+
+        $where = $this->resolve_php_expression($where, $ent, $type, $dim);
+
 
         $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($ent->entityId);
 
@@ -2718,6 +2867,148 @@ class managerController extends FOSRestController
 
             } else {
                 $fieldconf["fieldJoinConf"] = "same";
+            }
+
+            array_push($fldlist, $fieldconf);
+
+        }
+
+        $wherarray = array();
+
+        preg_match_all("/\[([^\]]+)]/", $where, $matchwhere);
+
+        foreach ($matchwhere[0] as $key => $confwhere) {
+
+            $wfieldconf = array();
+
+            $wfieldconf["wfieldReplacementPhrase"] = $confwhere;
+
+            $fieldId = $matchwhere[1][$key];
+
+            $fld = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($fieldId);
+
+            $entwhere = $fld->getFieldEntity()->getEntityEntity();
+
+            $wfieldconf["wfieldEntity"] = $entwhere;
+
+            $wfieldconf["wfieldalias"] = "";
+
+            $wfieldconf["wfieldEntityName"] = $fld->getFieldEntityName();
+
+            foreach ($fldlist as $fld) {
+                if ($fld["fieldJoinConf"] !== "same") {
+                    foreach ($fld["fieldJoinConf"] as $fieldConf) {
+                        if ($fieldConf["ent"] == $entwhere) {
+                            $wfieldconf["wfieldalias"] = $fieldConf["al"];
+                        };
+                    };
+                }
+
+            }
+
+            if ($entity->getEntityEntity() == $entwhere) {
+
+                $wfieldconf["wfieldalias"] = "a";
+            };
+
+
+            array_push($wherarray, $wfieldconf);
+        }
+
+
+        foreach ($fldlist as $fld) {
+            $field = str_replace($fld["fieldReplacementPhrase"], $fld["fieldName"], $field);
+        }
+
+        foreach ($wherarray as $wherfld) {
+            $rep = $wherfld["wfieldalias"] . "." . $wherfld["wfieldEntityName"];
+            $where = str_replace($wherfld["wfieldReplacementPhrase"], $rep, $where);
+        }
+
+        $qb = $qb->addSelect($field . " as rs");
+        $qb = $qb->where($where);
+        $rs = $qb->getQuery()->getArrayResult();
+
+        return $rs[0]["rs"];
+
+    }
+
+
+    private
+    function _get_result($ent, $field, $type, $dim)
+    {
+
+
+        $field = $this->resolve_dim_expression($field, $dim);
+
+        $field = $this->resolve_get_expression($field, $ent, $type, $dim);
+
+        $field = $this->resolve_get_where_expression($field, $ent, $type, $dim);
+
+        $field = $this->resolve_php_expression($field, $ent, $type, $dim);
+
+
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($ent->entityId);
+
+        preg_match_all("/\[([^\]]+)]/", $field, $matchfld);
+
+
+        $fldlist = array();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb = $qb->select('a');
+
+        $qb = $qb->from("AppBundle:" . $entity->getEntityEntity(), 'a');
+
+        foreach ($matchfld[0] as $key => $conffld) {
+
+            $fieldconf = array();
+
+            $fieldconf["fieldReplacementPhrase"] = $conffld;
+
+            $fieldId = $matchfld[1][$key];
+
+            $fld = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($fieldId);
+
+
+            if ($entity->getentityId() != $fld->getFieldEntity()->getentityId()) {
+
+                $relconf = $this->getRelationEntityConfig($entity, $fld->getFieldEntity());
+
+                $fieldconf["fieldJoinConf"] = $relconf;
+
+                foreach ($relconf as $key => $relroute) {
+
+                    $qb = $qb->addSelect($relroute["al"]);
+                    if ($key != 1) {
+                        $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
+
+                    } else {
+                        $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+
+                    }
+
+                    $prevalias = $relroute["al"];
+
+                }
+
+                if ($fld->getFieldNature() == 1) {
+                    $fieldconf["fieldName"] = "IDENTITY(" . $prevalias . "." . $fld->getFieldEntityName() . ")";
+                } else {
+                    $fieldconf["fieldName"] = $prevalias . "." . $fld->getFieldEntityName();
+                }
+
+
+            } else {
+                $fieldconf["fieldJoinConf"] = "same";
+                if ($fld->getFieldNature() == 1) {
+                    $fieldconf["fieldName"] = "IDENTITY(a." . $fld->getFieldEntityName() . ")";
+                } else {
+                    $fieldconf["fieldName"] = "a." . $fld->getFieldEntityName();
+                }
             }
 
             array_push($fldlist, $fieldconf);

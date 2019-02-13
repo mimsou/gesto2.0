@@ -154,15 +154,16 @@ export class ListComponent implements OnInit {
 
     setDemFilter($event) {
         this.dimfilter = $event;
+        console.log("dimset", this.dimfilter)
         this.refrechListData();
     }
 
     doAction(action, data) {
-        this.fireAction.emit([action, data]);
+        this.fireAction.emit([action, data, this.dimfilter]);
     }
 
     doCreateAction($event) {
-        this.fireCretateAction.emit();
+        this.fireCretateAction.emit(this.dimfilter);
     }
 
     isStepperField(fld){

@@ -39,6 +39,7 @@ export class FormComponent implements OnInit {
     subforModeChoix: string = "";
     choiceData: any;
     choiceDataValidate: any = [];
+    dimFielter:any;
 
     @ViewChild('dimentionchoice') DimComponentChoice: any;
 
@@ -51,7 +52,9 @@ export class FormComponent implements OnInit {
 
     }
 
-    initAction(action, steps, data, user) {
+    initAction(action, steps, data, dim) {
+
+          this.dimFielter =  dim;
 
         if (typeof data !== 'undefined' && data !== null) {
             var param = {};
@@ -349,6 +352,7 @@ export class FormComponent implements OnInit {
             param.action = this.action;
             param.data = this.actionData;
             param.entity = this.entity;
+            param.dimfilter =  this.dimFielter;
 
             if (typeof this.action.actionSubEntity != 'undefined') {
                 param.subentity = this.subentity;
@@ -394,7 +398,7 @@ export class FormComponent implements OnInit {
                     if (fld.fieldNature !== 1) {
                         subdat[fld.fieldEntityName] = dat[0][fld.fieldEntityName];
                     } else {
-
+console.log("myfield",fld,dat);
                         subdat[fld.fieldEntityName] = new Object();
                         subdat[fld.fieldEntityName].data = new Object();
                         subdat[fld.fieldEntityName].data[0] = new Object();

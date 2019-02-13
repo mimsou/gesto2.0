@@ -50,6 +50,12 @@ export class ExpressionComponent implements AfterViewInit, OnChanges {
 
                         return 'f';
                     },
+                    dim: function (x) {
+                        if (x == undefined)
+                            throw new Error("Paramétre 'x' non définie");
+
+                        return 'f';
+                    },
                     php: function (x) {
                         if (x == undefined)
                             throw new Error("Paramétre 'x' non définie");
