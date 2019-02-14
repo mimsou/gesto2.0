@@ -21,11 +21,28 @@ class Solde
      */
     private $crbCode;
 
+
     /**
-     * @var int|null
+     * @var \GestEntity
      *
-     * @ORM\Column(name="exercice", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Crb" , inversedBy="soldes"  )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="solde_crb", referencedColumnName="crb_code")
+     * })
      */
+    private $soldeCrb;
+
+
+
+    /**
+     * @var \Exercice
+     *
+     * @ORM\ManyToOne(targetEntity="Exercice",inversedBy="solde")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="exercice", referencedColumnName="exercice_code")
+     * })
+     */
+
     private $exercice;
 
     /**
@@ -40,24 +57,7 @@ class Solde
         return $this->crbCode;
     }
 
-    public function setCrbCode(?int $crbCode): self
-    {
-        $this->crbCode = $crbCode;
 
-        return $this;
-    }
-
-    public function getExercice(): ?int
-    {
-        return $this->exercice;
-    }
-
-    public function setExercice(?int $exercice): self
-    {
-        $this->exercice = $exercice;
-
-        return $this;
-    }
 
     public function getSolde(): ?float
     {
@@ -70,6 +70,31 @@ class Solde
 
         return $this;
     }
+
+    public function getSoldeCrb(): ?Crb
+    {
+        return $this->soldeCrb;
+    }
+
+    public function setSoldeCrb(?Crb $soldeCrb): self
+    {
+        $this->soldeCrb = $soldeCrb;
+
+        return $this;
+    }
+
+    public function getExercice(): ?Exercice
+    {
+        return $this->exercice;
+    }
+
+    public function setExercice(?Exercice $exercice): self
+    {
+        $this->exercice = $exercice;
+
+        return $this;
+    }
+
 
 
 }

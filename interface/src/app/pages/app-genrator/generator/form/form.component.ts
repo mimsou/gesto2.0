@@ -326,9 +326,9 @@ export class FormComponent implements OnInit {
     doAction() {
 
         var error = false;
+
         for (let fld of this.field) {
             fld = this.validationRequireField(fld, this.actionData[fld.fieldEntityName]);
-            console.log("msg", fld.errormsg);
             if (fld.errormsg == "") {
                 fld.error = false;
             } else {
@@ -337,17 +337,18 @@ export class FormComponent implements OnInit {
             }
         }
 
-        if (typeof this.action.actionSubEntity != 'undefined') {
-            if (this.actionsubdatacollection.length == 0) {
+        if (typeof this.action.actionSubEntity !== 'undefined') {
+            if (this.actionsubdatacollection.length == 0 && this.action.actionLevelDepth !==1) {
                 error = true;
             }
         } else {
-            if (this.choiceDataValidate.length == 0) {
+            if (this.choiceDataValidate.length == 0 && this.action.actionLevelDepth !==1) {
                 error = true;
             }
         }
 
         if (!error) {
+
             var param = {};
             param.action = this.action;
             param.data = this.actionData;
@@ -363,6 +364,7 @@ export class FormComponent implements OnInit {
             }
 
             this.manager.doAction(param).subscribe(action => this.refrechMainView.emit(action));
+
         }
     }
 
@@ -398,7 +400,6 @@ export class FormComponent implements OnInit {
                     if (fld.fieldNature !== 1) {
                         subdat[fld.fieldEntityName] = dat[0][fld.fieldEntityName];
                     } else {
-console.log("myfield",fld,dat);
                         subdat[fld.fieldEntityName] = new Object();
                         subdat[fld.fieldEntityName].data = new Object();
                         subdat[fld.fieldEntityName].data[0] = new Object();

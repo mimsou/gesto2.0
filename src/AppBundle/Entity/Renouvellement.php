@@ -22,10 +22,14 @@ class Renouvellement
     private $renouvellementCode;
 
     /**
-     * @var int|null
+     * @var \Exercice
      *
-     * @ORM\Column(name="renouvellement_exercice", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Exercice",inversedBy="renouvellement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="renouvellement_exercice", referencedColumnName="exercice_code")
+     * })
      */
+
     private $renouvellementExercice;
 
     /**
@@ -40,17 +44,7 @@ class Renouvellement
         return $this->renouvellementCode;
     }
 
-    public function getRenouvellementExercice(): ?int
-    {
-        return $this->renouvellementExercice;
-    }
 
-    public function setRenouvellementExercice(?int $renouvellementExercice): self
-    {
-        $this->renouvellementExercice = $renouvellementExercice;
-
-        return $this;
-    }
 
     public function getRenouvellementEtat(): ?int
     {
@@ -60,6 +54,18 @@ class Renouvellement
     public function setRenouvellementEtat(?int $renouvellementEtat): self
     {
         $this->renouvellementEtat = $renouvellementEtat;
+
+        return $this;
+    }
+
+    public function getRenouvellementExercice(): ?Exercice
+    {
+        return $this->renouvellementExercice;
+    }
+
+    public function setRenouvellementExercice(?Exercice $renouvellementExercice): self
+    {
+        $this->renouvellementExercice = $renouvellementExercice;
 
         return $this;
     }

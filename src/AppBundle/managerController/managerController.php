@@ -50,11 +50,9 @@ class managerController extends FOSRestController
         $restresult = $qb->select('u')
             ->from('AppBundle:GestRole', 'u')->getQuery()->getArrayResult();
 
-
         if ($restresult === null) {
             return new View("there are no role exist", Response::HTTP_NOT_FOUND);
         }
-
 
         return $restresult;
 
@@ -97,6 +95,7 @@ class managerController extends FOSRestController
                 $entity->setEntityEntity(str_replace($classMeta->namespace . "\\", "", $classMeta->name));
                 $entity->setEntityKey($classMeta->identifier[0]);
                 $entity->setEntityType("regular");
+                $entity->setEntityPos('264,570');
 
 
                 foreach ($classMeta->fieldMappings as $fieldMapping) {
@@ -175,6 +174,7 @@ class managerController extends FOSRestController
                                 $entitysub->setEntityTable($mapping["joinTable"]["name"]);
                                 $entitysub->setEntityEntity($mapping["joinTable"]["name"]);
                                 $entitysub->setEntityType("association");
+                                $entitysub->setEntityPos('264,570');
 
                                 $fieldsub = $this->getDoctrine()
                                     ->getRepository('AppBundle:GestFields')
@@ -1324,10 +1324,14 @@ class managerController extends FOSRestController
             $em->persist($ent);
         }
 
+        $mnprocess = $this->getDoctrine()->getRepository('AppBundle:GestMenu')->findBy(array("menuProcess" => $process->getProcessId()));
 
-        $process = $this->getDoctrine()->getRepository('AppBundle:GestMenu')->findBy(array("menuProcess" => $process->getProcessId()));
+        foreach ($mnprocess as $mnpr) {
+            $em->remove($mnpr);
+        }
 
         $em->remove($process);
+
 
         $em->flush();
 
@@ -2143,7 +2147,7 @@ class managerController extends FOSRestController
             }
 
         }
-        // die(var_dump($whereArray));
+
         if (empty($whereArray)) {
             return array();
         }

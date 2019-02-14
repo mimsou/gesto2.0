@@ -22,10 +22,14 @@ class Facture
     private $factureCode;
 
     /**
-     * @var int|null
+     * @var \Exercice
      *
-     * @ORM\Column(name="facture_exerice", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Exercice",inversedBy="facture")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="facture_exercice", referencedColumnName="exercice_code")
+     * })
      */
+
     private $factureExerice;
 
     /**
@@ -102,10 +106,7 @@ class Facture
         return $this->factureCode;
     }
 
-    public function getFactureExerice(): ?int
-    {
-        return $this->factureExerice;
-    }
+
 
     public function setFactureCode(?int $factureCode): self
     {
@@ -114,12 +115,7 @@ class Facture
         return $this;
     }
 
-    public function setFactureExerice(?int $factureExerice): self
-    {
-        $this->factureExerice = $factureExerice;
 
-        return $this;
-    }
 
     public function getFactureNumeoBl(): ?string
     {
@@ -225,6 +221,18 @@ class Facture
     public function setFactureCodeRenouvellement(?Renouvellement $factureCodeRenouvellement): self
     {
         $this->factureCodeRenouvellement = $factureCodeRenouvellement;
+
+        return $this;
+    }
+
+    public function getFactureExerice(): ?Exercice
+    {
+        return $this->factureExerice;
+    }
+
+    public function setFactureExerice(?Exercice $factureExerice): self
+    {
+        $this->factureExerice = $factureExerice;
 
         return $this;
     }

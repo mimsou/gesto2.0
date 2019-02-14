@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,17 +21,32 @@ class Crb
      */
     private $crbLibelle;
 
+
     /**
-     * @var \Solde
+     * @var string
      *
+     * @ORM\Column(name="crb_code", type="string", length=10, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Solde")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="crb_code", referencedColumnName="crb_code")
-     * })
      */
     private $crbCode;
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Solde", mappedBy="soldeCrb" , cascade={"persist"})
+     */
+
+    private  $soldes;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->soldes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getCrbLibelle(): ?string
     {
@@ -43,17 +60,44 @@ class Crb
         return $this;
     }
 
-    public function getCrbCode(): ?Solde
+    public function getCrbCode(): ?string
     {
         return $this->crbCode;
     }
 
-    public function setCrbCode(?Solde $crbCode): self
+    /**
+     * @return Collection|Solde[]
+     */
+    public function getSoldes(): Collection
     {
-        $this->crbCode = $crbCode;
+        return $this->soldes;
+    }
+
+    public function addSolde(Solde $solde): self
+    {
+        if (!$this->soldes->contains($solde)) {
+            $this->soldes[] = $solde;
+            $solde->setSoldeCrb($this);
+        }
 
         return $this;
     }
+
+    public function removeSolde(Solde $solde): self
+    {
+        if ($this->soldes->contains($solde)) {
+            $this->soldes->removeElement($solde);
+            // set the owning side to null (unless already changed)
+            if ($solde->getSoldeCrb() === $this) {
+                $solde->setSoldeCrb(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
 
 
 }

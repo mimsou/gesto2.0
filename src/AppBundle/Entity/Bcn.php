@@ -45,9 +45,12 @@ class Bcn
     private $bcnDateValidation;
 
     /**
-     * @var int|null
+     * @var \Exercice
      *
-     * @ORM\Column(name="bcn_exercice", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Exercice",inversedBy="bcn")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="bcn_exercice", referencedColumnName="exercice_code")
+     * })
      */
     private $bcnExercice;
 
@@ -122,17 +125,7 @@ class Bcn
         return $this;
     }
 
-    public function getBcnExercice(): ?int
-    {
-        return $this->bcnExercice;
-    }
 
-    public function setBcnExercice(?int $bcnExercice): self
-    {
-        $this->bcnExercice = $bcnExercice;
-
-        return $this;
-    }
 
     public function getBcnEtat(): ?int
     {
@@ -197,6 +190,18 @@ class Bcn
                 $detailBcn->setBcnCode(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBcnExercice(): ?Exercice
+    {
+        return $this->bcnExercice;
+    }
+
+    public function setBcnExercice(?Exercice $bcnExercice): self
+    {
+        $this->bcnExercice = $bcnExercice;
 
         return $this;
     }
