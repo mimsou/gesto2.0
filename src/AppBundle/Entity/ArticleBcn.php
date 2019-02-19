@@ -21,12 +21,7 @@ class ArticleBcn
      */
     private $articleBcnDetailCode;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="article_bcncol", type="string", length=45, nullable=true)
-     */
-    private $articleBcncol;
+
 
     /**
      * @var float|null

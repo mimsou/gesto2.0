@@ -89,6 +89,10 @@ export class ManagerService {
         return this.http.delete(`${this.apiLink.MANAGER_BASE_URL}/role/${role.roleId}`);
     }
 
+    deleteAgField(field) {
+        return this.http.delete(`${this.apiLink.MANAGER_BASE_URL}/agfield/${field.fieldId}`);
+    }
+
     RoleAddLink($link, $role){
         var param = {};
         param.role = $role;
@@ -205,6 +209,10 @@ export class ManagerService {
 
     updateFieldInList(param) {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/fieldlistaction/`, JSON.stringify(param));
+    }
+
+    updateFieldExpAg(param) {
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/fieldlagexp/`, JSON.stringify(param));
     }
 
     updateFieldRequire(param) {

@@ -61,6 +61,15 @@ class GestFields
     private $fieldType;
 
 
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="field_expression", type="string", length=2000, nullable=true)
+     */
+    private $fieldExpression;
+
+
     /**
      * @var string|null
      *
@@ -381,6 +390,18 @@ class GestFields
     public function setFieldTargetEntityId(?GestEntity $fieldTargetEntityId): self
     {
         $this->fieldTargetEntityId = $fieldTargetEntityId;
+
+        return $this;
+    }
+
+    public function getFieldExpression(): ?string
+    {
+        return $this->fieldExpression;
+    }
+
+    public function setFieldExpression(?string $fieldExpression): self
+    {
+        $this->fieldExpression = $fieldExpression;
 
         return $this;
     }

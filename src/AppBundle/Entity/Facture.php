@@ -42,7 +42,7 @@ class Facture
     /**
      * @var string
      *
-     * @ORM\Column(name="facture_code_regroupement", type="string", length=10, nullable=false)
+     * @ORM\Column(name="facture_code_regroupement", type="string", length=10, nullable=true)
      */
     private $factureCodeRegroupement;
 

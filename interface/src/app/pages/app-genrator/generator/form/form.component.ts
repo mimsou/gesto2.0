@@ -1,5 +1,6 @@
 ﻿import {Component, EventEmitter, OnInit, Output, Input, ViewChild} from '@angular/core';
 import {ManagerService} from "../../../../@core/data/manager.service";
+import { DatePipe } from '@angular/common';
 import {
     GestAccessPath,
     GestMenu,
@@ -16,6 +17,7 @@ import {
     selector: 'ngx-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss']
+    providers: [DatePipe]
 })
 export class FormComponent implements OnInit {
 
@@ -45,7 +47,7 @@ export class FormComponent implements OnInit {
 
     @Output() refrechMainView: EventEmitter<any> = new EventEmitter();
 
-    constructor(private manager: ManagerService) {
+    constructor(private manager: ManagerService,private datePipe: DatePipe) {
     }
 
     ngOnInit() {
@@ -379,7 +381,11 @@ export class FormComponent implements OnInit {
 
         for (let fld of this.field) {
             if (fld.fieldNature !== 1) {
-                this.actionData[fld.fieldEntityName] = data["entityData"][0][fld.fieldEntityName];
+                if(fld.fieldType!=="datetime"){
+                    this.actionData[fld.fieldEntityName] = data["entityData"][0][fld.fieldEntityName];
+                }else{
+                    this.actionData[fld.fieldEntityName] = this.datePipe.transform(data["entityData"][0][fld.fieldEntityName],"dd-MM-yyyy");
+                }
             } else {
                 this.actionData[fld.fieldEntityName] = new Object();
                 if (typeof data["entityData"][0][0][fld.fieldEntityName] != 'undefined') {
@@ -398,7 +404,11 @@ export class FormComponent implements OnInit {
 
                 for (let fld of this.subfield) {
                     if (fld.fieldNature !== 1) {
+                        if(fld.fieldType!=="datetime"){
                         subdat[fld.fieldEntityName] = dat[0][fld.fieldEntityName];
+                        }else{
+                            subdat[fld.fieldEntityName] = this.datePipe.transform(dat[0][fld.fieldEntityName]);
+                        }
                     } else {
                         subdat[fld.fieldEntityName] = new Object();
                         subdat[fld.fieldEntityName].data = new Object();

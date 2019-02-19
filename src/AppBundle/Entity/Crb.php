@@ -65,6 +65,14 @@ class Crb
         return $this->crbCode;
     }
 
+
+    public function setCrbCode(?string $crbCode): self
+    {
+        $this->crbCode = $crbCode;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Solde[]
      */

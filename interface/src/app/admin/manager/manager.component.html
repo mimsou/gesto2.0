@@ -525,7 +525,7 @@
                     <div id="plumbcontainer" class="col-md-10" style="height: 75%">
                         <div entityoption>
                             <i (click)="refrechRelationalEntity($event)"
-                                             style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
+                               style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
                             Rafréchir
                         </div>
 
@@ -533,7 +533,8 @@
                             <i (click)="refrechRelationalEntity($event)"
                                style="font-size: 16px; margin-top: 10px;" class="fa fa-lock"></i>
                             Role<br>
-                            <ng-select2 (click)="onRoleOptionClick($event)"  [width]="200"    [(ngModel)]="valueRole" (valueChanged)="setRoleValue($event)" ngControl="value"  [data]="dataRole" >
+                            <ng-select2 (click)="onRoleOptionClick($event)" [width]="200" [(ngModel)]="valueRole"
+                                        (valueChanged)="setRoleValue($event)" ngControl="value" [data]="dataRole">
 
                             </ng-select2>
                         </div>
@@ -646,10 +647,13 @@
                                                         <i *ngIf="lst.listIsMain != 1" colorPrimary ActionIcone
                                                            class="fa fa-times"
                                                            (click)="deleteView(lst.listId,$event)"></i>
-                                                        <i  ActionIcone colorInactive (click)="ToggleSelectList(lst,$event)"  [ngClass]="{'colorPrimary' : selectedroleInRoles(lst.role)}" *ngIf="selectedrole !==''"
-                                                            class="fa fa-user" >
-                                                            <span *ngIf="selectedroleInRoles(lst.role)"> Relier</span>
-                                                            <span *ngIf="!selectedroleInRoles(lst.role)"> Non Relier</span>
+                                                        <i ActionIcone colorInactive
+                                                           (click)="ToggleSelectList(lst,$event)"
+                                                           [ngClass]="{'colorPrimary' : selectedroleInRoles(lst.role)}"
+                                                           *ngIf="selectedrole !==''"
+                                                           class="fa fa-user">
+                                                            <span *ngIf="selectedroleInRoles(lst.role)"> </span>
+                                                            <span *ngIf="!selectedroleInRoles(lst.role)"> </span>
                                                         </i>
                                                     </div>
                                                 </div>
@@ -732,10 +736,12 @@
                                                                                        class="fa fa-times"
                                                                                        (click)="deleteStep(step.stepId,$event)"></i>
 
-                                                    <i  ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"  [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}" *ngIf="selectedrole !==''"
-                                                       class="fa fa-user" >
-                                                        <span *ngIf="selectedroleInRoles(step.role)"> Relier</span>
-                                                        <span *ngIf="!selectedroleInRoles(step.role)"> Non Relier</span>
+                                                    <i ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"
+                                                       [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}"
+                                                       *ngIf="selectedrole !==''"
+                                                       class="fa fa-user">
+                                                        <span *ngIf="selectedroleInRoles(step.role)"> </span>
+                                                        <span *ngIf="!selectedroleInRoles(step.role)"> </span>
                                                     </i>
                                                 </div>
                                             </div>
@@ -780,10 +786,13 @@
                                                         <i *ngIf="act.actionType != 1" colorPrimary ActionIcone
                                                            class="fa fa-times"
                                                            (click)="deleteAction(act.actionId,$event)"></i>
-                                                        <i  ActionIcone colorInactive (click)="ToggleSelectAction(act,$event)"  [ngClass]="{'colorPrimary' : selectedroleInRoles(act.role)}" *ngIf="selectedrole !==''"
-                                                            class="fa fa-user" >
-                                                            <span *ngIf="selectedroleInRoles(act.role)"> Relier</span>
-                                                            <span *ngIf="!selectedroleInRoles(act.role)"> Non Relier</span>
+                                                        <i ActionIcone colorInactive
+                                                           (click)="ToggleSelectAction(act,$event)"
+                                                           [ngClass]="{'colorPrimary' : selectedroleInRoles(act.role)}"
+                                                           *ngIf="selectedrole !==''"
+                                                           class="fa fa-user">
+                                                            <span *ngIf="selectedroleInRoles(act.role)"> </span>
+                                                            <span *ngIf="!selectedroleInRoles(act.role)"></span>
                                                         </i>
 
 
@@ -993,10 +1002,12 @@
                                     Expression sur champ : {{selectedField.fieldEntityName}}
                                 </nb-accordion-item-header>
 
-                                <nb-accordion-item-body >
+                                <nb-accordion-item-body>
 
-                                    <div   style="height: 500px;">
-                                        <ngx-expression  [optionvar]="allFieldOption" #updateexpression (valueChange)="updateFieldInActionExp($event)" [(value)]="expValu"  ></ngx-expression>
+                                    <div style="height: 500px;">
+                                        <ngx-expression [optionvar]="allFieldOption" #updateexpression
+                                                        (valueChange)="updateFieldInActionExp($event)"
+                                                        [(value)]="expValu"></ngx-expression>
                                     </div>
 
                                 </nb-accordion-item-body>
@@ -1306,9 +1317,52 @@
 
                             <nb-accordion-item>
                                 <nb-accordion-item-header>
-                                    Champ {{selectedField.fieldEntityName}}
+                                    Champ agrégé
                                 </nb-accordion-item-header>
                                 <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+
+                                        <div agField containerFlex  *ngFor="let fld of agField">
+
+                                        <div inlineelement  > {{fld.fieldEntityName}} </div>
+                                        <div inlineelement >
+                                            <i #editUpdate colorPrimary ActionIcone
+                                               (click)="deleteAgField(fld,$event)"
+                                               class="fa fa-times"></i>
+                                            <i #editUpdate colorPrimary ActionIcone
+                                                  (click)="setExpressionAg(fld,$event)"
+                                                  class="fa fa-pen"></i>
+                                        </div>
+                                        </div>
+
+                                        <button (click)="newFieldAg()" type="button" nbButton size="xsmall"> Nouveau Champ agrégé </button><br>
+
+                                            Alias du champ <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                                  type="text" [(ngModel)]="fieldForm.fieldAlias"> <br>
+                                            Nom du champ <input nbInput fullWidth fieldSize="xsmall" type="text"
+                                                                [(ngModel)]="fieldForm.fieldName"><br>
+                                            Type <select paramInput
+                                                         [(ngModel)]="fieldForm.fieldType"
+                                                         nbInput fullWidth
+                                                         fieldSize="xsmall"
+                                        >
+                                            <option value="string">Chaine
+                                            </option>
+                                            <option value="float">Réel
+                                            </option>
+                                            <option value="integer">entier
+                                            </option>
+                                            <option value="datetime">Date
+                                            </option>
+                                        </select>
+
+                                            <br>
+                                            <ngx-expression [optionvar]="allFieldOption" #updateexpressionag
+                                                            (valueChange)="updateFieldAgExp($event)"
+                                                            [(value)]="expValuAg"></ngx-expression>
+                                        </div>
+
+
 
                                 </nb-accordion-item-body>
                             </nb-accordion-item>

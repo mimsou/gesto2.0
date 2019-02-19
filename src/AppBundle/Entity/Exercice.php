@@ -35,6 +35,14 @@ class Exercice
 
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="exercice_etat", type="integer",   nullable=true)
+     */
+    private $exerciceetat;
+
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Facture", mappedBy="factureExerice" , cascade={"persist"})
@@ -224,6 +232,18 @@ class Exercice
                 $solde->setRenouvellementExercice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getExerciceetat(): ?int
+    {
+        return $this->exerciceetat;
+    }
+
+    public function setExerciceetat(?int $exerciceetat): self
+    {
+        $this->exerciceetat = $exerciceetat;
 
         return $this;
     }

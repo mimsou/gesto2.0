@@ -28,6 +28,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     @ViewChild('revealpage') revealpages: any;
     @ViewChild('entits') public entits: any;
     @ViewChild('updateexpression') updateExpressions: any;
+    @ViewChild('updateexpressionag') updateExpressionsag: any;
     @ViewChild('updateexpressions') updateExpressionss: any;
 
 
@@ -63,6 +64,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     selectedList = List;
     selectedProcess: Process = [];
     selectedField: Field = [];
+    selectedFieldAg: Field = [];
     hideActionType: boolean = false;
     paramPanel = "";
     subStepSelection: Array<Step> = [];
@@ -70,8 +72,11 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     expression: any;
     allFieldOption: any;
     expValu: any;
+    expValuAg: any;
     dataRole: any;
     valueRole: any;
+    fieldForm: any = new Object();
+    agField: any = [];
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -621,12 +626,22 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             for (let fld of ent.fields) {
                 var objvar = new Object();
                 objvar.variableId = fld.fieldId;
-                objvar.name = ent.entityEntity+"_"+fld.fieldEntityName;
+                objvar.name = ent.entityEntity + "_" + fld.fieldEntityName;
                 arrvar.push(objvar);
             }
         }
 
         this.allFieldOption = arrvar;
+
+        if (typeof this.selectedEntity != "undefined") {
+            for (let ent of this.entities) {
+                if (ent.entityId == this.selectedEntity.entityId) {
+                    this.selectedEntity = ent
+                }
+            }
+
+            this.agField = this.getAgField(this.selectedEntity.fields);
+        }
 
         this.connectEntity();
 
@@ -665,6 +680,10 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
         if (this.flipdim.flipped == true && this.dimform.type == 1) {
             this.dimform.entityId = entity.entityId;
+        }
+
+        if (typeof this.selectedEntity !== "undefined") {
+            this.agField = this.getAgField(this.selectedEntity.fields);
         }
 
     }
@@ -1204,11 +1223,11 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         if (typeof this.selectedActions.updateField != 'undefined') {
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
-                   if(fld.updateRequire==1){
-                       return true;
-                   }else{
-                       return false;
-                   }
+                    if (fld.updateRequire == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
 
@@ -1242,10 +1261,10 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             var exps = "";
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
-                   if(typeof fld.updateExpression !== 'undefined'){
-                    var exp = JSON.parse(fld.updateExpression);
-                    exps = exp.expression;
-                   }
+                    if (typeof fld.updateExpression !== 'undefined') {
+                        var exp = JSON.parse(fld.updateExpression);
+                        exps = exp.expression;
+                    }
                 }
             }
             this.expValu = exps;
@@ -1256,6 +1275,39 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.paramPanel = 'expression'
 
         this.selectedField = field;
+
+    }
+
+    newFieldAg() {
+        this.selectedFieldAg = [];
+        this.fieldForm.fieldAlias = "";
+        this.fieldForm.fieldName = "";
+        this.fieldForm.fieldType = 0;
+        this.expValuAg = "";
+    }
+
+    deleteAgField(field, $event) {
+        $event.stopPropagation();
+        this.menuService.deleteAgField(field).subscribe(field => this.refrechAgField());
+
+    }
+
+    setExpressionAg(field, $event) {
+
+        $event.stopPropagation();
+
+        if (typeof field.fieldExpression !== 'undefined') {
+            var exp = JSON.parse(field.fieldExpression);
+            this.expValuAg = exp.expression;
+        } else {
+            this.expValuAg = "";
+        }
+
+        this.fieldForm.fieldAlias = field.fieldEntityName;
+        this.fieldForm.fieldName = field.fieldInterfaceName;
+        this.fieldForm.fieldType = field.fieldType;
+
+        this.selectedFieldAg = field;
 
     }
 
@@ -1299,11 +1351,38 @@ export class ManagerComponent implements OnInit, AfterViewInit {
                 this.subStepSelection = pr.steps;
             }
         }
+    }
 
+    getAgField(flds) {
+        if (typeof flds != 'undefined') {
+            var arr = new Array();
+            for (let fld of flds) {
+                if (fld.fieldNature == 2) {
+                    arr.push(fld);
+                }
+            }
+            return arr;
+        }
     }
 
     copyObj(obj) {
         return JSON.parse(JSON.stringify(obj));
+    }
+
+    updateFieldAgExp($event) {
+        var param = {};
+        param.entity = this.selectedEntity;
+        param.form = this.fieldForm;
+        param.fieldAg = this.selectedFieldAg;
+        param.exp = $event;
+        this.menuService.updateFieldExpAg(param).subscribe(field => this.refrechAgField());
+    }
+
+    refrechAgField() {
+        this.loadProcess();
+        this.loadSchema();
+        this.newFieldAg();
+
     }
 }
 
