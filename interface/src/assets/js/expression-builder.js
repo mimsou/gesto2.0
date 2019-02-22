@@ -154,12 +154,19 @@ jQuery.fn.extend({
                     var r = this.right.compute();
                     switch (this.op) {
                         //computational operators
-                        case "=": return l + r;
                         case "+": return l + r;
                         case "-": return l - r;
                         case "*": return l * r;
                         case "/": return l / r;
                         case ".": return l + r;
+                        case "==": return l + r;
+                        case "<<": return l + r;
+                        case ">>": return l + r;
+                        case "<=": return l + r;
+                        case ">=": return l + r;
+                        case "!=": return l + r;
+                        case "&&": return l + r;
+                        case "||" : return l + r;
                     }
                     throw new Error("operator not implemented '" + this.op + "'");
                 };
@@ -167,7 +174,7 @@ jQuery.fn.extend({
                     if (parseVariables === void 0) { parseVariables = false; }
                     return this.left.toString(parseVariables) + this.op + this.right.toString(parseVariables);
                 };
-                BinaryNode.operators = ["*", "/", "+", "-",".","="];
+                BinaryNode.operators = ["*", "/", "+", "-",".","<<",">>","==","<=",">=","!=","&&","||"];
                 return BinaryNode;
             }(GraphNode));
             function parse(str) {
@@ -254,7 +261,7 @@ jQuery.fn.extend({
                             tokens = [new ValueNode(tokens)];
                         }
                         if (tokens.length !== 1) {
-                            console.log("error: ", tokens.slice());
+
                             throw new Error("something went wrong");
                         }
                         return tokens[0];
@@ -473,7 +480,6 @@ jQuery.fn.extend({
                 }
                 inString = _inString;
                 inVariable = _inVariable;
-                //console.log({ input: input, cursor: cursor, lastChar: lastChar, hasSpace: hasSpace });
                 if (inString) {
                     if (input == '"')
                         inString = false;
@@ -653,7 +659,7 @@ jQuery.fn.extend({
         }
         //validations
         function isOperator(char) {
-            return ['-', '+', '*', '/','='].indexOf(char) >= 0;
+            return ['-', '+', '*', '/','<<','>>','==','<=','>=','!=','&&','||'].indexOf(char) >= 0;
         }
         function isInvalidCharacter(char) {
             return ['~', '!', '@', '#', '$', '%', '^', '&', '=', '{', '}', '<', '>', '|', '\\', '`', '\'', ';', ':'].indexOf(char) >= 0;

@@ -166,6 +166,13 @@ class GestActions
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\OneToMany(targetEntity="GestActionsRegle", mappedBy="acregAction")
+     */
+    private $actionAcreg;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\ManyToMany(targetEntity="GestFields", inversedBy="viewAction")
      * @ORM\JoinTable(name="view_form",
      *   joinColumns={
@@ -187,6 +194,7 @@ class GestActions
         $this->updateField = new \Doctrine\Common\Collections\ArrayCollection();
         $this->viewField = new \Doctrine\Common\Collections\ArrayCollection();
         $this->role = new ArrayCollection();
+        $this->actionAcreg = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getActionId(): ?int
@@ -485,6 +493,37 @@ class GestActions
         if ($this->role->contains($role)) {
             $this->role->removeElement($role);
             $role->removeStep($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestActionsRegle[]
+     */
+    public function getActionAcreg(): Collection
+    {
+        return $this->actionAcreg;
+    }
+
+    public function addActionAcreg(GestActionsRegle $actionAcreg): self
+    {
+        if (!$this->actionAcreg->contains($actionAcreg)) {
+            $this->actionAcreg[] = $actionAcreg;
+            $actionAcreg->setAcregAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionAcreg(GestActionsRegle $actionAcreg): self
+    {
+        if ($this->actionAcreg->contains($actionAcreg)) {
+            $this->actionAcreg->removeElement($actionAcreg);
+            // set the owning side to null (unless already changed)
+            if ($actionAcreg->getAcregAction() === $this) {
+                $actionAcreg->setAcregAction(null);
+            }
         }
 
         return $this;

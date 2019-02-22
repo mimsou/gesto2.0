@@ -42,6 +42,7 @@ export class FormComponent implements OnInit {
     choiceData: any;
     choiceDataValidate: any = [];
     dimFielter:any;
+    FormMessage:string="";
 
     @ViewChild('dimentionchoice') DimComponentChoice: any;
 
@@ -365,10 +366,22 @@ export class FormComponent implements OnInit {
                 param.subprocess = this.subprocess;
             }
 
-            this.manager.doAction(param).subscribe(action => this.refrechMainView.emit(action));
+            this.manager.doAction(param).subscribe((res: Response) => {this.callbackAction(res)});
 
         }
     }
+
+    callbackAction(action){
+       var res = JSON.parse(action);
+
+       if(res.error == true){
+           this.FormMessage = "Régles : "+res.message;
+       }else{
+           this.FormMessage = "";
+           this.refrechMainView.emit(action);
+       }
+    }
+
 
     switchView() {
         this.refrechMainView.emit();

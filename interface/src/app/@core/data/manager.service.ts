@@ -93,6 +93,16 @@ export class ManagerService {
         return this.http.delete(`${this.apiLink.MANAGER_BASE_URL}/agfield/${field.fieldId}`);
     }
 
+    deleteAcreg(acreg) {
+        return this.http.delete(`${this.apiLink.MANAGER_BASE_URL}/acreg/${acreg.acregId}`);
+    }
+
+
+    deleteListreg(listreg) {
+        return this.http.delete(`${this.apiLink.MANAGER_BASE_URL}/listreg/${listreg.listregId}`);
+    }
+
+
     RoleAddLink($link, $role){
         var param = {};
         param.role = $role;
@@ -213,6 +223,14 @@ export class ManagerService {
 
     updateFieldExpAg(param) {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/fieldlagexp/`, JSON.stringify(param));
+    }
+
+    updateAcregAg(param) {
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/acregexp/`, JSON.stringify(param));
+    }
+
+    updateListregAg(param) {
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/listregexp/`, JSON.stringify(param));
     }
 
     updateFieldRequire(param) {

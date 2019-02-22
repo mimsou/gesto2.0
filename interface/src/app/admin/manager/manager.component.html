@@ -732,7 +732,7 @@
                                             <div class="step " id="step_{{step.stepId}}"
                                                  [ngClass]="{'active' :  step.stepId == selectedSteps.stepId  }">
                                                 <div class="circle">{{step.stepSequence}}</div>
-                                                <div class="label">{{step.stepName}}<i colorPrimary ActionIcone
+                                                <div class="label">{{step.stepName}} - {{step.stepId}}<i colorPrimary ActionIcone
                                                                                        class="fa fa-times"
                                                                                        (click)="deleteStep(step.stepId,$event)"></i>
 
@@ -1004,11 +1004,11 @@
 
                                 <nb-accordion-item-body>
 
-                                    <div style="height: 500px;">
-                                        <ngx-expression [optionvar]="allFieldOption" #updateexpression
+
+                                        <ngx-expression [optionvar]="allFieldOption"
                                                         (valueChange)="updateFieldInActionExp($event)"
                                                         [(value)]="expValu"></ngx-expression>
-                                    </div>
+
 
                                 </nb-accordion-item-body>
                             </nb-accordion-item>
@@ -1182,9 +1182,100 @@
 
                             <nb-accordion-item>
                                 <nb-accordion-item-header>
-                                    Champ {{selectedField.fieldEntityName}}
+                                  Régles de gestion
                                 </nb-accordion-item-header>
                                 <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+
+                                        <div agField containerFlex  *ngFor="let acreg of selectedActions.actionAcreg">
+
+                                            <div inlineelement  > {{acreg.acregName}} </div>
+                                            <div inlineelement >
+                                                <i #editUpdate colorPrimary ActionIcone
+                                                   (click)="deleteAcreg(acreg,$event)"
+                                                   class="fa fa-times"></i>
+                                                <i #editUpdate colorPrimary ActionIcone
+                                                   (click)="setExpressionAcreg(acreg,$event)"
+                                                   class="fa fa-pen"></i>
+                                            </div>
+                                        </div>
+
+                                        <button (click)="newAcreg()" type="button" nbButton size="xsmall"> Nouvelle régle </button><br>
+
+                                        Nom de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                              type="text" [(ngModel)]="acregForm.acregName"> <br>
+
+                                       alias de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                               type="text" [(ngModel)]="acregForm.acregAlias"> <br>
+
+                                       Message d'erreur <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                               type="text" [(ngModel)]="acregForm.acregErrormessage"> <br>
+
+
+
+                                        <br>
+                                        <ngx-expression [optionvar]="allFieldOption"
+                                                        (valueChange)="updateAcregExp($event)"
+                                                        [(value)]="expValuAcreg"></ngx-expression>
+                                    </div>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='view'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    View {{selectedList.actionName}}
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+
+to Do
+
+                                    </div>
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+                            <nb-accordion-item>
+                                <nb-accordion-item-header>
+                                    Régles d'affichage
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+
+                                        <div agField containerFlex  *ngFor="let listreg of selectedList.listReg">
+
+                                            <div inlineelement  > {{listreg.listregName}} </div>
+                                            <div inlineelement >
+                                                <i #editUpdate colorPrimary ActionIcone
+                                                   (click)="deleteListreg(listreg,$event)"
+                                                   class="fa fa-times"></i>
+                                                <i #editUpdate colorPrimary ActionIcone
+                                                   (click)="setExpressionListreg(listreg,$event)"
+                                                   class="fa fa-pen"></i>
+                                            </div>
+                                        </div>
+
+                                        <button (click)="newListreg()" type="button" nbButton size="xsmall"> Nouvelle régle </button><br>
+
+                                        Nom de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                               type="text" [(ngModel)]="listregForm.listregName"> <br>
+
+                                        alias de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                                 type="text" [(ngModel)]="listregForm.listregAlias"> <br>
+
+
+                                        <br>
+                                        <ngx-expression [optionvar]="allFieldOption"
+                                                        (valueChange)="updateListregExp($event)"
+                                                        [(value)]="expValuListreg"></ngx-expression>
+                                    </div>
 
                                 </nb-accordion-item-body>
                             </nb-accordion-item>
@@ -1357,7 +1448,7 @@
                                         </select>
 
                                             <br>
-                                            <ngx-expression [optionvar]="allFieldOption" #updateexpressionag
+                                            <ngx-expression [optionvar]="allFieldOption"
                                                             (valueChange)="updateFieldAgExp($event)"
                                                             [(value)]="expValuAg"></ngx-expression>
                                         </div>

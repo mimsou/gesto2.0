@@ -30,6 +30,14 @@ class GestList
      */
     private $listName;
 
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="list_regle", type="string", length=2000, nullable=true)
+     */
+    private $listRegle;
+
     /**
      * @var integer|null
      *
@@ -86,6 +94,13 @@ class GestList
     private $role;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestListRegle", mappedBy="regList")
+     */
+     private $listReg;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -93,6 +108,7 @@ class GestList
         $this->field = new \Doctrine\Common\Collections\ArrayCollection();
         $this->role = new \Doctrine\Common\Collections\ArrayCollection();
         $this->step = new ArrayCollection();
+        $this->listReg = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getListId(): ?int
@@ -226,6 +242,49 @@ class GestList
     public function setListIsMain(?int $listIsMain): self
     {
         $this->listIsMain = $listIsMain;
+
+        return $this;
+    }
+
+    public function getListRegle(): ?string
+    {
+        return $this->listRegle;
+    }
+
+    public function setListRegle(?string $listRegle): self
+    {
+        $this->listRegle = $listRegle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestListRegle[]
+     */
+    public function getListReg(): Collection
+    {
+        return $this->listReg;
+    }
+
+    public function addListReg(GestListRegle $listReg): self
+    {
+        if (!$this->listReg->contains($listReg)) {
+            $this->listReg[] = $listReg;
+            $listReg->setRegList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListReg(GestListRegle $listReg): self
+    {
+        if ($this->listReg->contains($listReg)) {
+            $this->listReg->removeElement($listReg);
+            // set the owning side to null (unless already changed)
+            if ($listReg->getRegList() === $this) {
+                $listReg->setRegList(null);
+            }
+        }
 
         return $this;
     }

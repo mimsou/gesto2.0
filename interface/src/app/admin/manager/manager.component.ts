@@ -65,6 +65,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     selectedProcess: Process = [];
     selectedField: Field = [];
     selectedFieldAg: Field = [];
+    selectedAcreg:any = [];
+    selectedListreg:any = [];
     hideActionType: boolean = false;
     paramPanel = "";
     subStepSelection: Array<Step> = [];
@@ -73,10 +75,15 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     allFieldOption: any;
     expValu: any;
     expValuAg: any;
+    expValuAcreg: any;
     dataRole: any;
     valueRole: any;
     fieldForm: any = new Object();
     agField: any = [];
+    acregForm: any = new Object();
+    listregForm: any = new Object();
+    expValuListreg: any;
+
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -124,6 +131,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.FieldDimention = [];
         this.selectedFieldDimention = [];
         this.selectedField = [];
+        this.selectedAcreg = [];
+        this.selectedFieldAg = [];
         this.selectedrolelib = "";
         this.editable = true;
         this.paramPanel = "";
@@ -924,7 +933,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     selectList(list, $event) {
 
         $event.stopPropagation();
-        this.paramPanel = 'list';
+        this.paramPanel = 'view';
         if (this.selectedSteps.length == 0) {
 
             this.EntityList = [];
@@ -1173,7 +1182,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     }
 
     updateFieldInActionExp($event) {
-        console.log("ee", $event)
         var param = {};
         param.field = this.selectedField;
         param.action = this.selectedActions;
@@ -1259,6 +1267,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
         if (typeof this.selectedActions.updateField !== 'undefined') {
             var exps = "";
+            console.log("updf",this.selectedActions.updateField);
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
                     if (typeof fld.updateExpression !== 'undefined') {
@@ -1384,6 +1393,106 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.newFieldAg();
 
     }
+
+
+    newAcreg() {
+        this.selectedAcreg = [];
+        this.acregForm.acregName = "";
+        this.acregForm.acregAlias = "";
+        this.acregForm.acregErrormessage = "";
+        this.expValuAcreg = "";
+    }
+
+    deleteAcreg(acreg, $event) {
+        $event.stopPropagation();
+        this.menuService.deleteAcreg(acreg).subscribe(field => this.refrechAcreg());
+    }
+
+    setExpressionAcreg(acreg, $event) {
+
+        $event.stopPropagation();
+
+        if (typeof acreg.acregExpression !== 'undefined') {
+            var exp = JSON.parse(acreg.acregExpression);
+            this.expValuAcreg = exp.expression;
+        } else {
+            this.expValuAcreg = "";
+        }
+
+        this.acregForm.acregName = acreg.acregName;
+        this.acregForm.acregAlias = acreg.acregAlias;
+        this.acregForm.acregErrormessage = acreg.acregErrormessage;
+
+        this.selectedAcreg = acreg;
+
+    }
+
+    updateAcregExp($event) {
+        var param = {};
+        param.action = this.selectedActions;
+        param.acreg =  this.selectedAcreg;
+        param.form = this.acregForm;
+        param.exp = $event;
+        this.menuService.updateAcregAg(param).subscribe(field => this.refrechAcreg());
+    }
+
+    refrechAcreg() {
+        this.loadProcess();
+        this.newAcreg();
+    }
+
+
+
+    newListreg() {
+        this.selectedListreg = [];
+        this.listregForm.listregName = "";
+        this.listregForm.listregAlias = "";
+        this.expValuListreg = "";
+    }
+
+    deleteListreg(acreg, $event) {
+        $event.stopPropagation();
+        this.menuService.deleteListreg(acreg).subscribe(field => this.refrechListreg());
+    }
+
+    setExpressionListreg(listreg, $event) {
+
+        console.log("lstreg",this.selectedList);
+
+        $event.stopPropagation();
+
+        if (typeof listreg.listregExpression !== 'undefined') {
+            var exp = JSON.parse(listreg.listregExpression);
+            this.expValuListreg = exp.expression;
+        } else {
+            this.expValuListreg = "";
+        }
+
+        this.listregForm.listregName = listreg.listregName;
+        this.listregForm.listregAlias = listreg.listregAlias;
+
+        this.selectedListreg = listreg;
+
+    }
+
+    updateListregExp($event) {
+        var param = {};
+        param.list = this.selectedList;
+        param.listreg =  this.selectedListreg;
+        param.form = this.listregForm;
+        param.exp = $event;
+        this.menuService.updateListregAg(param).subscribe(field => this.refrechListreg());
+    }
+
+    refrechListreg() {
+        this.loadProcess();
+        this.newListreg();
+    }
+
+
+
+
+
 }
 
 
