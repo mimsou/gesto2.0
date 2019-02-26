@@ -95,6 +95,15 @@ class GestProcess
 
     private $steps;
 
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestSteps", mappedBy="stepFromProcess" , cascade={"persist"})
+     */
+
+    private $fromsteps;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -126,6 +135,7 @@ class GestProcess
         $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->list = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gestFieldDimention = new ArrayCollection();
+        $this->fromsteps = new ArrayCollection();
     }
 
     public function getProcessId(): ?int
@@ -323,6 +333,37 @@ class GestProcess
     {
         if ($this->gestFieldDimention->contains($gestFieldDimention)) {
             $this->gestFieldDimention->removeElement($gestFieldDimention);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestSteps[]
+     */
+    public function getFromsteps(): Collection
+    {
+        return $this->fromsteps;
+    }
+
+    public function addFromstep(GestSteps $fromstep): self
+    {
+        if (!$this->fromsteps->contains($fromstep)) {
+            $this->fromsteps[] = $fromstep;
+            $fromstep->setStepFromProcess($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFromstep(GestSteps $fromstep): self
+    {
+        if ($this->fromsteps->contains($fromstep)) {
+            $this->fromsteps->removeElement($fromstep);
+            // set the owning side to null (unless already changed)
+            if ($fromstep->getStepFromProcess() === $this) {
+                $fromstep->setStepFromProcess(null);
+            }
         }
 
         return $this;

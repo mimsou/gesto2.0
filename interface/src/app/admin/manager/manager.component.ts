@@ -65,8 +65,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     selectedProcess: Process = [];
     selectedField: Field = [];
     selectedFieldAg: Field = [];
-    selectedAcreg:any = [];
-    selectedListreg:any = [];
+    selectedAcreg: any = [];
+    selectedListreg: any = [];
     hideActionType: boolean = false;
     paramPanel = "";
     subStepSelection: Array<Step> = [];
@@ -83,7 +83,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     acregForm: any = new Object();
     listregForm: any = new Object();
     expValuListreg: any;
-
+    selectFrom: any = [];
+    stepform: any="";
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -136,6 +137,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.selectedrolelib = "";
         this.editable = true;
         this.paramPanel = "";
+        this.selectFrom = [];
         this.connectEntity();
 
 
@@ -855,6 +857,38 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.EntityDimention = process.gestEntityDimention;
         this.FieldDimention = process.gestFieldDimention;
         this.paramPanel = 'process';
+        this.selectFrom = [];
+        this.setStepForm(process);
+    }
+
+    setStepForm(process) {
+        for (let prs of this.process) {
+            if (prs.gestEntity[0].entityId == process.gestEntity[0].entityId && prs.processId !== process.processId) {
+                for (let step of prs.steps) {
+                    var stp = new Object();
+                    stp.stepId = step.stepId;
+                    stp.stepName = prs.processDesignation + "_" + step.stepName;
+                    this.selectFrom.push(stp);
+                }
+            }
+        }
+        return [];
+    }
+
+    addStepFromProcess($event){
+        $event.stopPropagation();
+        var param = {};
+        param.process = this.selectedProcess;
+        param.step = this.stepform;
+        this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
+    }
+
+    removeStepFromProcess(step ,$event){
+        $event.stopPropagation();
+        var param = {};
+        param.process = this.selectedProcess;
+        param.step = step;
+        this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
     }
 
     selectStep(step, $event) {
@@ -1267,7 +1301,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
         if (typeof this.selectedActions.updateField !== 'undefined') {
             var exps = "";
-            console.log("updf",this.selectedActions.updateField);
+            console.log("updf", this.selectedActions.updateField);
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
                     if (typeof fld.updateExpression !== 'undefined') {
@@ -1430,7 +1464,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     updateAcregExp($event) {
         var param = {};
         param.action = this.selectedActions;
-        param.acreg =  this.selectedAcreg;
+        param.acreg = this.selectedAcreg;
         param.form = this.acregForm;
         param.exp = $event;
         this.menuService.updateAcregAg(param).subscribe(field => this.refrechAcreg());
@@ -1440,7 +1474,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.loadProcess();
         this.newAcreg();
     }
-
 
 
     newListreg() {
@@ -1457,7 +1490,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     setExpressionListreg(listreg, $event) {
 
-        console.log("lstreg",this.selectedList);
+        console.log("lstreg", this.selectedList);
 
         $event.stopPropagation();
 
@@ -1478,7 +1511,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     updateListregExp($event) {
         var param = {};
         param.list = this.selectedList;
-        param.listreg =  this.selectedListreg;
+        param.listreg = this.selectedListreg;
         param.form = this.listregForm;
         param.exp = $event;
         this.menuService.updateListregAg(param).subscribe(field => this.refrechListreg());
@@ -1488,9 +1521,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.loadProcess();
         this.newListreg();
     }
-
-
-
 
 
 }

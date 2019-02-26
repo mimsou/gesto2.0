@@ -47,6 +47,17 @@ class GestSteps
      */
     private $stepProcess;
 
+
+    /**
+     * @var \GestProcess
+     *
+     * @ORM\ManyToOne(targetEntity="GestProcess",inversedBy="fromsteps")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="step_from_process", referencedColumnName="process_id"  )
+     * })
+     */
+    private $stepFromProcess;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -213,6 +224,18 @@ class GestSteps
         if ($this->list->contains($list)) {
             $this->list->removeElement($list);
         }
+
+        return $this;
+    }
+
+    public function getStepFromProcess(): ?GestProcess
+    {
+        return $this->stepFromProcess;
+    }
+
+    public function setStepFromProcess(?GestProcess $stepFromProcess): self
+    {
+        $this->stepFromProcess = $stepFromProcess;
 
         return $this;
     }

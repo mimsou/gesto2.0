@@ -16,7 +16,7 @@ import {
 @Component({
     selector: 'ngx-form',
     templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+    styleUrls: ['./form.component.scss'],
     providers: [DatePipe]
 })
 export class FormComponent implements OnInit {

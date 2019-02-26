@@ -714,7 +714,22 @@
                         <nb-card full-heigth full-heigth-all-child>
 
                             <nb-card-header noborder style="text-align: left !important">
+
                                 <div title>Step</div>
+
+                                <div title>
+
+                                    Add step from : <select (click)="stopClick($event)" type="text" [(ngModel)]="stepform" nbInput fullWidth
+                                                            fieldSize="xsmall">
+                                    <option *ngFor="let stp of selectFrom" [value]="stp.stepId">
+                                        {{stp.stepName}}
+                                    </option>
+
+                                </select>
+                                    <button (click)="addStepFromProcess($event)" nbButton type="button" size="xsmall"> +
+                                    </button>
+                                </div>
+
                                 <ngx-one-input-form *ngIf="selectedProcess" [placeholder]="pprocessplaceholder"
                                                     (newItem)="onAddStep($event)"></ngx-one-input-form>
                             </nb-card-header>
@@ -726,15 +741,40 @@
                                     <div class="stepper">
 
                                         <div style="display: inline-block" (click)="selectStep(step,$event)"
+                                             *ngFor="let step of selectedProcess.fromsteps">
+
+                                            <div class="divider"></div>
+                                            <div class="step " id="step_{{step.stepId}}"
+                                                 [ngClass]="{'active' :  step.stepId == selectedSteps.stepId  }">
+                                                <div class="circle">{{step.stepSequence}}</div>
+                                                <div class="label">{{step.stepName}} - <span style="color: #313131">{{step.stepId}}</span><i colorPrimary
+                                                                                                         ActionIcone
+                                                                                                         class="fa fa-unlink"
+                                                                                                         (click)="removeStepFromProcess(step.stepId,$event)"></i>
+
+                                                    <i ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"
+                                                       [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}"
+                                                       *ngIf="selectedrole !==''"
+                                                       class="fa fa-user">
+                                                        <span *ngIf="selectedroleInRoles(step.role)"> </span>
+                                                        <span *ngIf="!selectedroleInRoles(step.role)"> </span>
+                                                    </i>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div style="display: inline-block" (click)="selectStep(step,$event)"
                                              *ngFor="let step of selectedProcess.steps">
 
                                             <div class="divider"></div>
                                             <div class="step " id="step_{{step.stepId}}"
                                                  [ngClass]="{'active' :  step.stepId == selectedSteps.stepId  }">
                                                 <div class="circle">{{step.stepSequence}}</div>
-                                                <div class="label">{{step.stepName}} - {{step.stepId}}<i colorPrimary ActionIcone
-                                                                                       class="fa fa-times"
-                                                                                       (click)="deleteStep(step.stepId,$event)"></i>
+                                                <div class="label">{{step.stepName}} - <span style="color: #313131">{{step.stepId}}</span><i colorPrimary
+                                                                                                         ActionIcone
+                                                                                                         class="fa fa-times"
+                                                                                                         (click)="deleteStep(step.stepId,$event)"></i>
 
                                                     <i ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"
                                                        [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}"
@@ -1005,9 +1045,9 @@
                                 <nb-accordion-item-body>
 
 
-                                        <ngx-expression [optionvar]="allFieldOption"
-                                                        (valueChange)="updateFieldInActionExp($event)"
-                                                        [(value)]="expValu"></ngx-expression>
+                                    <ngx-expression [optionvar]="allFieldOption"
+                                                    (valueChange)="updateFieldInActionExp($event)"
+                                                    [(value)]="expValu"></ngx-expression>
 
 
                                 </nb-accordion-item-body>
@@ -1182,15 +1222,15 @@
 
                             <nb-accordion-item>
                                 <nb-accordion-item-header>
-                                  Régles de gestion
+                                    Régles de gestion
                                 </nb-accordion-item-header>
                                 <nb-accordion-item-body>
                                     <div style="height: 500px;">
 
-                                        <div agField containerFlex  *ngFor="let acreg of selectedActions.actionAcreg">
+                                        <div agField containerFlex *ngFor="let acreg of selectedActions.actionAcreg">
 
-                                            <div inlineelement  > {{acreg.acregName}} </div>
-                                            <div inlineelement >
+                                            <div inlineelement> {{acreg.acregName}}</div>
+                                            <div inlineelement>
                                                 <i #editUpdate colorPrimary ActionIcone
                                                    (click)="deleteAcreg(acreg,$event)"
                                                    class="fa fa-times"></i>
@@ -1200,17 +1240,20 @@
                                             </div>
                                         </div>
 
-                                        <button (click)="newAcreg()" type="button" nbButton size="xsmall"> Nouvelle régle </button><br>
+                                        <button (click)="newAcreg()" type="button" nbButton size="xsmall"> Nouvelle
+                                            régle
+                                        </button>
+                                        <br>
 
                                         Nom de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
-                                                              type="text" [(ngModel)]="acregForm.acregName"> <br>
+                                                               type="text" [(ngModel)]="acregForm.acregName"> <br>
 
-                                       alias de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
-                                                               type="text" [(ngModel)]="acregForm.acregAlias"> <br>
+                                        alias de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                                 type="text" [(ngModel)]="acregForm.acregAlias"> <br>
 
-                                       Message d'erreur <input nbInput fullWidth fieldSize="xsmall" paramInput
-                                                               type="text" [(ngModel)]="acregForm.acregErrormessage"> <br>
-
+                                        Message d'erreur <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                                type="text" [(ngModel)]="acregForm.acregErrormessage">
+                                        <br>
 
 
                                         <br>
@@ -1236,7 +1279,7 @@
                                 <nb-accordion-item-body>
                                     <div style="height: 500px;">
 
-to Do
+                                        to Do
 
                                     </div>
                                 </nb-accordion-item-body>
@@ -1249,10 +1292,10 @@ to Do
                                 <nb-accordion-item-body>
                                     <div style="height: 500px;">
 
-                                        <div agField containerFlex  *ngFor="let listreg of selectedList.listReg">
+                                        <div agField containerFlex *ngFor="let listreg of selectedList.listReg">
 
-                                            <div inlineelement  > {{listreg.listregName}} </div>
-                                            <div inlineelement >
+                                            <div inlineelement> {{listreg.listregName}}</div>
+                                            <div inlineelement>
                                                 <i #editUpdate colorPrimary ActionIcone
                                                    (click)="deleteListreg(listreg,$event)"
                                                    class="fa fa-times"></i>
@@ -1262,13 +1305,17 @@ to Do
                                             </div>
                                         </div>
 
-                                        <button (click)="newListreg()" type="button" nbButton size="xsmall"> Nouvelle régle </button><br>
+                                        <button (click)="newListreg()" type="button" nbButton size="xsmall"> Nouvelle
+                                            régle
+                                        </button>
+                                        <br>
 
                                         Nom de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
                                                                type="text" [(ngModel)]="listregForm.listregName"> <br>
 
                                         alias de la régle <input nbInput fullWidth fieldSize="xsmall" paramInput
-                                                                 type="text" [(ngModel)]="listregForm.listregAlias"> <br>
+                                                                 type="text" [(ngModel)]="listregForm.listregAlias">
+                                        <br>
 
 
                                         <br>
@@ -1413,46 +1460,48 @@ to Do
                                 <nb-accordion-item-body>
                                     <div style="height: 500px;">
 
-                                        <div agField containerFlex  *ngFor="let fld of agField">
+                                        <div agField containerFlex *ngFor="let fld of agField">
 
-                                        <div inlineelement  > {{fld.fieldEntityName}} </div>
-                                        <div inlineelement >
-                                            <i #editUpdate colorPrimary ActionIcone
-                                               (click)="deleteAgField(fld,$event)"
-                                               class="fa fa-times"></i>
-                                            <i #editUpdate colorPrimary ActionIcone
-                                                  (click)="setExpressionAg(fld,$event)"
-                                                  class="fa fa-pen"></i>
-                                        </div>
-                                        </div>
-
-                                        <button (click)="newFieldAg()" type="button" nbButton size="xsmall"> Nouveau Champ agrégé </button><br>
-
-                                            Alias du champ <input nbInput fullWidth fieldSize="xsmall" paramInput
-                                                                  type="text" [(ngModel)]="fieldForm.fieldAlias"> <br>
-                                            Nom du champ <input nbInput fullWidth fieldSize="xsmall" type="text"
-                                                                [(ngModel)]="fieldForm.fieldName"><br>
-                                            Type <select paramInput
-                                                         [(ngModel)]="fieldForm.fieldType"
-                                                         nbInput fullWidth
-                                                         fieldSize="xsmall"
-                                        >
-                                            <option value="string">Chaine
-                                            </option>
-                                            <option value="float">Réel
-                                            </option>
-                                            <option value="integer">entier
-                                            </option>
-                                            <option value="datetime">Date
-                                            </option>
-                                        </select>
-
-                                            <br>
-                                            <ngx-expression [optionvar]="allFieldOption"
-                                                            (valueChange)="updateFieldAgExp($event)"
-                                                            [(value)]="expValuAg"></ngx-expression>
+                                            <div inlineelement> {{fld.fieldEntityName}}</div>
+                                            <div inlineelement>
+                                                <i #editUpdate colorPrimary ActionIcone
+                                                   (click)="deleteAgField(fld,$event)"
+                                                   class="fa fa-times"></i>
+                                                <i #editUpdate colorPrimary ActionIcone
+                                                   (click)="setExpressionAg(fld,$event)"
+                                                   class="fa fa-pen"></i>
+                                            </div>
                                         </div>
 
+                                        <button (click)="newFieldAg()" type="button" nbButton size="xsmall"> Nouveau
+                                            Champ agrégé
+                                        </button>
+                                        <br>
+
+                                        Alias du champ <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                              type="text" [(ngModel)]="fieldForm.fieldAlias"> <br>
+                                        Nom du champ <input nbInput fullWidth fieldSize="xsmall" type="text"
+                                                            [(ngModel)]="fieldForm.fieldName"><br>
+                                        Type <select paramInput
+                                                     [(ngModel)]="fieldForm.fieldType"
+                                                     nbInput fullWidth
+                                                     fieldSize="xsmall"
+                                    >
+                                        <option value="string">Chaine
+                                        </option>
+                                        <option value="float">Réel
+                                        </option>
+                                        <option value="integer">entier
+                                        </option>
+                                        <option value="datetime">Date
+                                        </option>
+                                    </select>
+
+                                        <br>
+                                        <ngx-expression [optionvar]="allFieldOption"
+                                                        (valueChange)="updateFieldAgExp($event)"
+                                                        [(value)]="expValuAg"></ngx-expression>
+                                    </div>
 
 
                                 </nb-accordion-item-body>

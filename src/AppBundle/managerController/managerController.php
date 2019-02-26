@@ -28,6 +28,7 @@ use AppBundle\Entity\GestMenu;
 use AppBundle\Menu;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Validator\Constraints\Date;
+use Doctrine\ORM\Query;
 
 
 class managerController extends FOSRestController
@@ -1352,33 +1353,62 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 's', 'l', 'y', 'z', 'ha', 'yu', 'ra', 'rb', 'oa', 'ao', 'al', 'yp', 'it')
-            ->from('AppBundle:GestProcess', 'u')
-            ->leftJoin('u.gestEntity', 'p')
-            ->leftJoin('u.gestEntityDimention', 't')
-            ->leftJoin('u.gestFieldDimention', 's')
-            ->leftJoin('u.steps', 'o')
-            ->leftJoin('o.role', 'oa')
-            ->leftJoin('o.action', 'r')
-            ->leftJoin('u.actions', 'k')
-            ->leftJoin('k.role', 'ao')
-            ->leftJoin('k.actionAcreg', 'yp')
-            ->leftJoin('k.actionNextStep', 'ra')
-            ->leftJoin('k.actionFromStep', 'rb')
-            ->leftJoin('k.actionEntity', 'l')
-            ->leftJoin('k.actionSubEntity', 'y')
-            ->leftJoin('k.actionSubProcess', 'z')
-            ->leftJoin('z.steps', 'yu')
-            ->leftJoin('k.updateField', 'h')
-            ->leftJoin('h.updateFieldId', 'ha')
-            ->leftJoin('k.viewField', 'j')
-            ->leftJoin('o.list', 'm')
-            ->leftJoin('u.list', 'g')
-            ->leftJoin('g.listReg', 'it')
-            ->leftJoin('g.role', 'al')
-            ->leftJoin('g.field', 'f');
 
-        $process = $qb->getQuery()->getArrayResult();
+        $pr = $qb->select('a')->from('AppBundle:GestProcess', 'a')->getQuery()->getArrayResult();
+
+        $process = array();
+
+        foreach ($pr as $proc) {
+
+            $pr = $this->getSignleProcessAction($proc["processId"],false);
+
+            array_push($process, $pr[0]);
+
+        }
+
+//        $em = $this->getDoctrine()->getManager();
+//
+//        $qb = $em->createQueryBuilder();
+//        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 's', 'l', 'y', 'z', 'ha', 'yu', 'ra', 'rb', 'oa', 'ao', 'al', 'yp', 'it', 'pi', 'oai', 'ri', 'mi')
+//            ->from('AppBundle:GestProcess', 'u')
+//
+//            ->leftJoin('u.gestEntity', 'p')
+//
+//            ->leftJoin('u.gestEntityDimention', 't')
+//
+//            ->leftJoin('u.gestFieldDimention', 's')
+//
+//            ->leftJoin('u.steps', 'o')
+//            ->leftJoin('o.role', 'oa')
+//            ->leftJoin('o.action', 'r')
+//            ->leftJoin('o.list', 'm')
+//
+//            ->leftJoin('u.fromsteps', 'pi')
+//            ->leftJoin('pi.role', 'oai')
+//            ->leftJoin('pi.action', 'ri')
+//            ->leftJoin('pi.list', 'mi')
+//
+//            ->leftJoin('u.list', 'g')
+//            ->leftJoin('g.listReg', 'it')
+//            ->leftJoin('g.role', 'al')
+//            ->leftJoin('g.field', 'f')
+//
+//            ->leftJoin('u.actions', 'k')
+//            ->leftJoin('k.role', 'ao')
+//            ->leftJoin('k.actionAcreg', 'yp')
+//            ->leftJoin('k.actionNextStep', 'ra')
+//            ->leftJoin('k.actionFromStep', 'rb')
+//            ->leftJoin('k.actionEntity', 'l')
+//            ->leftJoin('k.actionSubEntity', 'y')
+//            ->leftJoin('k.actionSubProcess', 'z')
+//            ->leftJoin('z.steps', 'yu')
+//            ->leftJoin('k.viewField', 'j')
+//            ->leftJoin('k.updateField', 'h')
+//            ->leftJoin('h.updateFieldId', 'ha');
+//
+//
+//        $process = $qb->getQuery()->getArrayResult();
+
 
         return $process;
 
@@ -1389,28 +1419,66 @@ class managerController extends FOSRestController
      * @Rest\Get("/process/{id}")
      */
 
-    public function getSignleProcessAction($id)
+    public function getSignleProcessAction($id, $exrastep = true)
     {
 
 
         $user = $this->getCurrentUser();
+
         $iduser = $user->getId();
 
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 'q', 's', 'l', 'y', 'z', 'ha', 'n', 'b', 'ba', 'na', 'ta', 'ya', 'ra', 'ri', 'ry', 'xe', 'xi', 'rt', 'xa', 'yp', 'it')
-            ->from('AppBundle:GestProcess', 'u')
-            ->leftJoin('u.gestEntity', 'p')
-            ->leftJoin('u.gestEntityDimention', 't')
-            ->leftJoin('u.gestFieldDimention', 's')
-            ->leftJoin('u.steps', 'o')
+        $process = $qb->select('a', 'b', 'c', 'd')->from('AppBundle:GestProcess', 'a')->leftJoin('a.gestEntity', 'b')->leftJoin('a.gestEntityDimention', 'c')->leftJoin('a.gestFieldDimention', 'd')->andWhere('a.processId =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+
+
+        $qb = $em->createQueryBuilder();
+        $stp = $qb->select('o', 'r', 'xi', 'ra', 'm', 'rt', 'na', 'ta', 'xe')->from('AppBundle:GestSteps', 'o')
             ->leftJoin('o.role', 'xe')
             ->leftJoin('o.action', 'r')
             ->leftJoin('r.role', 'xi')
             ->leftJoin('r.actionNextStep', 'ra')
-            ->leftJoin('u.actions', 'k')
+            ->leftJoin('o.list', 'm')
+            ->leftJoin('m.role', 'rt')
+            ->leftJoin('m.field', 'na')
+            ->leftJoin('na.fieldTargetEntityId', 'ta')
+            ->andWhere('o.stepProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+
+        $qb = $em->createQueryBuilder();
+
+        if ($exrastep) {
+
+            $stpfrom = $qb->select('o', 'r', 'xi', 'ra', 'm', 'rt', 'na', 'ta', 'xe')->from('AppBundle:GestSteps', 'o')
+                ->leftJoin('o.role', 'xe')
+                ->leftJoin('o.action', 'r')
+                ->leftJoin('r.role', 'xi')
+                ->leftJoin('r.actionNextStep', 'ra')
+                ->leftJoin('o.list', 'm')
+                ->leftJoin('m.role', 'rt')
+                ->leftJoin('m.field', 'na')
+                ->leftJoin('na.fieldTargetEntityId', 'ta')
+                ->andWhere('o.stepFromProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+
+
+            $process[0]["steps"] = array_merge($stp, $stpfrom);
+
+        }else{
+
+            $process[0]["steps"] = $stp;
+
+        }
+
+        $qb = $em->createQueryBuilder();
+        $process[0]["fromsteps"] = $qb->select('x ', 'oai', 'ri', 'mi')->from('AppBundle:GestSteps', 'x')
+            ->leftJoin('x.role', 'oai')
+            ->leftJoin('x.action', 'ri')
+            ->leftJoin('x.list', 'mi')
+            ->andWhere('x.stepFromProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+
+        $qb = $em->createQueryBuilder();
+        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba','ri')->from('AppBundle:GestActions', 'k')
             ->leftJoin('k.actionAcreg', 'yp')
             ->leftJoin('k.role', 'xa')
             ->leftJoin('k.actionNextStep', 'ri')
@@ -1420,24 +1488,20 @@ class managerController extends FOSRestController
             ->leftJoin('k.actionSubProcess', 'z')
             ->leftJoin('k.updateField', 'h')
             ->leftJoin('h.updateFieldId', 'ha')
-            ->leftJoin('k.viewField', 'j')
             ->leftJoin('ha.fieldEntity', 'n')
+            ->leftJoin('k.viewField', 'j')
             ->leftJoin('j.fieldEntity', 'b')
             ->leftJoin('j.fieldTargetEntityId', 'ba')
-            ->leftJoin('o.list', 'm')
-            ->leftJoin('m.role', 'rt')
-            ->leftJoin('u.list', 'g')
+            ->andWhere('k.actionProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+
+        $qb = $em->createQueryBuilder();
+        $process[0]["list"] = $qb->select('g', 'it', 'f', 'ya', 'q', 'al')->from('AppBundle:GestList', 'g')
             ->leftJoin('g.listReg', 'it')
             ->leftJoin('g.field', 'f')
-            ->leftJoin('m.field', 'na')
-            ->leftJoin('na.fieldTargetEntityId', 'ta')
+            ->leftJoin('g.role', 'al')
             ->leftJoin('f.fieldTargetEntityId', 'ya')
             ->leftJoin('f.fieldEntity', 'q')
-            ->andWhere('u.processId =:proc')
-            ->setParameter('proc', $id);
-
-
-        $process = $qb->getQuery()->getArrayResult();
+            ->andWhere('g.listProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
 
         return $process;
 
@@ -1458,6 +1522,38 @@ class managerController extends FOSRestController
             ->where('u.stepId =:stpid')->setParameter('stpid', $id);
         $step = $qb->getQuery()->getArrayResult();
         return $step;
+
+    }
+
+
+    /**
+     * @Rest\Post("/stepfromprocess/")
+     */
+
+    public function postStepfromprocessAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $param = json_decode($request->getContent());
+
+
+        $process = $this->getDoctrine()->getRepository('AppBundle:GestProcess')->find($param->process->processId);
+
+        $step = $this->getDoctrine()->getRepository('AppBundle:GestSteps')->find($param->step);
+
+
+        if (!$process->getFromsteps()->contains($step)) {
+            $step->setStepFromProcess($process);
+        } else {
+            $process->removeFromstep($step);
+        }
+
+        $em->persist($step);
+
+        $em->flush();
+
+        return new View("step Added from process Successfully", Response::HTTP_OK);
 
     }
 
@@ -1496,6 +1592,7 @@ class managerController extends FOSRestController
         return new View("Process Added Successfully", Response::HTTP_OK);
 
     }
+
 
     /**
      * @Rest\Delete("/step/{id}")
@@ -2166,6 +2263,7 @@ class managerController extends FOSRestController
 
         $list = $this->getDoctrine()->getRepository('AppBundle:Gestlist')->find($id);
 
+
         $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($list->getListEntityName());
 
         $entEntityName = $entity->getEntityEntity();
@@ -2292,7 +2390,6 @@ class managerController extends FOSRestController
         }
 
 
-
         if (empty($whereArray)) {
 
         }
@@ -2337,15 +2434,54 @@ class managerController extends FOSRestController
             }
         }
 
-        if ($entity->getEntityStepperField() != NULL) {
-            $qb = $qb->andWhere($qb->expr()->isNotNull('a.' . $entity->getEntityStepperField()));
+        $steps = $list->getListProcess()->getSteps();
+
+        $user = $this->getCurrentUser();
+
+        $iduser = $user->getId();
+
+        $steps = $em->createQueryBuilder()
+            ->select('s')
+            ->from('AppBundle:GestSteps', 's')
+            ->join('s.role', 'a')
+            ->join('a.user', 'o')
+            ->where("o.id = $iduser")
+            ->andWhere('s.stepProcess = :stepProcess')->setParameter('stepProcess', $list->getListProcess()->getProcessId())
+            ->getQuery()->getArrayResult();
+
+        $stepfromprocesss = $em->createQueryBuilder()
+            ->select('s')
+            ->from('AppBundle:GestSteps', 's')
+            ->join('s.role', 'a')
+            ->join('a.user', 'o')
+            ->where("o.id = $iduser")
+            ->andWhere('s.stepFromProcess = :stepProcess')->setParameter('stepProcess', $list->getListProcess()->getProcessId())
+            ->getQuery()->getArrayResult();
+
+        $stepsids = array();
+
+        foreach ($steps as $step) {
+            array_push($stepsids, $step["stepId"]);
         }
 
-        if (isset($param->step)) {
-            if ($param->step !== null) {
-                $stepper = $entity->getEntityStepperField();
-                $qb = $qb->andWhere("a." . $stepper . " = :step")->setParameter("step", $param->step->stepId);
+        foreach ($stepfromprocesss as $stepf) {
+            array_push($stepsids, $stepf["stepId"]);
+        }
+
+
+        if ($entity->getEntityStepperField() != NULL) {
+
+            $stepper = $entity->getEntityStepperField();
+
+            $qb = $qb->andWhere($qb->expr()->in('a.' . $entity->getEntityStepperField(), '?1'))->setParameter(1, $stepsids);
+
+            if (isset($param->step)) {
+                if ($param->step !== null) {
+
+                    $qb = $qb->andWhere("a." . $stepper . " = :step")->setParameter("step", $param->step->stepId);
+                }
             }
+
         }
 
         $qb = $qb->distinct("a");
@@ -3377,7 +3513,7 @@ class managerController extends FOSRestController
 
         $where = str_replace("||", " OR ", $where);
 
-        $where =  str_replace("==","=",$where);
+        $where = str_replace("==", "=", $where);
 
 
         $qb = $qb->addSelect($field . " as rs");
@@ -3520,8 +3656,11 @@ class managerController extends FOSRestController
 
             foreach ($routearray as $reoutref) {
                 foreach ($route as $key => $relroute) {
-                    // echo $reoutref[$key]["rel"] . "==" . $relroute["rel"] . " - " . $reoutref[$key]["key"] . "==" . $relroute["key"] . " - " . $reoutref[$key]["ent"] . "==" . $relroute["ent"] . "<br><br>";
-                    if (!($reoutref[$key]["rel"] == $relroute["rel"] && $reoutref[$key]["key"] == $relroute["key"] && $reoutref[$key]["ent"] == $relroute["ent"])) {
+                    if (isset($reoutref[$key])) {
+                        if (!($reoutref[$key]["rel"] == $relroute["rel"] && $reoutref[$key]["key"] == $relroute["key"] && $reoutref[$key]["ent"] == $relroute["ent"])) {
+                            $exist = false;
+                        }
+                    } else {
                         $exist = false;
                     }
                 }
@@ -3547,14 +3686,14 @@ class managerController extends FOSRestController
             foreach ($routearray as $reoutref) {
 
                 foreach ($route as $key => $relroute) {
+                    if (isset($reoutref[$key])) {
+                        if (!($reoutref[$key]["rel"] == $relroute["rel"] && $reoutref[$key]["key"] == $relroute["key"] && $reoutref[$key]["ent"] == $relroute["ent"])) {
 
-                    if (!($reoutref[$key]["rel"] == $relroute["rel"] && $reoutref[$key]["key"] == $relroute["key"] && $reoutref[$key]["ent"] == $relroute["ent"])) {
-
-                    } else {
-                        $lastAlias = $reoutref[$key]["al"];
-                        unset($route[$key]);
+                        } else {
+                            $lastAlias = $reoutref[$key]["al"];
+                            unset($route[$key]);
+                        }
                     }
-
                 }
 
             }
@@ -3686,6 +3825,10 @@ class managerController extends FOSRestController
             ->from('AppBundle:' . $param->entity, 'u');
 
         $data = $qb->getQuery()->getArrayResult();
+
+        $blank = array(array("id" => "", "text" => "--"));
+
+        $data = array_merge($blank, $data);
 
         return array("data" => $data);
 

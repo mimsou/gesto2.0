@@ -156,6 +156,10 @@ export class ManagerService {
         return this.http.post(`${this.apiLink.MANAGER_BASE_URL}/step/`, JSON.stringify(param));
     }
 
+    addRemoveStepFromProcee(param) {
+        return this.http.post(`${this.apiLink.MANAGER_BASE_URL}/stepfromprocess/`, JSON.stringify(param));
+    }
+
     AddActionToStep(param) {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/stepactions/`, JSON.stringify(param));
     }
