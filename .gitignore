@@ -15,3 +15,17 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/src/Entity/Article.php
+/src/Entity/ArticleBcn.php
+/src/Entity/Bcn.php
+/src/Entity/Crb.php
+/src/Entity/Etat.php
+/src/Entity/Exercice.php
+/src/Entity/Facture.php
+/src/Entity/FondType.php
+/src/Entity/Fournisseur.php
+/src/Entity/Renouvellement.php
+/src/Entity/Service.php
+/src/Entity/Solde.php
+/src/Entity/User.php
+/.idea

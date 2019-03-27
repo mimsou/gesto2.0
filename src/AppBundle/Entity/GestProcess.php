@@ -30,6 +30,17 @@ class GestProcess
      */
     private $processDesignation;
 
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="process_requiredim", type="string", length=150, nullable=true)
+     */
+    private $processRequiredim;
+
+
+
     /**
      * @var string|null
      *
@@ -365,6 +376,18 @@ class GestProcess
                 $fromstep->setStepFromProcess(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProcessRequiredim(): ?string
+    {
+        return $this->processRequiredim;
+    }
+
+    public function setProcessRequiredim(?string $processRequiredim): self
+    {
+        $this->processRequiredim = $processRequiredim;
 
         return $this;
     }

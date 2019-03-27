@@ -1360,7 +1360,7 @@ class managerController extends FOSRestController
 
         foreach ($pr as $proc) {
 
-            $pr = $this->getSignleProcessAction($proc["processId"],false);
+            $pr = $this->getSignleProcessAction($proc["processId"], false);
 
             array_push($process, $pr[0]);
 
@@ -1464,7 +1464,7 @@ class managerController extends FOSRestController
 
             $process[0]["steps"] = array_merge($stp, $stpfrom);
 
-        }else{
+        } else {
 
             $process[0]["steps"] = $stp;
 
@@ -1478,7 +1478,7 @@ class managerController extends FOSRestController
             ->andWhere('x.stepFromProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
 
         $qb = $em->createQueryBuilder();
-        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba','ri')->from('AppBundle:GestActions', 'k')
+        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba', 'ri')->from('AppBundle:GestActions', 'k')
             ->leftJoin('k.actionAcreg', 'yp')
             ->leftJoin('k.role', 'xa')
             ->leftJoin('k.actionNextStep', 'ri')
@@ -2174,22 +2174,58 @@ class managerController extends FOSRestController
 
         $param = json_decode($request->getContent());
 
-
         $process = $this->getDoctrine()->getRepository('AppBundle:GestProcess')->find($param->process->processId);
-
 
         if ((int)$param->dim->type == 1) {
 
+            $code = $param->dim->type . "." . $param->dim->entityId;
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->dim->entityId);
             $entity->addGestProcessDimention($process);
 
 
         } else if ((int)$param->dim->type == 2) {
+
+            $code = $param->dim->type . "." . $param->dim->fieldId;
             $field = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($param->dim->fieldId);
             $field->addGestProcessDimention($process);
+
         }
 
+
+        if ($param->dim->require == 1) {
+
+            $dim = $process->getProcessRequiredim();
+
+            if ($dim !== NULL) {
+
+                $dimjson = json_decode($dim);
+
+                $exist = false;
+
+                foreach ($dimjson as $item) {
+
+                    if ($code == $item) {
+                        $exist = true;
+                    }
+
+                    if (!$exist) {
+                        array_push($dimjson, $code);
+                    }
+
+                }
+
+                $process->setProcessRequiredim(json_encode($dimjson));
+
+            } else {
+                $dimjson = array();
+                array_push($dimjson, $code);
+                $process->setProcessRequiredim(json_encode($dimjson));
+            }
+        }
+
+
         $em->persist($process);
+
         $em->flush();
 
         return new View("Dimention Added Successfully", Response::HTTP_OK);
@@ -2211,6 +2247,8 @@ class managerController extends FOSRestController
 
         if ($param->type == 'ent') {
 
+            $code = "1" . "." . $param->id;
+
             $ent = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->id);
 
             $Process = $this->getDoctrine()->getRepository('AppBundle:GestProcess')->find($param->process);
@@ -2223,6 +2261,8 @@ class managerController extends FOSRestController
 
         } else if ($param->type == 'fld') {
 
+            $code = "2" . "." . $param->id;
+
             $fld = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($param->id);
 
             $Process = $this->getDoctrine()->getRepository('AppBundle:GestProcess')->find($param->process);
@@ -2234,6 +2274,34 @@ class managerController extends FOSRestController
             $em->flush();
 
         };
+
+        $dim = $Process->getProcessRequiredim();
+
+
+        if ($dim !== NULL) {
+
+            $dimjson = json_decode($dim);
+
+            $arr = array();
+            foreach ($dimjson as $key => $item) {
+                if ($code != $item) {
+                    array_push($arr, $item);
+                }
+            }
+
+            $rr = json_encode($arr);
+
+            if ($arr != NULL && !empty($arr) && $arr != "") {
+                $Process->setProcessRequiredim($rr);
+            } else {
+                $Process->setProcessRequiredim(NULL);
+            }
+
+        }
+
+        $em->persist($Process);
+
+        $em->flush();
 
         return new View("Dimention removed Successfully", Response::HTTP_OK);
 
@@ -2263,6 +2331,7 @@ class managerController extends FOSRestController
 
         $list = $this->getDoctrine()->getRepository('AppBundle:Gestlist')->find($id);
 
+        $process = $list->getListProcess();
 
         $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($list->getListEntityName());
 
@@ -2338,7 +2407,7 @@ class managerController extends FOSRestController
 
                     if (!in_array($entdim->param->entityKey, $nofilterArray)) {
 
-                        array_push($whereArray, array($prevalias . "." . $entdim->param->entityKey . " = :val" . $prevalias, 'val' . $prevalias, $entdim->data, "interger"));
+                        array_push($whereArray, array($prevalias . "." . $entdim->param->entityKey . " = :val" . $prevalias, 'val' . $prevalias, $entdim->data, "interger", "1." . $dimentity->getEntityId()));
 
                         array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
 
@@ -2373,7 +2442,7 @@ class managerController extends FOSRestController
                         if (!in_array($field->getFieldEntityName(), $nofilterArray)) {
                             array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
 
-                            array_push($whereArray, array($prevalias . "." . $field->getFieldEntityName() . " = :val" . $prevalias, 'val' . $prevalias, $flddim->data, $flddim->param->fieldType));
+                            array_push($whereArray, array($prevalias . "." . $field->getFieldEntityName() . " like :val" . $prevalias, 'val' . $prevalias, $flddim->data, $flddim->param->fieldType, "1." . $field->getFieldId()));
                         }
                     } else {
                         if (!in_array($field->getFieldEntityName(), $nofilterArray)) {
@@ -2381,7 +2450,7 @@ class managerController extends FOSRestController
 
                             $id = uniqid();
 
-                            array_push($whereArray, array("a" . "." . $field->getFieldEntityName() . " = :val" . $id, 'val' . $id, $flddim->data, $flddim->param->fieldType));
+                            array_push($whereArray, array("a" . "." . $field->getFieldEntityName() . " like :val" . $id, 'val' . $id, $flddim->data, $flddim->param->fieldType, "1." . $field->getFieldId()));
                         }
                     }
                 }
@@ -2396,9 +2465,23 @@ class managerController extends FOSRestController
 
 
         foreach ($whereArray as $warr) {
-            if ($warr[3] !== "datetime") {
-                $qb = $qb->andWhere($warr[0])->setParameter($warr[1], $warr[2]);
+            if ($warr[2] == "") {
+                if ($this->field_is_required_in_process($process, $warr[4])) {
+                    $roceed = true;
+                } else {
+                    $roceed = false;
+                }
             } else {
+                $roceed = true;
+            }
+
+            if ($warr[3] !== "datetime" && $roceed) {
+                if ($warr[3] == "string") {
+                    $qb = $qb->andWhere($warr[0])->setParameter($warr[1], "%" . $warr[2] . "%");
+                } else {
+                    $qb = $qb->andWhere($warr[0])->setParameter($warr[1], $warr[2]);
+                }
+            } else if ($roceed) {
                 $default = false;
                 if (strpos($warr[2], ':') !== false) {
                     $dates = explode(":", $warr[2]);
@@ -2540,6 +2623,23 @@ class managerController extends FOSRestController
         }
 
         return $result;
+
+    }
+
+    private function field_is_required_in_process($proccess, $code)
+    {
+
+        $reqs = $proccess->getProcessRequiredim();
+
+        $dim = json_decode($reqs);
+
+        $exist = false;
+        foreach ($dim as $item) {
+            if ($code == $item) {
+                $exist = true;
+            }
+        }
+        return $exist;
 
     }
 

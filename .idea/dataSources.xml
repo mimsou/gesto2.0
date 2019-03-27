@@ -12,5 +12,14 @@
         <property name="prompt" value="false" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="AS400 2" uuid="7917d8c4-da08-43a2-8d9c-12d746022b24">
+      <driver-ref>db2</driver-ref>
+      <jdbc-driver>com.ibm.db2.jcc.DB2Driver</jdbc-driver>
+      <jdbc-url>jdbc:db2://10.1.1.1/sgsfic</jdbc-url>
+      <driver-properties>
+        <property name="retrieveMessagesFromServerOnGetMessage" value="true" />
+        <property name="clientProgramName" value="DataGrip" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>

@@ -11,5 +11,11 @@
       <user-name>SMI19633</user-name>
       <introspection-schemas>*:@</introspection-schemas>
     </data-source>
+    <data-source name="AS400 2" uuid="7917d8c4-da08-43a2-8d9c-12d746022b24">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <secret-storage>master_key</secret-storage>
+      <first-sync>true</first-sync>
+      <user-name>SMI19633</user-name>
+    </data-source>
   </component>
 </project>
