@@ -142,6 +142,13 @@ class GestFields
     private $viewAction;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="checks", type="integer", nullable=true)
+     */
+    private $checks;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -405,6 +412,19 @@ class GestFields
 
         return $this;
     }
+
+    public function getChecks(): ?int
+    {
+        return $this->checks;
+    }
+
+    public function setChecks(?int $checks): self
+    {
+        $this->checks = $checks;
+
+        return $this;
+    }
+
 
 
 }

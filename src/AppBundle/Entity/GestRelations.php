@@ -70,6 +70,13 @@ class GestRelations
      */
     private $relationsTable;
 
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="checks", type="integer", nullable=true)
+     */
+    private $checks;
+
     public function getRelationsId(): ?int
     {
         return $this->relationsId;
@@ -146,6 +153,20 @@ class GestRelations
 
         return $this;
     }
+
+    public function getChecks(): ?int
+    {
+        return $this->checks;
+    }
+
+    public function setChecks(?int $checks): self
+    {
+        $this->checks = $checks;
+
+        return $this;
+    }
+
+
 
 
 }

@@ -129,6 +129,14 @@ class GestEntity
      */
     private $fieldsInversedTarget;
 
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="checks", type="integer", nullable=true)
+     */
+    private $checks;
+
     /**
      * Constructor
      */
@@ -402,6 +410,19 @@ class GestEntity
 
         return $this;
     }
+
+    public function getChecks(): ?int
+    {
+        return $this->checks;
+    }
+
+    public function setChecks(?int $checks): self
+    {
+        $this->checks = $checks;
+
+        return $this;
+    }
+
 
 
 }

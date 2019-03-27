@@ -83,6 +83,10 @@ class managerController extends FOSRestController
 //        }
 
 
+        $em->createQuery('update AppBundle:GestEntity a set a.checks = 0 where a.checks != 2')->execute();
+        $em->createQuery('update AppBundle:Gestfields a set a.checks = 0 where a.checks != 2')->execute();
+        $em->createQuery('update AppBundle:GestRelations a set a.checks = 0 where a.checks != 2')->execute();
+
         foreach ($metadata as $classMeta) {
 
 
@@ -93,13 +97,15 @@ class managerController extends FOSRestController
 
                 if ($entity == null) {
                     $entity = new GestEntity();
+                    $entity->setEntityPos('264,570');
                 }
 
                 $entity->setEntityTable($classMeta->table["name"]);
                 $entity->setEntityEntity(str_replace($classMeta->namespace . "\\", "", $classMeta->name));
                 $entity->setEntityKey($classMeta->identifier[0]);
                 $entity->setEntityType("regular");
-                $entity->setEntityPos('264,570');
+                $entity->setChecks('1');
+
 
 
                 foreach ($classMeta->fieldMappings as $fieldMapping) {
@@ -122,8 +128,10 @@ class managerController extends FOSRestController
                     $field->setFieldColumnName($fieldMapping["columnName"]);
                     $field->setFieldType($fieldMapping["type"]);
                     $field->setFieldNature(0);
+                    $field->setChecks('1');
                     //$field->setFieldLength($fieldMapping["length"]);
                     $entity->addField($field);
+
                 }
 
                 foreach ($classMeta->getAssociationMappings() as $mapping) {
@@ -149,6 +157,7 @@ class managerController extends FOSRestController
                     $fieldf->setFieldType("integer");
                     $fieldf->setFieldNature(1);
                     $fieldf->setFieldTargetEntity(str_replace($classMeta->namespace . "\\", "", $mapping["targetEntity"]));
+                    $fieldf->setChecks('1');
                     //$field->setFieldLength($fieldMapping["length"]);
 
                     if ($addtoEntity) {
@@ -170,6 +179,7 @@ class managerController extends FOSRestController
 
                                     if ($entitysub == null) {
                                         $entitysub = new GestEntity();
+                                        $entitysub->setEntityPos('264,570');
                                     }
 
                                 }
@@ -178,7 +188,8 @@ class managerController extends FOSRestController
                                 $entitysub->setEntityTable($mapping["joinTable"]["name"]);
                                 $entitysub->setEntityEntity($mapping["joinTable"]["name"]);
                                 $entitysub->setEntityType("association");
-                                $entitysub->setEntityPos('264,570');
+                                $entitysub->setChecks('1');
+
 
                                 $fieldsub = $this->getDoctrine()
                                     ->getRepository('AppBundle:GestFields')
@@ -198,7 +209,9 @@ class managerController extends FOSRestController
                                 $fieldsub->setFieldEntityName($mapping["joinTable"]["joinColumns"][0]["name"]);
                                 $fieldsub->setFieldColumnName($mapping["joinTable"]["joinColumns"][0]["name"]);
                                 $fieldsub->setFieldNature(2);
+                                $fieldsub->setChecks('1');
                                 $entitysub->addField($fieldsub);
+
 
                                 $fieldsub = $this->getDoctrine()
                                     ->getRepository('AppBundle:GestFields')
@@ -217,6 +230,7 @@ class managerController extends FOSRestController
                                 $fieldsub->setFieldEntityName($mapping["joinTable"]["inverseJoinColumns"][0]["name"]);
                                 $fieldsub->setFieldColumnName($mapping["joinTable"]["inverseJoinColumns"][0]["name"]);
                                 $fieldsub->setFieldNature(2);
+                                $fieldsub->setChecks('1');
                                 $entitysub->addField($fieldsub);
 
                                 $em->persist($entitysub);
@@ -237,6 +251,7 @@ class managerController extends FOSRestController
 
                                 $relation->setRelationKey($mapping["fieldName"]);
                                 $relation->setRelationTableName(str_replace($classMeta->namespace . "\\", "", $mapping["targetEntity"]));
+                                $relation->setChecks('1');
                                 if ($mapping["inversedBy"] != "") {
                                     $relation->setRelationInverseKey($mapping["inversedBy"]);
                                 }
@@ -264,6 +279,7 @@ class managerController extends FOSRestController
 
                         $relation->setRelationKey($mapping["fieldName"]);
                         $relation->setRelationTableName(str_replace($classMeta->namespace . "\\", "", $mapping["targetEntity"]));
+                        $relation->setChecks('1');
                         if ($mapping["inversedBy"] != "") {
                             $relation->setRelationInverseKey($mapping["inversedBy"]);
                         }
@@ -297,6 +313,13 @@ class managerController extends FOSRestController
             $em->persist($field);
             $em->flush();
         }
+
+        $em->createQuery('delete from AppBundle:GestRelations a  where a.checks = 0')->execute();
+        $em->createQuery('delete from AppBundle:GestEntity a  where a.checks = 0')->execute();
+        $em->createQuery('delete from AppBundle:Gestfields a  where a.checks = 0')->execute();
+
+        $em->flush();
+
 
 
     }
@@ -1787,6 +1810,7 @@ class managerController extends FOSRestController
         $field->setFieldEntityName($param->form->fieldAlias);
         $field->setFieldInterfaceName($param->form->fieldName);
         $field->setFieldExpression(json_encode($param->exp));
+        $field->setChecks('2');
 
 
         $em->persist($field);
