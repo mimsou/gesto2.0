@@ -1513,7 +1513,7 @@ class managerController extends FOSRestController
             ->leftJoin('k.viewField', 'j')
             ->leftJoin('j.fieldEntity', 'b')
             ->leftJoin('j.fieldTargetEntityId', 'ba')
-            ->andWhere('k.actionProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+            ->andWhere('k.actionProcess =:proc')->setParameter('proc', $id)->orderBy("ha.fieldOrder")->getQuery()->getArrayResult();
 
         $qb = $em->createQueryBuilder();
         $process[0]["list"] = $qb->select('g', 'it', 'f', 'ya', 'q', 'al')->from('AppBundle:GestList', 'g')
