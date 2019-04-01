@@ -107,7 +107,6 @@ class managerController extends FOSRestController
                 $entity->setChecks('1');
 
 
-
                 foreach ($classMeta->fieldMappings as $fieldMapping) {
 
 
@@ -321,7 +320,6 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-
     }
 
 
@@ -340,7 +338,7 @@ class managerController extends FOSRestController
 
         $qb->select('u', 'p')
             ->from('AppBundle:GestEntity', 'u')
-            ->leftJoin('u.fields', 'p');
+            ->leftJoin('u.fields', 'p')->orderBy("p.fieldOrder");
 
         $schema["table"] = $qb->getQuery()->getArrayResult();
 
@@ -1467,7 +1465,7 @@ class managerController extends FOSRestController
             ->leftJoin('m.role', 'rt')
             ->leftJoin('m.field', 'na')
             ->leftJoin('na.fieldTargetEntityId', 'ta')
-            ->andWhere('o.stepProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+            ->andWhere('o.stepProcess =:proc')->setParameter('proc', $id)->orderBy("na.fieldOrder")->getQuery()->getArrayResult();
 
         $qb = $em->createQueryBuilder();
 
@@ -1482,7 +1480,7 @@ class managerController extends FOSRestController
                 ->leftJoin('m.role', 'rt')
                 ->leftJoin('m.field', 'na')
                 ->leftJoin('na.fieldTargetEntityId', 'ta')
-                ->andWhere('o.stepFromProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+                ->andWhere('o.stepFromProcess =:proc')->setParameter('proc', $id)->orderBy("na.fieldOrder")->getQuery()->getArrayResult();
 
 
             $process[0]["steps"] = array_merge($stp, $stpfrom);
@@ -1524,7 +1522,7 @@ class managerController extends FOSRestController
             ->leftJoin('g.role', 'al')
             ->leftJoin('f.fieldTargetEntityId', 'ya')
             ->leftJoin('f.fieldEntity', 'q')
-            ->andWhere('g.listProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
+            ->andWhere('g.listProcess =:proc')->setParameter('proc', $id)->orderBy("f.fieldOrder")->getQuery()->getArrayResult();
 
         return $process;
 
@@ -3907,14 +3905,22 @@ class managerController extends FOSRestController
     function updateEntityAction($id, Request $request)
     {
 
-
+        $em = $this->getDoctrine()->getManager();
         $param = json_decode($request->getContent());
 
         $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($id);
         $entity->setEntityInterfaceName($param->entityInterfaceName);
         $entity->setEntityDisplayField($param->entityDisplayField);
         $entity->setEntityStepperField($param->entityStepperField);
-        $em = $this->getDoctrine()->getManager();
+
+        foreach ($param->fields as $fld) {
+            $flds = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($fld->fieldId);
+            $flds->setFieldOrder($fld->fieldOrder);
+            $em->persist($flds);
+            $em->flush();
+        }
+
+
         $em->persist($entity);
         $em->flush();
 

@@ -141,6 +141,14 @@ class GestFields
      */
     private $viewAction;
 
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="field_order", type="integer", nullable=true)
+     */
+    private $fieldOrder;
+
     /**
      * @var int|null
      *
@@ -157,7 +165,7 @@ class GestFields
         $this->updateAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->viewAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gestProcessDiemntion = new ArrayCollection();
-        $this->gestProcessDimention = new ArrayCollection();
+
     }
 
     public function getFieldId(): ?int
@@ -421,6 +429,18 @@ class GestFields
     public function setChecks(?int $checks): self
     {
         $this->checks = $checks;
+
+        return $this;
+    }
+
+    public function getFieldOrder(): ?int
+    {
+        return $this->fieldOrder;
+    }
+
+    public function setFieldOrder(?int $fieldOrder): self
+    {
+        $this->fieldOrder = $fieldOrder;
 
         return $this;
     }

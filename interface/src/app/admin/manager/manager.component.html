@@ -1447,7 +1447,11 @@
                                             </option>
                                         </select>
                                             <br>
-
+                                            <br>
+                                            <div>   <strong> Ordre: </strong>
+                                                <div *ngFor="let fld of selectedEntity.fields" ><input   [ngModelOptions]="{standalone: true}"  [(ngModel)]="fld.fieldOrder"  inputOrdre ><span>{{fld.fieldEntityName}}</span><br></div>
+                                            </div>
+                                            <br>  <br>
                                             <button style="margin-right: 10px;" [disabled]="!settingFormControl.valid"
                                                     nbButton
                                                     type="submit" size="xsmall">

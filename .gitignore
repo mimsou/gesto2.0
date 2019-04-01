@@ -27,5 +27,6 @@
 /src/Entity/Renouvellement.php
 /src/Entity/Service.php
 /src/Entity/Solde.php
-/src/Entity/User.php
 /.idea
+/interface/src/app/@core/data/api.link.ts
+/interface/src/app/app.module.ts
