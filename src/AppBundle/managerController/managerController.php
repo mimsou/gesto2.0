@@ -309,6 +309,20 @@ class managerController extends FOSRestController
         foreach ($fields as $field) {
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findOneBy(array("entityEntity" => $field->getFieldTargetEntity()));
             $field->setFieldTargetEntityId($entity);
+
+            if($field->getFieldNature()==1){
+
+                $fields = $this->getDoctrine()->getRepository('AppBundle:GestFields')->findOneBy(
+                    array(
+                        "fieldEntityName" => $entity->getEntityKey(),
+                        "fieldEntity" => $entity
+                    )
+                );
+
+                $field->setFieldType($fields->getFieldType());
+
+            }
+
             $em->persist($field);
             $em->flush();
         }

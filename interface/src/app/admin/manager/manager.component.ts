@@ -796,6 +796,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
                 target: target,
                 anchor: ['Right', 'Left'],
                 paintStyle: {stroke: '#456', strokeWidth: 0.7},
+                endpointStyle:{  radius:5 },
                 overlays: [
                     ['Label', {label: "x", location: 0, cssClass: 'connectingConnectorLabel'}]
                 ],
