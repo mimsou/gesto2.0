@@ -91,6 +91,24 @@ class GestRole
      */
     private $rap;
 
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GestDataAccess", inversedBy="role")
+     * @ORM\JoinTable(name="gest_role_data_access",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="role_id", referencedColumnName="role_id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="rda_id", referencedColumnName="da_id")
+     *   }
+     * )
+     */
+
+
+    private $rda;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -104,6 +122,7 @@ class GestRole
      *   }
      * )
      */
+    
     private $user;
 
     /**
@@ -132,6 +151,7 @@ class GestRole
         $this->user = new \Doctrine\Common\Collections\ArrayCollection();
         $this->list = new \Doctrine\Common\Collections\ArrayCollection();
         $this->action = new ArrayCollection();
+        $this->rda = new ArrayCollection();
     }
 
     public function getRoleId(): ?int
@@ -316,6 +336,32 @@ class GestRole
     {
         if ($this->action->contains($action)) {
             $this->action->removeElement($action);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestDataAccess[]
+     */
+    public function getRda(): Collection
+    {
+        return $this->rda;
+    }
+
+    public function addRda(GestDataAccess $rda): self
+    {
+        if (!$this->rda->contains($rda)) {
+            $this->rda[] = $rda;
+        }
+
+        return $this;
+    }
+
+    public function removeRda(GestDataAccess $rda): self
+    {
+        if ($this->rda->contains($rda)) {
+            $this->rda->removeElement($rda);
         }
 
         return $this;

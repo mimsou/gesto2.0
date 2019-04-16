@@ -11,6 +11,7 @@ import {Entitie, Field} from "../../@core/data/data.model";
 import {jsPlumb} from 'jsplumb';
 import * as $ from 'jquery';
 import {Observable, Subject} from "rxjs/Rx";
+import {E} from "@angular/core/src/render3";
 
 
 @Component({
@@ -54,6 +55,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     isposset = false;
     selectedArborecence = [];
     selectedEntity: any;
+    dataSelectedEntity:Entitie = new Entitie();
     process: any = new Process();
     selectedSteps: Step = [];
     selectedActions: Action = [];
@@ -84,7 +86,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     listregForm: any = new Object();
     expValuListreg: any;
     selectFrom: any = [];
-    stepform: any="";
+    stepform: any = "";
+    accessData:any;
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -659,6 +662,76 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     }
 
 
+    dataOnSelectedEntity($event) {
+
+       var id = $event.target.selectedOptions[0].value;
+
+       if(id==0){
+           this.dataSelectedEntity = new Entitie();
+       }
+
+        for(let entitie of this.entities){
+            if(id==entitie.entityId){
+                this.dataSelectedEntity = entitie;
+            }
+        }
+
+        var param={}
+        param.entity =  this.dataSelectedEntity;
+
+        this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
+
+    }
+
+    getDataCallback(data){
+        this.accessData=data
+    }
+
+    garantAccess($event){
+
+        var mode = $event.target.selectedOptions[0].value;
+
+        if(!this.isEmpty(this.dataSelectedEntity)){
+            var param = {}
+            param.entity = this.dataSelectedEntity
+            param.mode = mode
+            this.menuService.updateAccessData(param).subscribe(data => console.log("pos ok"));
+        }
+
+
+    }
+
+
+      isEmpty(obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+
+        return JSON.stringify(obj) === JSON.stringify({});
+    }
+
+
+    getDataAccessField(entity){
+        var flds = [];
+
+        if(!this.isEmpty(entity)){
+        for(let fld of entity.fields){
+            if(fld.fieldEntityName == entity.entityKey){
+                flds[0] = fld;
+            }
+
+            if(fld.fieldEntityName == entity.entityDisplayfield){
+                flds[1] = fld;
+            }
+        }
+        }
+
+        return flds;
+    }
+
+
+
     onSelectEntity(entity, $event) {
 
 
@@ -796,7 +869,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
                 target: target,
                 anchor: ['Right', 'Left'],
                 paintStyle: {stroke: '#456', strokeWidth: 0.7},
-                endpointStyle:{  radius:5 },
+                endpointStyle: {radius: 5},
                 overlays: [
                     ['Label', {label: "x", location: 0, cssClass: 'connectingConnectorLabel'}]
                 ],
@@ -876,7 +949,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         return [];
     }
 
-    addStepFromProcess($event){
+    addStepFromProcess($event) {
         $event.stopPropagation();
         var param = {};
         param.process = this.selectedProcess;
@@ -884,7 +957,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
     }
 
-    removeStepFromProcess(step ,$event){
+    removeStepFromProcess(step, $event) {
         $event.stopPropagation();
         var param = {};
         param.process = this.selectedProcess;

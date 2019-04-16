@@ -2935,6 +2935,56 @@ class managerController extends FOSRestController
             $resultsub = array();
         }
 
+
+        foreach ($resultsub as $key => $rs) {
+
+            $id = $rs[0][$entity->getEntityKey()];
+            $prm = new \stdClass();
+            $prm->data = $rs[0];
+
+            $rslistreg = $list->getListReg();
+
+            $passed = true;
+
+            foreach ($rslistreg as $itemreglist) {
+                $params = new \stdClass();
+                $params->type = "boolean";
+                $params->entity = $entity;
+                $params->expression = $itemreglist->getListregExpression();
+
+                if (strpos($params->expression, "nofilter") == false) {
+                    $rs = $this->_getExpressionRestult($params, $prm, $param->dimfilter, $id);
+                    if (!$rs) {
+                        unset($resultsub[$key]);
+                        $passed = false;
+                        break;
+                    }
+                }
+            }
+
+
+            if ($passed) {
+
+                foreach ($field as $fld) {
+
+                    if ($fld->getFieldNature() == 2) {
+                        $expression = $fld->getFieldExpression();
+                        $params = new \stdClass();
+                        $params->expression = $expression;
+                        $params->type = $fld->getFieldType();
+                        $params->entity = $entity;
+                        $id = $rs[0][$entity->getEntityKey()];
+                        $rs = $this->_getExpressionRestult($params, $request, $param->dimfilter, $id);
+                        $resultsub[$key][0][$fld->getFieldEntityName()] = $rs;
+                        $resultsub[$key][$fld->getFieldEntityName()] = $rs;
+                    }
+
+                }
+
+            }
+
+        }
+
         $res = array("entityData" => $result, "subEntityData" => $resultsub);
 
         return $res;
@@ -3186,6 +3236,7 @@ class managerController extends FOSRestController
 
         $expression->expression = $this->resolve_get_expression($expression->expression, $entity, $type, $dim, $id);
 
+
         $expression->expression = $this->resolve_get_where_expression($expression->expression, $entity, $type, $dim, $id);
 
         $expression->expression = $this->resolve_php_expression($expression->expression, $entity, $type, $dim, $id);
@@ -3401,11 +3452,14 @@ class managerController extends FOSRestController
             $where = $match[5][$key];
 
             $result = $this->_get_result($entity, $conf, $type, $dim, $id);
+            //if($expr !="get([20])")
+            //die(var_dump($result));
             if ($result !== null) {
                 $get["result"] = $result;
             } else {
                 $get["result"] = 0;
             }
+
             if ($type == "string") {
                 $expr = str_replace($get["patern"], $get["result"], $expr);
             } else {
@@ -3620,6 +3674,7 @@ class managerController extends FOSRestController
 
                         }
 
+
                         $wfieldconf["wfieldalias"] = $prevalias;
                         //die(var_dump($relconffiltred[0]));
                     } else {
@@ -3633,6 +3688,8 @@ class managerController extends FOSRestController
 
 
             array_push($wherarray, $wfieldconf);
+
+
         }
 
 
@@ -3684,6 +3741,9 @@ class managerController extends FOSRestController
         $field = $this->resolve_get_where_expression($field, $ent, $type, $dim, $id);
 
         $field = $this->resolve_php_expression($field, $ent, $type, $dim, $id);
+
+        //if($expr !="get([20])")
+
 
         if (isset($ent->entityId)) {
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($ent->entityId);
@@ -4065,6 +4125,62 @@ class managerController extends FOSRestController
             $sn->remove($listreg);
             $sn->flush();
         }
+    }
+
+
+
+    /**
+     * @Rest\Patch("/getdata/")
+     */
+
+    public function PatchGetDataAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('u')->from('AppBundle:' . $param->entity->entityEntity, 'u');
+
+        $data = $qb->getQuery()->getArrayResult();
+
+        return $data;
+
+    }
+
+    /**
+     * @Rest\Patch("/accessdata/")
+     */
+
+    public function PatchAccessDataAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $entity = $param->action->actionEntity->entityEntity;
+
+        $class = "\AppBundle\Entity\\" . $entity;
+
+        $arr = (array)$param->data;
+
+        $stepperField = $param->action->actionEntity->entityStepperField;
+
+        $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arr[$param->action->actionEntity->entityKey]);
+
+        $functionName = "set" . ucfirst($stepperField);
+
+        if (method_exists($entityAction, $functionName)) {
+            $entityAction->$functionName(null);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entityAction);
+        $em->flush();
+
+        return new View("Entity Data Deleted Successfully", Response::HTTP_OK);
+
     }
 
 

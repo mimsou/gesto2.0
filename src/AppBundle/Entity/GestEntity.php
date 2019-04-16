@@ -123,11 +123,18 @@ class GestEntity
     private $fields;
 
     /**
+ * @var \Doctrine\Common\Collections\Collection
+ *
+ * @ORM\OneToMany(targetEntity="GestFields", mappedBy="fieldTargetEntityId" , cascade={"persist"})
+ */
+    private $fieldsInversedTarget;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="GestFields", mappedBy="fieldTargetEntityId" , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="GestFields", mappedBy="daEntity" , cascade={"persist"})
      */
-    private $fieldsInversedTarget;
+    private $daAccessData;
 
 
     /**
@@ -147,6 +154,7 @@ class GestEntity
         $this->relations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fieldsInversedTarget = new ArrayCollection();
+        $this->daAccessData = new ArrayCollection();
     }
 
     public function getEntityId(): ?int
@@ -419,6 +427,37 @@ class GestEntity
     public function setChecks(?int $checks): self
     {
         $this->checks = $checks;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestFields[]
+     */
+    public function getDaAccessData(): Collection
+    {
+        return $this->daAccessData;
+    }
+
+    public function addDaAccessData(GestFields $daAccessData): self
+    {
+        if (!$this->daAccessData->contains($daAccessData)) {
+            $this->daAccessData[] = $daAccessData;
+            $daAccessData->setDaEntity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDaAccessData(GestFields $daAccessData): self
+    {
+        if ($this->daAccessData->contains($daAccessData)) {
+            $this->daAccessData->removeElement($daAccessData);
+            // set the owning side to null (unless already changed)
+            if ($daAccessData->getDaEntity() === $this) {
+                $daAccessData->setDaEntity(null);
+            }
+        }
 
         return $this;
     }

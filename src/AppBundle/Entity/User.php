@@ -50,7 +50,7 @@ class User extends BaseUser
     }
 
     public function addRols(GestRole $role): self
-    {
+    { 
         if (!$this->role->contains($role)) {
             $this->role[] = $role;
             $role->addRap($this);

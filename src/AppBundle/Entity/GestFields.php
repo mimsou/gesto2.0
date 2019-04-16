@@ -165,6 +165,7 @@ class GestFields
         $this->updateAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->viewAction = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gestProcessDiemntion = new ArrayCollection();
+        $this->gestProcessDimention = new ArrayCollection();
 
     }
 

@@ -156,8 +156,45 @@
                         <nb-card full-heigth>
 
                             <nb-card-header noborder>
-                                <div title>Liste des liens</div>
+                                <div title>Access au données :
+                                    <select (click)="stopClick($event)" (change)="dataOnSelectedEntity($event)">
+                                        <option [value]="0">-</option>
+                                        <option *ngFor="let entitie of entities" [value]="entitie.entityId">
+                                            {{entitie.entityEntity}}
+                                        </option>
+                                    </select>
+
+                                    Mode :
+
+                                    <select (click)="stopClick($event)" (change)="garantAccess($event)">
+                                        <option value="0"> Pas d'access</option>
+                                        <option value="1"> in </option>
+                                        <option value="2"> not in</option>
+                                    </select>
+                                </div>
                             </nb-card-header>
+
+                            <nb-card-body>
+
+
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th *ngFor="let datafield of getDataAccessField(dataSelectedEntity)">
+                                            <strong>{{datafield.fieldEntityName}}</strong>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let datas of accessData">
+                                        <td *ngFor="let datafield of getDataAccessField(dataSelectedEntity)">
+                                            {{datas[datafield.fieldEntityName]}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </nb-card-body>
 
                         </nb-card>
 
@@ -725,7 +762,8 @@
 
                                 <div title>
 
-                                    Add step from : <select (click)="stopClick($event)" type="text" [(ngModel)]="stepform" nbInput fullWidth
+                                    Add step from : <select (click)="stopClick($event)" type="text"
+                                                            [(ngModel)]="stepform" nbInput fullWidth
                                                             fieldSize="xsmall">
                                     <option *ngFor="let stp of selectFrom" [value]="stp.stepId">
                                         {{stp.stepName}}
@@ -753,10 +791,11 @@
                                             <div class="step " id="step_{{step.stepId}}"
                                                  [ngClass]="{'active' :  step.stepId == selectedSteps.stepId  }">
                                                 <div class="circle">{{step.stepSequence}}</div>
-                                                <div class="label">{{step.stepName}} - <span style="color: #313131">{{step.stepId}}</span><i colorPrimary
-                                                                                                         ActionIcone
-                                                                                                         class="fa fa-unlink"
-                                                                                                         (click)="removeStepFromProcess(step.stepId,$event)"></i>
+                                                <div class="label">{{step.stepName}} - <span style="color: #313131">{{step.stepId}}</span><i
+                                                        colorPrimary
+                                                        ActionIcone
+                                                        class="fa fa-unlink"
+                                                        (click)="removeStepFromProcess(step.stepId,$event)"></i>
 
                                                     <i ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"
                                                        [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}"
@@ -777,10 +816,11 @@
                                             <div class="step " id="step_{{step.stepId}}"
                                                  [ngClass]="{'active' :  step.stepId == selectedSteps.stepId  }">
                                                 <div class="circle">{{step.stepSequence}}</div>
-                                                <div class="label">{{step.stepName}} - <span style="color: #313131">{{step.stepId}}</span><i colorPrimary
-                                                                                                         ActionIcone
-                                                                                                         class="fa fa-times"
-                                                                                                         (click)="deleteStep(step.stepId,$event)"></i>
+                                                <div class="label">{{step.stepName}} - <span style="color: #313131">{{step.stepId}}</span><i
+                                                        colorPrimary
+                                                        ActionIcone
+                                                        class="fa fa-times"
+                                                        (click)="deleteStep(step.stepId,$event)"></i>
 
                                                     <i ActionIcone colorInactive (click)="ToggleSelectStep(step,$event)"
                                                        [ngClass]="{'colorPrimary' : selectedroleInRoles(step.role)}"
@@ -1448,10 +1488,13 @@
                                         </select>
                                             <br>
                                             <br>
-                                            <div>   <strong> Ordre: </strong>
-                                                <div *ngFor="let fld of selectedEntity.fields" ><input   [ngModelOptions]="{standalone: true}"  [(ngModel)]="fld.fieldOrder"  inputOrdre ><span>{{fld.fieldEntityName}}</span><br></div>
+                                            <div><strong> Ordre: </strong>
+                                                <div *ngFor="let fld of selectedEntity.fields"><input
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        [(ngModel)]="fld.fieldOrder" inputOrdre><span>{{fld.fieldEntityName}}</span><br>
+                                                </div>
                                             </div>
-                                            <br>  <br>
+                                            <br> <br>
                                             <button style="margin-right: 10px;" [disabled]="!settingFormControl.valid"
                                                     nbButton
                                                     type="submit" size="xsmall">

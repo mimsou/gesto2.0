@@ -17,7 +17,7 @@ import {
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit { 
 
     @ViewChild('dimention') DimComponent: any;
     listTtile: string = "Loading...";
@@ -28,6 +28,7 @@ export class ListComponent implements OnInit {
     listData: any;
     dimfilter: any;
     field: any = Array();
+    process:any;
     user:any;
     @Output() fireAction: EventEmitter<any> = new EventEmitter();
     @Output() fireCretateAction: EventEmitter<any> = new EventEmitter();
@@ -47,6 +48,7 @@ export class ListComponent implements OnInit {
         this.entity = entity;
         this.list = list;
         this.listTtile = list.listName;
+        this.process = process;
         this.getListfield();
         this.dimfilter=[];
         this.DimComponent.initDimention(process);
@@ -81,9 +83,11 @@ export class ListComponent implements OnInit {
             if (stp.stepId == stepid) {
                 var acts = [];
                 for (let act of  stp.action) {
-                    if (act.actionType !== 1) {
-                        if(this.hasAccess(act.role)){
-                            acts.push(act)
+                    if(this.actionInProcess(act.actionId)){
+                        if (act.actionType !== 1) {
+                            if(this.hasAccess(act.role)){
+                                acts.push(act)
+                            }
                         }
                     }
                     ;
@@ -92,6 +96,15 @@ export class ListComponent implements OnInit {
             }
         }
         return acts;
+    }
+
+    actionInProcess(actId){
+        var exist = false;
+        console.log(this.process )
+        for(let act of this.process[0].actions){
+            if(act.actionId == actId){exist = true;}
+        }
+        return exist;
     }
 
 
