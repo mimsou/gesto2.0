@@ -132,9 +132,16 @@ class GestEntity
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="GestFields", mappedBy="daEntity" , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="GestDataAccess", mappedBy="daEntity" , cascade={"persist"})
      */
     private $daAccessData;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestRoleData", mappedBy="rdEntity" , cascade={"persist"})
+     */
+    private $rdAccessData;
 
 
     /**
@@ -155,6 +162,7 @@ class GestEntity
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fieldsInversedTarget = new ArrayCollection();
         $this->daAccessData = new ArrayCollection();
+        $this->rdAccessData = new ArrayCollection();
     }
 
     public function getEntityId(): ?int
@@ -456,6 +464,37 @@ class GestEntity
             // set the owning side to null (unless already changed)
             if ($daAccessData->getDaEntity() === $this) {
                 $daAccessData->setDaEntity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestRoleData[]
+     */
+    public function getRdAccessData(): Collection
+    {
+        return $this->rdAccessData;
+    }
+
+    public function addRdAccessData(GestRoleData $rdAccessData): self
+    {
+        if (!$this->rdAccessData->contains($rdAccessData)) {
+            $this->rdAccessData[] = $rdAccessData;
+            $rdAccessData->setRdEntity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdAccessData(GestRoleData $rdAccessData): self
+    {
+        if ($this->rdAccessData->contains($rdAccessData)) {
+            $this->rdAccessData->removeElement($rdAccessData);
+            // set the owning side to null (unless already changed)
+            if ($rdAccessData->getRdEntity() === $this) {
+                $rdAccessData->setRdEntity(null);
             }
         }
 

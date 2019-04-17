@@ -4,6 +4,8 @@ namespace AppBundle\managerController;
 
 use AppBundle\Annotation\ActionName;
 use AppBundle\Entity\GestAccessPath;
+use AppBundle\Entity\GestDataAccess;
+use AppBundle\Entity\GestRoleData;
 use AppBundle\Entity\GestActions;
 use AppBundle\Entity\GestActionsRegle;
 use AppBundle\Entity\GestEntity;
@@ -310,7 +312,7 @@ class managerController extends FOSRestController
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findOneBy(array("entityEntity" => $field->getFieldTargetEntity()));
             $field->setFieldTargetEntityId($entity);
 
-            if($field->getFieldNature()==1){
+            if ($field->getFieldNature() == 1) {
 
                 $fields = $this->getDoctrine()->getRepository('AppBundle:GestFields')->findOneBy(
                     array(
@@ -4013,10 +4015,10 @@ class managerController extends FOSRestController
 
         $param = json_decode($request->getContent());
 
-
         $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findBy(array(
             "entityEntity" => $param->entity
         ));
+
 
         $em = $this->getDoctrine()->getManager();
 
@@ -4028,7 +4030,65 @@ class managerController extends FOSRestController
         )
             ->from('AppBundle:' . $param->entity, 'u');
 
-        $data = $qb->getQuery()->getArrayResult();
+
+        $entityId = $entity[0]->getEntityId();
+
+        $entityKey = $entity[0]->getEntityKey();
+
+
+        $user = $this->getCurrentUser();
+
+        $qbu = $em->createQueryBuilder();
+
+        $userid = $user->getId();
+
+        $qbu->select('u')
+            ->from('AppBundle:User', 'u')->where("u.id = $userid");
+
+        $datauser = $qbu->getQuery()->getArrayResult();
+
+
+        $qba = $em->createQueryBuilder();
+
+        $qba->select('u', 'a')
+            ->from('AppBundle:GestDataAccess', 'u')->join('u.role', 'a')->where("a.roleLibelle IN (:rolelib)")->andWhere("u.daEntity = $entityId")->setParameter('rolelib', $datauser[0]["roles"]);
+
+        $access = $qba->getQuery()->getArrayResult();
+
+        $mode = $this->_getMode($access);
+
+
+        if ($mode == 1) {
+            $data = $qb->where(
+
+                $qb->expr()->in(
+
+                    'u.' . $entityKey,
+                    $em->createQueryBuilder()
+                        ->select('e.rdData')
+                        ->from('AppBundle:GestRoleData', 'e')->join('e.role', 't')
+                        ->where('t.roleLibelle IN (:rolelibs)')
+                        ->andWhere("e.rdEntity = $entityId")->setParameter('rolelibs', $datauser[0]["roles"])
+                        ->getDQL())
+
+
+            )->getQuery()->setParameter('rolelibs', $datauser[0]["roles"])->getArrayResult();
+        } else {
+            $data = $qb->where(
+
+                $qb->expr()->notin(
+
+                    'u.' . $entityKey,
+                    $em->createQueryBuilder()
+                        ->select('e.rdData')
+                        ->from('AppBundle:GestRoleData', 'e')->join('e.role', 't')
+                        ->where('t.roleLibelle IN (:rolelibs)')
+                        ->andWhere("e.rdEntity = $entityId")->setParameter('rolelibs', $datauser[0]["roles"])
+                        ->getDQL())
+
+
+            )->getQuery()->setParameter('rolelibs', $datauser[0]["roles"])->getArrayResult();
+        }
 
         $blank = array(array("id" => "", "text" => "--"));
 
@@ -4036,8 +4096,26 @@ class managerController extends FOSRestController
 
         return array("data" => $data);
 
+
     }
 
+    private function _getMode($acc)
+    {
+
+        foreach ($acc as $item) {
+            if ($item["daMode"] == "1") {
+                return 1;
+            }
+        }
+
+        foreach ($acc as $item) {
+            if ($item["daMode"] == "2") {
+                return 2;
+            }
+        }
+
+        return (integer)0;
+    }
 
     /**
      * @Rest\Patch("/deleteentitydata")
@@ -4128,7 +4206,6 @@ class managerController extends FOSRestController
     }
 
 
-
     /**
      * @Rest\Patch("/getdata/")
      */
@@ -4146,6 +4223,26 @@ class managerController extends FOSRestController
 
         $data = $qb->getQuery()->getArrayResult();
 
+
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
+
+        foreach ($data as $key => $dat) {
+
+            $content = $dat[$param->entity->entityKey];
+
+            $entityId = $entity->getEntityId();
+
+            $qbr = $em->createQueryBuilder();
+
+            $qbr->select('u', 'a.roleId')->from('AppBundle:GestRoleData', 'u')->join('u.role', 'a')->where("u.rdEntity = $entityId")->andWhere("u.rdData = $content");
+
+            $datarole = $qbr->getQuery()->getArrayResult();
+
+            $data[$key]["role"] = $datarole;
+
+        }
+
+
         return $data;
 
     }
@@ -4159,27 +4256,75 @@ class managerController extends FOSRestController
 
         $param = json_decode($request->getContent());
 
-        $entity = $param->action->actionEntity->entityEntity;
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
 
-        $class = "\AppBundle\Entity\\" . $entity;
+        $role = $this->getDoctrine()->getRepository('AppBundle:GestRole')->find($param->role);
 
-        $arr = (array)$param->data;
-
-        $stepperField = $param->action->actionEntity->entityStepperField;
-
-        $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arr[$param->action->actionEntity->entityKey]);
-
-        $functionName = "set" . ucfirst($stepperField);
-
-        if (method_exists($entityAction, $functionName)) {
-            $entityAction->$functionName(null);
-        }
+        $mode = $param->mode;
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($entityAction);
+
+        $dataAceess = $this->getDoctrine()->getRepository('AppBundle:GestDataAccess')->findOneBy(array(
+            "daEntity" => $entity,
+            "role" => $role
+        ));
+
+        if (!empty($dataAceess)) {
+            $dataAceess->setDaMode($mode);
+        } else {
+            $dataAceess = new GestDataAccess();
+            $dataAceess->setDaMode($mode);
+            $dataAceess->setDaEntity($entity);
+            $dataAceess->setRole($role);
+        }
+
+        $em->persist($dataAceess);
+
         $em->flush();
 
-        return new View("Entity Data Deleted Successfully", Response::HTTP_OK);
+        return new View("l'access a été mise à jour", Response::HTTP_OK);
+
+    }
+
+
+    /**
+     * @Rest\Patch("/dataroleaccess/")
+     */
+
+    public function patchDataRoleAccessAction(Request $request)
+    {
+
+
+        $param = json_decode($request->getContent());
+
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
+
+        $role = $this->getDoctrine()->getRepository('AppBundle:GestRole')->find($param->role);
+
+        $data = $param->data;
+
+        $em = $this->getDoctrine()->getManager();
+
+        $roleAceess = $this->getDoctrine()->getRepository('AppBundle:GestRoleData')->findOneBy(array(
+            "rdEntity" => $entity,
+            "role" => $role,
+            "rdData" => $data
+        ));
+
+        if (!empty($roleAceess)) {
+            $em->remove($roleAceess);
+            $em->flush();
+        } else {
+            $roleAceess = new GestRoleData();
+            $roleAceess->setRdEntity($entity);
+            $roleAceess->setRole($role);
+            $roleAceess->setRdData($data);
+            $em->persist($roleAceess);
+            $em->flush();
+        }
+
+
+        return new View("l'access a été mise à jour", Response::HTTP_OK);
 
     }
 

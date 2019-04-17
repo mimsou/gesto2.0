@@ -169,7 +169,7 @@
                                     <select (click)="stopClick($event)" (change)="garantAccess($event)">
                                         <option value="0"> Pas d'access</option>
                                         <option value="1"> in </option>
-                                        <option value="2"> not in</option>
+                                        <option value="2"> not in (Tous sauf)</option>
                                     </select>
                                 </div>
                             </nb-card-header>
@@ -183,12 +183,18 @@
                                         <th *ngFor="let datafield of getDataAccessField(dataSelectedEntity)">
                                             <strong>{{datafield.fieldEntityName}}</strong>
                                         </th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr *ngFor="let datas of accessData">
+                                    <tr *ngFor="let datas of accessData" (click)="roleDataAccess(datas,$event)"  [ngClass]="{'selectedListr' : roleInRoleData(datas.role)  }">
                                         <td *ngFor="let datafield of getDataAccessField(dataSelectedEntity)">
                                             {{datas[datafield.fieldEntityName]}}
+                                        </td>
+                                        <td>
+                                            <i colorPrimary ActionIcone
+                                               [ngClass]="{'fa-check-circle' : roleInRoleData(datas.role)}"
+                                               *ngIf="selectedrole != ''" class="fa"></i>
                                         </td>
                                     </tr>
                                     </tbody>

@@ -333,6 +333,10 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/accessdata/`, JSON.stringify(param));
     }
 
+    updateRoleAccessData(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/dataroleaccess/`, JSON.stringify(param));
+    }
+
     getAccessData(param){
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getdata/`, JSON.stringify(param));
     }

@@ -7,43 +7,43 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GestAccessPath
+ * GestRoleAccess
  *
- * @ORM\Table(name="gest_data_access")
+ * @ORM\Table(name="gest_role_data")
  * @ORM\Entity
  */
-class GestDataAccess
+class GestRoleData
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="da_id", type="integer", nullable=false)
+     * @ORM\Column(name="rd_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $daId;
+    private $rdId;
 
     /**
      * @var \GestEntity
      *
-     * @ORM\ManyToOne(targetEntity="GestEntity" , inversedBy="daAccessData"  )
+     * @ORM\ManyToOne(targetEntity="GestEntity" , inversedBy="rdAccessData"  )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="da_entity", referencedColumnName="entity_id")
+     *   @ORM\JoinColumn(name="rd_entity", referencedColumnName="entity_id")
      * })
      */
-    private $daEntity;
+    private $rdEntity;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="da_mode", type="string", length=200, nullable=true)
+     * @ORM\Column(name="rd_data", type="string", length=200, nullable=true)
      */
-    private $daMode;
+    private $rdData;
 
     /**
-     * @var \GestEntity
+     * @var \GestRole
      *
-     * @ORM\ManyToOne(targetEntity="GestRole" , inversedBy="rda"  )
+     * @ORM\ManyToOne(targetEntity="GestRole" , inversedBy="dra"  )
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="role", referencedColumnName="role_id")
      * })
@@ -55,35 +55,31 @@ class GestDataAccess
         $this->role = new ArrayCollection();
     }
 
-    public function getDaId(): ?int
+    public function getRdId(): ?int
     {
-        return $this->daId;
+        return $this->rdId;
     }
 
-
-
-    public function getDaMode(): ?string
+    public function getRdData(): ?string
     {
-        return $this->daMode;
+        return $this->rdData;
     }
 
-    public function setDaMode(?string $daMode): self
+    public function setRdData(?string $rdData): self
     {
-        $this->daMode = $daMode;
+        $this->rdData = $rdData;
 
         return $this;
     }
 
-
-
-    public function getDaEntity(): ?GestEntity
+    public function getRdEntity(): ?GestEntity
     {
-        return $this->daEntity;
+        return $this->rdEntity;
     }
 
-    public function setDaEntity(?GestEntity $daEntity): self
+    public function setRdEntity(?GestEntity $rdEntity): self
     {
-        $this->daEntity = $daEntity;
+        $this->rdEntity = $rdEntity;
 
         return $this;
     }

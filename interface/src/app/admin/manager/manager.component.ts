@@ -55,7 +55,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     isposset = false;
     selectedArborecence = [];
     selectedEntity: any;
-    dataSelectedEntity:Entitie = new Entitie();
+    dataSelectedEntity: Entitie = new Entitie();
     process: any = new Process();
     selectedSteps: Step = [];
     selectedActions: Action = [];
@@ -87,7 +87,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     expValuListreg: any;
     selectFrom: any = [];
     stepform: any = "";
-    accessData:any;
+    accessData: any;
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -664,47 +664,84 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     dataOnSelectedEntity($event) {
 
-       var id = $event.target.selectedOptions[0].value;
+        var id = $event.target.selectedOptions[0].value;
 
-       if(id==0){
-           this.dataSelectedEntity = new Entitie();
-       }
+        if (id == 0) {
+            this.dataSelectedEntity = new Entitie();
+        }
 
-        for(let entitie of this.entities){
-            if(id==entitie.entityId){
+        for (let entitie of this.entities) {
+            if (id == entitie.entityId) {
                 this.dataSelectedEntity = entitie;
             }
         }
 
-        var param={}
-        param.entity =  this.dataSelectedEntity;
+        var param = {}
+
+        param.entity = this.dataSelectedEntity;
 
         this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
 
     }
 
-    getDataCallback(data){
-        this.accessData=data
+    dataRefrechData(){
+
+        var param = {}
+
+        param.entity = this.dataSelectedEntity;
+
+        this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
+
     }
 
-    garantAccess($event){
+    getDataCallback(data) {
+        this.accessData = data
+    }
+
+    garantAccess($event) {
 
         var mode = $event.target.selectedOptions[0].value;
 
-        if(!this.isEmpty(this.dataSelectedEntity)){
+        if (!this.isEmpty(this.dataSelectedEntity)) {
             var param = {}
             param.entity = this.dataSelectedEntity
             param.mode = mode
+            param.role = this.selectedrole
             this.menuService.updateAccessData(param).subscribe(data => console.log("pos ok"));
         }
 
 
     }
 
+    roleDataAccess(data, $event) {
 
-      isEmpty(obj) {
-        for(var prop in obj) {
-            if(obj.hasOwnProperty(prop))
+        $event.stopPropagation();
+
+        if (this.selectedrole !== "") {
+            var param = {}
+            param.entity = this.dataSelectedEntity
+            param.role = this.selectedrole
+            param.data = data[this.dataSelectedEntity.entityKey]
+            console.log(param);
+            this.menuService.updateRoleAccessData(param).subscribe(data => this.dataRefrechData());
+        }
+
+    }
+
+    roleInRoleData(role) {
+        for (let dat of role) {
+            if (parseInt(dat.roleId) == parseInt(this.selectedrole)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    isEmpty(obj) {
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
                 return false;
         }
 
@@ -712,24 +749,23 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     }
 
 
-    getDataAccessField(entity){
+    getDataAccessField(entity) {
         var flds = [];
 
-        if(!this.isEmpty(entity)){
-        for(let fld of entity.fields){
-            if(fld.fieldEntityName == entity.entityKey){
-                flds[0] = fld;
-            }
+        if (!this.isEmpty(entity)) {
+            for (let fld of entity.fields) {
+                if (fld.fieldEntityName == entity.entityKey) {
+                    flds[0] = fld;
+                }
 
-            if(fld.fieldEntityName == entity.entityDisplayfield){
-                flds[1] = fld;
+                if (fld.fieldEntityName == entity.entityDisplayfield) {
+                    flds[1] = fld;
+                }
             }
-        }
         }
 
         return flds;
     }
-
 
 
     onSelectEntity(entity, $event) {

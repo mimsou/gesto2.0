@@ -95,19 +95,20 @@ class GestRole
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="GestDataAccess", inversedBy="role")
-     * @ORM\JoinTable(name="gest_role_data_access",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="role_id", referencedColumnName="role_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="rda_id", referencedColumnName="da_id")
-     *   }
-     * )
+     * @ORM\OneToMany(targetEntity="GestDataAccess", mappedBy="role" , cascade={"persist"})
      */
 
 
     private $rda;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestroleData", mappedBy="role" , cascade={"persist"})
+     */
+
+
+    private $dra;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -152,6 +153,7 @@ class GestRole
         $this->list = new \Doctrine\Common\Collections\ArrayCollection();
         $this->action = new ArrayCollection();
         $this->rda = new ArrayCollection();
+        $this->dra = new ArrayCollection();
     }
 
     public function getRoleId(): ?int
@@ -353,6 +355,7 @@ class GestRole
     {
         if (!$this->rda->contains($rda)) {
             $this->rda[] = $rda;
+            $rda->setRole($this);
         }
 
         return $this;
@@ -362,9 +365,45 @@ class GestRole
     {
         if ($this->rda->contains($rda)) {
             $this->rda->removeElement($rda);
+            // set the owning side to null (unless already changed)
+            if ($rda->getRole() === $this) {
+                $rda->setRole(null);
+            }
         }
 
         return $this;
     }
 
+    /**
+     * @return Collection|GestroleData[]
+     */
+    public function getDra(): Collection
+    {
+        return $this->dra;
+    }
+
+    public function addDra(GestroleData $dra): self
+    {
+        if (!$this->dra->contains($dra)) {
+            $this->dra[] = $dra;
+            $dra->setRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDra(GestroleData $dra): self
+    {
+        if ($this->dra->contains($dra)) {
+            $this->dra->removeElement($dra);
+            // set the owning side to null (unless already changed)
+            if ($dra->getRole() === $this) {
+                $dra->setRole(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
 }
