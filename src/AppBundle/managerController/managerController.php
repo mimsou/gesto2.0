@@ -1529,7 +1529,7 @@ class managerController extends FOSRestController
             ->leftJoin('k.viewField', 'j')
             ->leftJoin('j.fieldEntity', 'b')
             ->leftJoin('j.fieldTargetEntityId', 'ba')
-            ->andWhere('k.actionProcess =:proc')->setParameter('proc', $id)->orderBy("ha.fieldOrder")->getQuery()->getArrayResult();
+            ->andWhere('k.actionProcess =:proc')->setParameter('proc', $id)->orderBy("ha.fieldOrder,j.fieldOrder")->getQuery()->getArrayResult();
 
         $qb = $em->createQueryBuilder();
         $process[0]["list"] = $qb->select('g', 'it', 'f', 'ya', 'q', 'al')->from('AppBundle:GestList', 'g')
@@ -2827,6 +2827,8 @@ class managerController extends FOSRestController
 
         $fields = array();
 
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->action->actionEntity->entityId);
+
         foreach ($field as $fld) {
 
             if ($fld->getFieldEntity()->getEntityId() == $param->action->actionEntity->entityId) {
@@ -2938,54 +2940,6 @@ class managerController extends FOSRestController
         }
 
 
-        foreach ($resultsub as $key => $rs) {
-
-            $id = $rs[0][$entity->getEntityKey()];
-            $prm = new \stdClass();
-            $prm->data = $rs[0];
-
-            $rslistreg = $list->getListReg();
-
-            $passed = true;
-
-            foreach ($rslistreg as $itemreglist) {
-                $params = new \stdClass();
-                $params->type = "boolean";
-                $params->entity = $entity;
-                $params->expression = $itemreglist->getListregExpression();
-
-                if (strpos($params->expression, "nofilter") == false) {
-                    $rs = $this->_getExpressionRestult($params, $prm, $param->dimfilter, $id);
-                    if (!$rs) {
-                        unset($resultsub[$key]);
-                        $passed = false;
-                        break;
-                    }
-                }
-            }
-
-
-            if ($passed) {
-
-                foreach ($field as $fld) {
-
-                    if ($fld->getFieldNature() == 2) {
-                        $expression = $fld->getFieldExpression();
-                        $params = new \stdClass();
-                        $params->expression = $expression;
-                        $params->type = $fld->getFieldType();
-                        $params->entity = $entity;
-                        $id = $rs[0][$entity->getEntityKey()];
-                        $rs = $this->_getExpressionRestult($params, $request, $param->dimfilter, $id);
-                        $resultsub[$key][0][$fld->getFieldEntityName()] = $rs;
-                        $resultsub[$key][$fld->getFieldEntityName()] = $rs;
-                    }
-
-                }
-
-            }
-
-        }
 
         $res = array("entityData" => $result, "subEntityData" => $resultsub);
 
@@ -4073,7 +4027,7 @@ class managerController extends FOSRestController
 
 
             )->getQuery()->setParameter('rolelibs', $datauser[0]["roles"])->getArrayResult();
-        } else {
+        } else if ($mode == 2) {
             $data = $qb->where(
 
                 $qb->expr()->notin(
@@ -4088,6 +4042,8 @@ class managerController extends FOSRestController
 
 
             )->getQuery()->setParameter('rolelibs', $datauser[0]["roles"])->getArrayResult();
+        } else if ($mode == 0) {
+            $data = array();
         }
 
         $blank = array(array("id" => "", "text" => "--"));
