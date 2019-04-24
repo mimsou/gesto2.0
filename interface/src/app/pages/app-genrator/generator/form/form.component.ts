@@ -461,4 +461,12 @@ export class FormComponent implements OnInit {
         return count;
     }
 
+    cleanData(data,fld){
+        console.log("dat",data);
+        if(data[0][fld.fieldEntityName]){
+        return data[0][fld.fieldEntityName][fld.fieldTargetEntityId.entityDisplayfield];
+        }
+        return "-";
+    }
+
 }

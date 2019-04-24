@@ -57,7 +57,7 @@ class managerController extends FOSRestController
             ->from('AppBundle:GestRole', 'u')->getQuery()->getArrayResult();
 
         if ($restresult === null) {
-            return new View("there are no role exist", Response::HTTP_NOT_FOUND);
+            return new View("there are no role", Response::HTTP_NOT_FOUND);
         }
 
         return $restresult;
@@ -2402,7 +2402,9 @@ class managerController extends FOSRestController
 
 
         $rslistregs = $list->getListReg();
+
         $nofilterArray = array();
+
         foreach ($rslistregs as $itemreglists) {
 
             $exp = json_decode($itemreglists->getListregExpression());
@@ -4283,6 +4285,7 @@ class managerController extends FOSRestController
         return new View("l'access a été mise à jour", Response::HTTP_OK);
 
     }
+
 
 
 }

@@ -56,6 +56,8 @@ export class DimentionComponent implements OnInit {
             this.fieldDimData.push(dimobs);
         }
 
+        this.goToSearch();
+
 
     }
 

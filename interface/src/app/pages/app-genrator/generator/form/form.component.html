@@ -118,7 +118,7 @@ ligne Details :
             <tr *ngFor="let data of choiceData" >
                 <td *ngFor="let fld of subfield" >
                     <span *ngIf="fld.fieldNature == 0">{{data[fld.fieldEntityName]}}</span>
-                    <span *ngIf="fld.fieldNature == 1">{{data[0][fld.fieldEntityName][fld.fieldTargetEntityId.entityDisplayfield]}}</span>
+                    <span *ngIf="fld.fieldNature == 1">{{cleanData(data,fld)}}</span>
                 </td>
                 <td  >
                     <span ><input  [(ngModel)]="data['choix']" type="checkbox"   ></span>
@@ -129,10 +129,12 @@ ligne Details :
             </tbody>
 
             <tbody *ngIf="subforModeChoix == 'choice'"  >
+
             <tr *ngFor="let data of choiceDataValidate" >
+
                 <td *ngFor="let fld of subfield" >
                     <span *ngIf="fld.fieldNature == 0">{{data[fld.fieldEntityName]}}</span>
-                    <span *ngIf="fld.fieldNature == 1">{{data[0][fld.fieldEntityName][fld.fieldTargetEntityId.entityDisplayfield]}}</span>
+                    <span *ngIf="fld.fieldNature == 1">{{cleanData(data,fld)}}</span>
                 </td>
 
             </tr>
