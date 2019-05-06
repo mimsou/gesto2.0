@@ -3190,6 +3190,7 @@ class managerController extends FOSRestController
 
         $expression->expression = $this->resolve_inp_expression($expression->expression, $req);
 
+
         $expression->expression = $this->resolve_dim_expression($expression->expression, $dim);
 
         $expression->expression = $this->resolve_get_expression($expression->expression, $entity, $type, $dim, $id);
@@ -3198,6 +3199,7 @@ class managerController extends FOSRestController
         $expression->expression = $this->resolve_get_where_expression($expression->expression, $entity, $type, $dim, $id);
 
         $expression->expression = $this->resolve_php_expression($expression->expression, $entity, $type, $dim, $id);
+
 
 
         if ($type == "float") {
@@ -3676,6 +3678,7 @@ class managerController extends FOSRestController
             $qb = $qb->andWhere($where);
         } else {
             $qb = $qb->where($where);
+            
         }
 
 

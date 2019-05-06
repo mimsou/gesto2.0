@@ -100,7 +100,6 @@ export class ListComponent implements OnInit {
 
     actionInProcess(actId){
         var exist = false;
-        console.log(this.process )
         for(let act of this.process[0].actions){
             if(act.actionId == actId){exist = true;}
         }
