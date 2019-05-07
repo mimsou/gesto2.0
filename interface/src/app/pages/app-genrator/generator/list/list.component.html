@@ -31,7 +31,7 @@
             <tr *ngFor="let data of listData">
                 <td *ngFor="let fld of field">
                     <span *ngIf="fld.fieldType !== 'datetime' && !isStepperField(fld)" >{{data[fld.fieldEntityName]}}</span>
-                    <span *ngIf="fld.fieldType == 'datetime' && !isStepperField(fld)" >{{data[fld.fieldEntityName] | date:'dd/MM/yyyy' }}</span>
+                    <span *ngIf="fld.fieldType == 'datetime' && !isStepperField(fld) && data[fld.fieldEntityName]!='-'" >{{data[fld.fieldEntityName] | date:'dd/MM/yyyy' }}</span>
                     <span *ngIf="fld.fieldType != 'datetime' && isStepperField(fld)" >{{data[fld.fieldEntityName] | step:step }}</span>
                 </td>
                 <td *ngIf="getStepActionCount(data) > 0">

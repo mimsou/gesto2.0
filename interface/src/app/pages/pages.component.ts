@@ -33,7 +33,7 @@ export class PagesComponent {
             }
             this.menu.push(men);
         }
-        console.log(this.menu);
+
 
     }
 

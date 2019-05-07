@@ -42,7 +42,7 @@ export class GeneratorComponent implements OnInit {
 
     ngOnInit() {
         this._activatedRoute.queryParams.subscribe(
-            params => console.log('queryParams', this.getProcess(params['processId'])));
+            params =>   this.getProcess(params['processId']));
 
     }
 
@@ -52,7 +52,7 @@ export class GeneratorComponent implements OnInit {
 
     init(process) {
         this.process = process;
-        console.log(this.process)
+
         this.setMainEntity();
         $(".formWarp").switchClass("showElement", "hideElement", 50);
         $(".listWarp").addClass("col-md-12");
@@ -86,9 +86,9 @@ export class GeneratorComponent implements OnInit {
                 }
             }
         }
-        console.log(this.user);
+
         this.listCompenent.initList(this.mainList, this.mainEntity, this.process[0].steps, this.mainCreateAction, this.process, this.user);
-        //this.formComponent.initAction(this.mainCreateAction, this.process.steps,null,this.user);
+
 
     }
 
@@ -96,7 +96,7 @@ export class GeneratorComponent implements OnInit {
         var userRole = this.user.roles;
         for (let rl of role) {
             for (let rls of userRole) {
-                console.log("rl",rls,rl.roleLibelle)
+
                 if (rls == rl.roleLibelle.toUpperCase()) {
                     return true;
                 }

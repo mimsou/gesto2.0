@@ -71,7 +71,6 @@ export class ListComponent implements OnInit {
     getListfield() {
         for (let fld of this.list.field) {
             if (fld.fieldEntity.entityId == this.entity.entityId) {
-                console.log(fld)
                 this.field.push(fld);
             }
         }
@@ -135,7 +134,6 @@ export class ListComponent implements OnInit {
     refrechListData(filter) {
 
         var param = new Object();
-        console.log(this.dimfilter);
         param.id = this.list.listId;
         param.dimfilter =  this.dimfilter;
         this.manager.getDatalist(param).subscribe(list =>this.setData(list) );
@@ -166,7 +164,6 @@ export class ListComponent implements OnInit {
 
     setDemFilter($event) {
         this.dimfilter = $event;
-        console.log("dimset", this.dimfilter)
         this.refrechListData();
     }
 
