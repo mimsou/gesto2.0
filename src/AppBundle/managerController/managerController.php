@@ -5,6 +5,7 @@ namespace AppBundle\managerController;
 use AppBundle\Annotation\ActionName;
 use AppBundle\Entity\GestAccessPath;
 use AppBundle\Entity\GestDataAccess;
+use AppBundle\Entity\GestJoinRoutes;
 use AppBundle\Entity\GestRoleData;
 use AppBundle\Entity\GestActions;
 use AppBundle\Entity\GestActionsRegle;
@@ -39,6 +40,7 @@ class managerController extends FOSRestController
 
     private $foundedRoute = array();
     private $routecount = 0;
+    private $currentProcess;
 
 
     /**
@@ -430,7 +432,15 @@ class managerController extends FOSRestController
 
         }
 
-        return $menu;
+        $finalemenu = array();
+
+        foreach ($menu as $key => $itemmenu) {
+            if (!empty($itemmenu->children)) {
+                array_push($finalemenu, $menu[$key]);
+            };
+        }
+
+        return $finalemenu;
 
     }
 
@@ -2371,6 +2381,9 @@ class managerController extends FOSRestController
 
         $process = $list->getListProcess();
 
+        $this->currentProcess = $process;
+
+
         $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($list->getListEntityName());
 
         $entEntityName = $entity->getEntityEntity();
@@ -2386,6 +2399,22 @@ class managerController extends FOSRestController
         $qb = $qb->select('a');
 
         $qb = $qb->from($fullentityName, 'a');
+
+        if ($param->mode == "form") {
+            $parententity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
+            $relation = $this->getDoctrine()
+                ->getRepository('AppBundle:GestRelations')
+                ->findOneBy(
+                    array(
+                        "relationsTable" => $parententity,
+                        "relationEntitie" => $entity,
+                    )
+                );
+
+            $qb = $qb->addSelect("IDENTITY(a." . $relation->getRelationKey() . ")");
+
+        }
+
 
         $alias = "b";
 
@@ -2425,6 +2454,8 @@ class managerController extends FOSRestController
 
         $whereArray = array();
 
+        $allroute = array();
+
         if (property_exists($param, "dimfilter")) {
 
             $rel = array();
@@ -2434,15 +2465,23 @@ class managerController extends FOSRestController
                     $relconfig = $this->getRelationEntityConfig($entity, $dimentity);
                     $prevalias = "";
 
-                    foreach ($relconfig as $key => $relroute) {
+                    $relconffiltred = $this->_route_filter_conf($allroute, $relconfig);
+
+                    if (!$this->_route_conf_exist($allroute, $relconffiltred[1])) {
+                        if (!empty($relconffiltred[1])) {
+                            array_push($allroute, $relconfig);
+
+                            foreach ($relconfig as $key => $relroute) {
 
 
-                        if ($key != 1) {
-                            $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
-                        } else {
-                            $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+                                if ($key != 1) {
+                                    $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
+                                } else {
+                                    $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+                                }
+                                $prevalias = $relroute["al"];
+                            }
                         }
-                        $prevalias = $relroute["al"];
                     }
 
                     if (!in_array($entdim->param->entityKey, $nofilterArray)) {
@@ -2466,18 +2505,29 @@ class managerController extends FOSRestController
                         $relconfig = $this->getRelationEntityConfig($entity, $dimentity);
                         $prevalias = "";
 
-                        foreach ($relconfig as $key => $relroute) {
+                        $relconffiltred = $this->_route_filter_conf($allroute, $relconfig);
 
-                            $qb = $qb->addSelect($relroute["al"]);
-                            if ($key != 1) {
-                                $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
+                        if (!$this->_route_conf_exist($allroute, $relconffiltred[1])) {
+                            if (!empty($relconffiltred[1])) {
 
-                            } else {
-                                $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+                                array_push($allroute, $relconfig);
 
+
+                                foreach ($relconfig as $key => $relroute) {
+
+                                    $qb = $qb->addSelect($relroute["al"]);
+                                    if ($key != 1) {
+                                        $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
+
+                                    } else {
+                                        $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
+
+                                    }
+
+                                    $prevalias = $relroute["al"];
+                                }
                             }
 
-                            $prevalias = $relroute["al"];
                         }
                         if (!in_array($field->getFieldEntityName(), $nofilterArray)) {
                             array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
@@ -2607,9 +2657,15 @@ class managerController extends FOSRestController
 
         }
 
+        if ($param->mode == "form") {
+            $qb = $qb->addSelect("IDENTITY(a." . $relation->getRelationKey() . ")");
+            $qb = $qb->andWhere("a." . $relation->getRelationKey() . " is NULL");
+        }
+
         $qb = $qb->distinct("a");
 
-        // die(var_dump( $qb->getQuery()->getSql()));
+        //die(var_dump( $qb->getQuery()->getSql()));
+
         $result = $qb->getQuery()->getArrayResult();
 
 
@@ -2639,6 +2695,8 @@ class managerController extends FOSRestController
                 }
             }
 
+            $id = $rs[0][$entity->getEntityKey()];
+
 
             if ($passed) {
 
@@ -2650,7 +2708,6 @@ class managerController extends FOSRestController
                         $params->expression = $expression;
                         $params->type = $fld->getFieldType();
                         $params->entity = $entity;
-                        $id = $rs[0][$entity->getEntityKey()];
                         $rs = $this->_getExpressionRestult($params, $request, $param->dimfilter, $id);
                         $result[$key][0][$fld->getFieldEntityName()] = $rs;
                         $result[$key][$fld->getFieldEntityName()] = $rs;
@@ -2697,6 +2754,15 @@ class managerController extends FOSRestController
     private function getRelationEntityConfig($mainent, $searchent)
     {
 
+        $route = $this->get_route($mainent->getEntityId(), $searchent->getEntityId());
+
+
+        if ($route !== false) {
+            $this->foundedRoute = json_decode($route->getRoutePath(), true);
+            unset($this->foundedRoute[0]);
+            return $this->foundedRoute;
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
@@ -2714,6 +2780,7 @@ class managerController extends FOSRestController
         array_push($relconfig, array(
             "rel" => "main",
             "key" => "",
+            "id" => $mainent->getEntityId(),
             "ent" => $mainent->getEntityEntity()
         ));
 
@@ -2723,6 +2790,7 @@ class managerController extends FOSRestController
         return $this->foundedRoute;
 
     }
+
 
     private function traceRoute($relconfig, $mainent, $searchent, $rels)
     {
@@ -2741,8 +2809,19 @@ class managerController extends FOSRestController
                     "found" => "true"
                 ));
 
-                $this->foundedRoute = $relconfig;
-                break;
+                $path = json_encode($relconfig, true);
+
+                $route = $this->get_route($relconfig[0]["id"], $searchent, $path);
+
+                if ($route == false) {
+                    $this->save_route($relconfig[0]["id"], $searchent, $path);
+                    $this->foundedRoute = $relconfig;
+                    break;
+                } else {
+                    $this->foundedRoute = $relconfig;
+                    break;
+                }
+
 
             } else if (($rel["relationEntitie"]["entityId"] == $searchent) && ($rel["relationsTable"]["entityId"] == $mainent)) {
 
@@ -2752,10 +2831,22 @@ class managerController extends FOSRestController
                     "ent" => $rel["relationEntitie"]["entityEntity"],
                     "al" => $this->uniq_char(),
                     "found" => "true"
-                ));
+                ));;
 
-                $this->foundedRoute = $relconfig;
-                break;
+                $path = json_encode($relconfig, true);
+
+                $route = $this->get_route($relconfig[0]["id"], $searchent, $path);
+
+                if ($route == false) {
+                    $this->save_route($relconfig[0]["id"], $searchent, $path);
+                    $this->foundedRoute = $relconfig;
+                    break;
+                } else {
+
+                    $this->foundedRoute = $relconfig;
+                    break;
+
+                }
 
             } else if (($rel["relationEntitie"]["entityId"] == $mainent) && !$this->entity_in_array($relconfig, $rel["relationsTable"])) {
 
@@ -2788,6 +2879,58 @@ class managerController extends FOSRestController
     }
 
 
+    private function get_route($entity, $searchentity, $path = "")
+    {
+
+        if (empty($path)) {
+            $route = $this->getDoctrine()->getRepository('AppBundle:GestJoinRoutes')->findOneBy(
+                array(
+                    "routeStartEntity" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($entity),
+                    "routeEndEntity" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($searchentity),
+                    "routeProcess" => $this->currentProcess,
+                    "routeState" => 1
+                )
+            );
+        } else {
+            $route = $this->getDoctrine()->getRepository('AppBundle:GestJoinRoutes')->findBy(
+                array(
+                    "routeStartEntity" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($entity),
+                    "routeEndEntity" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($searchentity),
+                    "routeProcess" => $this->currentProcess,
+                    "routePath" => $path,
+                    "routeState" => 1
+                )
+            );
+        }
+
+
+        if (!empty($route)) {
+            return $route;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    private function save_route($entity, $searchentity, $path = "")
+    {
+
+        $route = new GestJoinRoutes();
+        $route->setRouteStartEntity($this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($entity));
+        $route->setRouteEndEntity($this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($searchentity));
+        $route->setRouteProcess($this->currentProcess);
+        $route->setRoutePath($path);
+        $route->setRouteState(1);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($route);
+        $em->flush();
+
+
+    }
+
+
     private function entity_in_array($relconfig, $ent)
     {
         foreach ($relconfig as $conf) {
@@ -2797,6 +2940,73 @@ class managerController extends FOSRestController
             }
         }
         return false;
+    }
+
+
+    /**
+     * @Rest\Patch("/getjoindata/")
+     */
+
+    public function getJoindataAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $qb = $qb->select('a');
+
+        $qb = $qb->from('AppBundle:GestJoinRoutes', 'a');
+
+        $qb = $qb->where('a.routeStartEntity = :dep')->setParameter('dep', $param->entDepart);
+
+        $qb = $qb->andWhere('a.routeEndEntity = :arv')->setParameter('arv', $param->entArrive);
+
+        $qb = $qb->andWhere('a.routeProcess = :prs')->setParameter('prs', $param->process->processId);
+
+        $result = $qb->getQuery()->getArrayResult();
+
+        foreach ($result as $key => $rs) {
+            $result[$key]["routePath"] = json_decode($result[$key]["routePath"], true);
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * @Rest\Patch("/setjoin/")
+     */
+
+    public function setJoinAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        foreach ($param->joins as $jn) {
+
+            $join = $this->getDoctrine()->getRepository('AppBundle:GestJoinRoutes')->find($jn->routeId);
+            $join->setRouteState(0);
+            $em->persist($join);
+            $em->flush();
+
+
+        }
+
+        $join = $this->getDoctrine()->getRepository('AppBundle:GestJoinRoutes')->find($param->join->routeId);
+        $join->setRouteState(1);
+        $em->persist($join);
+        $em->flush();
+
+
+        $res = json_encode(array("error" => false, "message" => "join updated Successfully"));
+        return new View($res, Response::HTTP_OK);
+
     }
 
 
@@ -2812,6 +3022,8 @@ class managerController extends FOSRestController
         $id = $param->id;
 
         $action = $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($param->action->actionId);
+
+        $this->currentProcess = $action->getActionProcess();
 
         $fullentityName = "AppBundle:" . $action->getActionEntity()->getEntityEntity();
 
@@ -2942,13 +3154,46 @@ class managerController extends FOSRestController
         }
 
 
-
         $res = array("entityData" => $result, "subEntityData" => $resultsub);
 
         return $res;
 
     }
 
+
+    /**
+     * @Rest\Patch("/getgenfield/")
+     */
+
+    public function getGenfieldAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $action = $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($param->action->actionId);
+
+        $this->currentProcess = $action->getActionProcess();
+
+        if (property_exists($param, "dimfilter")) {
+            $dimfilter = $param->dimfilter;
+        } else {
+            $dimfilter = array();
+        }
+
+
+        $params = new \stdClass();
+        $params->expression = $param->genfield->updateExpression;;
+        $params->type = $param->genfield->updateFieldId->fieldType;
+        $params->entity = $param->entity;
+        $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
+
+        if($param->genfield->updateFieldId->fieldType!="datetime"){
+           return $rs;
+        }else{
+            return $rs->format("d-m-Y") ;
+        }
+
+    }
 
     /**
      * @Rest\Post("/doaction/")
@@ -2959,6 +3204,10 @@ class managerController extends FOSRestController
 
 
         $param = json_decode($request->getContent());
+
+        $action = $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($param->action->actionId);
+
+        $this->currentProcess = $action->getActionProcess();
 
         $entity = $param->entity->entityEntity;
 
@@ -2979,6 +3228,7 @@ class managerController extends FOSRestController
             $params->type = "boolean";
             $params->entity = $param->entity;
             $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
+
             if (!$rs) {
                 $res = json_encode(array("error" => true, "message" => $message));
                 return new View($res, Response::HTTP_OK);
@@ -3190,6 +3440,7 @@ class managerController extends FOSRestController
 
         $expression->expression = $this->resolve_inp_expression($expression->expression, $req);
 
+        $expression->expression = $this->resolve_sysdate_expression($expression->expression, $req);
 
         $expression->expression = $this->resolve_dim_expression($expression->expression, $dim);
 
@@ -3198,8 +3449,9 @@ class managerController extends FOSRestController
 
         $expression->expression = $this->resolve_get_where_expression($expression->expression, $entity, $type, $dim, $id);
 
-        $expression->expression = $this->resolve_php_expression($expression->expression, $entity, $type, $dim, $id);
+        $expression->expression = $this->resolve_dql_expression($expression->expression, $entity, $type, $dim, $id);
 
+        $expression->expression = $this->resolve_php_expression($expression->expression, $entity, $type, $dim, $id);
 
 
         if ($type == "float") {
@@ -3250,7 +3502,7 @@ class managerController extends FOSRestController
             }
 
             $timestamp = $rs;
-            $datetimeFormat = 'Y-m-d H:i:s';
+            $datetimeFormat = 'Y-m-d';
             $date = new \DateTime();
             $date->setTimestamp($timestamp);
             $rs = $date;
@@ -3262,7 +3514,12 @@ class managerController extends FOSRestController
             $rs = "";
 
             foreach ($arrstr as $str) {
+
+                $str = str_replace("<<", "<", $str);
+                $str = str_replace(">>", ">", $str);
+
                 eval("\$streval =" . $str . ";");
+
                 $rs .= $streval;
             }
 
@@ -3274,6 +3531,34 @@ class managerController extends FOSRestController
         return $rs;
 
     }
+
+
+    private function resolve_sysdate_expression($expr, $req)
+    {
+
+
+        preg_match_all("/sysdate(\(((?>[^()]+|(?1))*)\))/", $expr, $matchinps);
+
+        foreach ($matchinps[2] as $key => $conf) {
+
+            $inprs = array();
+
+            $inprs["patern"] = $matchinps[0][$key];
+
+            $result = $this->_get_sysdate_result($conf, $req);
+
+            if ($result !== null) {
+                $inprs["result"] = $result;
+                $expr = str_replace($inprs["patern"], $inprs["result"], $expr);
+            } else {
+                $expr = str_replace($inprs["patern"], null, $expr);
+            }
+
+        }
+
+        return $expr;
+    }
+
 
     private function resolve_inp_expression($expr, $req)
     {
@@ -3299,6 +3584,20 @@ class managerController extends FOSRestController
         }
 
         return $expr;
+    }
+
+
+    private function _get_sysdate_result($conf, $rq)
+    {
+
+        preg_match_all("/dim(\(((?>[^()]+|(?1))*)\))/", $conf, $matchfld);
+
+        $date = $now = new \DateTime("NOW");
+
+        $datestring =  $date->getTimestamp();
+
+        return $datestring;
+
     }
 
     private function _get_inp_result($conf, $rq)
@@ -3400,6 +3699,35 @@ class managerController extends FOSRestController
     }
 
 
+    private function resolve_dql_expression($expr, $entity, $type, $dim, $id)
+    {
+
+        preg_match_all("/dql(\(((?>[^()]+|(?1))*)\))/", $expr, $matchs);
+
+        foreach ($matchs[2] as $key => $conf) {
+            $get = array();
+
+            $get["patern"] = $matchs[0][$key];
+
+            $result = $this->_get_dql_result($entity, $conf, $dim, $id);
+
+            if ($result !== null) {
+                $get["result"] = $result;
+            } else {
+                $get["result"] = 0;
+            }
+            if ($type == "string") {
+                $expr = str_replace($get["patern"], "(string)'" . $get["result"] . "'", $expr);
+            } else {
+                $expr = str_replace($get["patern"], $get["result"], $expr);
+            }
+        }
+
+        return $expr;
+
+    }
+
+
     private function resolve_get_expression($expr, $entity, $type, $dim, $id)
     {
 
@@ -3409,7 +3737,7 @@ class managerController extends FOSRestController
         foreach ($match[2] as $key => $conf) {
             $get = array();
             $get["patern"] = $match[0][$key];
-            $where = $match[5][$key];
+
 
             $result = $this->_get_result($entity, $conf, $type, $dim, $id);
             //if($expr !="get([20])")
@@ -3465,10 +3793,28 @@ class managerController extends FOSRestController
         $ex = str_replace('"', "", $field);
         $arrstr = explode(".", $ex);
         $rsex = "";
+
         foreach ($arrstr as $str) {
             $rsex .= $str;
         }
+
         return eval($rsex);
+
+    }
+
+
+    private function _get_dql_result($ent, $field, $dim, $id)
+    {
+
+        $ex = str_replace('"', "", $field);
+
+        $ex = str_replace('id', $id, $ex);
+
+
+        $query = $this->getDoctrine()->getManager()->createQuery($ex)->getArrayResult();
+
+        return $query[0][1];
+
     }
 
 
@@ -3482,6 +3828,8 @@ class managerController extends FOSRestController
 
         $field = $this->resolve_get_where_expression($field, $ent, $type, $dim, $id);
 
+        $field = $this->resolve_dql_expression($field, $ent, $type, $dim, $id);
+
         $field = $this->resolve_php_expression($field, $ent, $type, $dim, $id);
 
 
@@ -3490,6 +3838,8 @@ class managerController extends FOSRestController
         $where = $this->resolve_get_expression($where, $ent, $type, $dim, $id);
 
         $where = $this->resolve_get_where_expression($where, $ent, $type, $dim, $id);
+
+        $where = $this->resolve_dql_expression($where, $ent, $type, $dim, $id);
 
         $where = $this->resolve_php_expression($where, $ent, $type, $dim, $id);
 
@@ -3515,6 +3865,8 @@ class managerController extends FOSRestController
 
         $allroute = array();
 
+        $debug = array();
+
         foreach ($matchfld[0] as $key => $conffld) {
 
             $fieldconf = array();
@@ -3527,8 +3879,10 @@ class managerController extends FOSRestController
 
 
             if ($entity->getentityId() != $fld->getFieldEntity()->getentityId()) {
+                array_push($debug, array($entity->getEntityId(), $fld->getFieldEntity()->getEntityId()));
 
                 $relconf = $this->getRelationEntityConfig($entity, $fld->getFieldEntity());
+
 
                 $fieldconf["fieldJoinConf"] = $relconf;
 
@@ -3568,6 +3922,7 @@ class managerController extends FOSRestController
 
         }
 
+        //die(var_dump($debug));
 
         $wherarray = array();
 
@@ -3600,7 +3955,6 @@ class managerController extends FOSRestController
                     };
                 }
             }
-
 
             if ($entity->getEntityEntity() == $entwhere) {
                 $wfieldconf["wfieldalias"] = "a";
@@ -3646,7 +4000,6 @@ class managerController extends FOSRestController
                 }
             }
 
-
             array_push($wherarray, $wfieldconf);
 
 
@@ -3656,6 +4009,7 @@ class managerController extends FOSRestController
         foreach ($fldlist as $fld) {
             $field = str_replace($fld["fieldReplacementPhrase"], $fld["fieldName"], $field);
         }
+
 
         foreach ($wherarray as $wherfld) {
             $rep = $wherfld["wfieldalias"] . "." . $wherfld["wfieldEntityName"];
@@ -3678,12 +4032,13 @@ class managerController extends FOSRestController
             $qb = $qb->andWhere($where);
         } else {
             $qb = $qb->where($where);
-            
+
         }
+
+        $rs = $qb->getQuery()->getSql();
 
 
         $rs = $qb->getQuery()->getArrayResult();
-        // die($rs);
 
         return $rs[0]["rs"];
 
@@ -3701,9 +4056,9 @@ class managerController extends FOSRestController
 
         $field = $this->resolve_get_where_expression($field, $ent, $type, $dim, $id);
 
-        $field = $this->resolve_php_expression($field, $ent, $type, $dim, $id);
+        $field = $this->resolve_dql_expression($field, $ent, $type, $dim, $id);
 
-        //if($expr !="get([20])")
+        $field = $this->resolve_php_expression($field, $ent, $type, $dim, $id);
 
 
         if (isset($ent->entityId)) {
@@ -4053,7 +4408,10 @@ class managerController extends FOSRestController
 
         $blank = array(array("id" => "", "text" => "--"));
 
-        $data = array_merge($blank, $data);
+        if (count($data) > 1) {
+            $data = array_merge($blank, $data);
+        }
+
 
         return array("data" => $data);
 
@@ -4288,7 +4646,6 @@ class managerController extends FOSRestController
         return new View("l'access a été mise à jour", Response::HTTP_OK);
 
     }
-
 
 
 }

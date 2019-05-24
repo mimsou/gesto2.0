@@ -1,6 +1,6 @@
-﻿import {Component, EventEmitter, OnInit, Output, Input, ViewChild} from '@angular/core';
+﻿import {Component, EventEmitter, OnInit, Output, Input, ViewChild, KeyValueDiffers, DoCheck} from '@angular/core';
 import {ManagerService} from "../../../../@core/data/manager.service";
-import { DatePipe } from '@angular/common';
+import {DatePipe} from '@angular/common';
 import {
     GestAccessPath,
     GestMenu,
@@ -12,6 +12,7 @@ import {
     List,
     Dim
 } from "../../../../@core/data/user.model";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
     selector: 'ngx-form',
@@ -19,7 +20,7 @@ import {
     styleUrls: ['./form.component.scss'],
     providers: [DatePipe]
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, DoCheck {
 
     listMainentityform: string = "Loading main Form .. ";
     listSubEntityform: string = "Loading Sub Form .. ";
@@ -41,14 +42,87 @@ export class FormComponent implements OnInit {
     subforModeChoix: string = "";
     choiceData: any;
     choiceDataValidate: any = [];
-    dimFielter:any;
-    FormMessage:string="";
+    dimFielter: any;
+    FormMessage: string = "";
+    genfield: any = [];
+    differ;
 
     @ViewChild('dimentionchoice') DimComponentChoice: any;
 
     @Output() refrechMainView: EventEmitter<any> = new EventEmitter();
 
-    constructor(private manager: ManagerService,private datePipe: DatePipe) {
+    constructor(private manager: ManagerService, private datePipe: DatePipe, differs: KeyValueDiffers) {
+        this.differ = differs.find({}).create(null);
+    }
+
+    ngDoCheck() {
+
+        var changes = this.differ.diff(this.actionData);
+        if (changes) {
+            for (let gfield of this.genfield) {
+                for (let actfield of this.action.updateField) {
+                    if (gfield.fieldId == actfield.update_field_id) {
+
+                        var param = {};
+                        param.action = this.action;
+                        param.data = this.actionData;
+                        param.entity = this.entity;
+                        param.dimfilter = this.dimFielter;
+                        param.genfield = actfield;
+
+                        if (typeof this.action.actionSubEntity != 'undefined') {
+                            param.subentity = this.subentity;
+                            param.subdata = this.actionsubdatacollection;
+                        } else {
+                            param.subdata = this.choiceDataValidate;
+                            param.subprocess = this.subprocess;
+                        }
+
+                        this.manager.getGenField(param).subscribe((res: Response) => {
+                            this.setGenfield(res, actfield)
+                        });
+
+
+                    }
+                }
+            }
+        }
+    }
+
+    triggerChange() {
+        for (let gfield of this.genfield) {
+            for (let actfield of this.action.updateField) {
+
+                if (gfield.fieldId == actfield.update_field_id) {
+
+                    var param = {};
+                    param.action = this.action;
+                    param.data = this.actionData;
+                    param.entity = this.entity;
+                    param.dimfilter = this.dimFielter;
+                    param.genfield = actfield;
+
+                    if (typeof this.action.actionSubEntity != 'undefined') {
+                        param.subentity = this.subentity;
+                        param.subdata = this.actionsubdatacollection;
+                    } else {
+                        param.subdata = this.choiceDataValidate;
+                        param.subprocess = this.subprocess;
+                    }
+
+                    this.manager.getGenField(param).subscribe((res: Response) => {
+                        this.setGenfield(res, actfield)
+                    });
+
+
+                }
+            }
+        }
+    }
+
+    setGenfield(res, actfield) {
+
+        this.actionData[actfield.updateFieldId.fieldEntityName] = res;
     }
 
     ngOnInit() {
@@ -57,7 +131,12 @@ export class FormComponent implements OnInit {
 
     initAction(action, steps, data, dim) {
 
-          this.dimFielter =  dim;
+        this.dimFielter = dim;
+
+        this.choiceData = [];
+
+        this.choiceDataValidate = [];
+
 
         if (typeof data !== 'undefined' && data !== null) {
             var param = {};
@@ -69,8 +148,8 @@ export class FormComponent implements OnInit {
         this.subforMode = 'add';
         this.field = [];
         this.subfield = [];
-        this.actionData = {};
-        this.actionsubData = {};
+        this.genfield = [];
+
         this.actionsubdatacollection = [];
         this.action = action;
         this.steps = steps;
@@ -133,41 +212,56 @@ export class FormComponent implements OnInit {
     getDatachoice() {
 
         var param = new Object();
-        console.log("acttt", this.action)
+
         param.id = this.subprocess[0].list[0].listId;
         param.dimfilter = this.dimfilter;
         param.step = this.action.actionFromStep;
+        param.mode = "form";
+        param.entity = this.entity;
         this.manager.getDatalist(param).subscribe(list => this.choiceData = list);
 
     }
 
     setActionfield() {
+
         for (let vfld of this.action.viewField) {
+
             if (this.action.actionEntity.entityId == vfld.fieldEntity.entityId) {
+
                 var isEditble = true;
                 var isExpression = false;
+
                 for (let ufld of  this.action.updateField) {
                     if (ufld.updateFieldId.fieldId == vfld.fieldId) {
                         vfld.require = ufld.updateRequire;
                         isEditble = false;
                         if (typeof ufld.updateExpression !== "undefined") {
-                            console.log("yes");
                             isExpression = true;
                         }
                     }
                 }
 
-
                 vfld.isEditeble = (isEditble || isExpression);
+
                 if (isExpression) {
-                    this.actionData[vfld.fieldEntityName] = '-gen-';
+                    this.genfield.push(vfld);
                 } else {
-                    this.actionData[vfld.fieldEntityName] = "";
+                    if (vfld.fieldNature == 1) {
+                        if (typeof this.actionData[vfld.fieldEntityName] == "undefined") {
+                            this.actionData[vfld.fieldEntityName] = "";
+                        }
+                    } else {
+                        this.actionData[vfld.fieldEntityName] = "";
+                    }
                 }
 
                 this.field.push(vfld);
+
             }
         }
+
+
+        this.triggerChange();
     }
 
     setActionSubFieldChoice() {
@@ -195,7 +289,6 @@ export class FormComponent implements OnInit {
                 }
                 vfld.isEditeble = isEditble;
                 vfld.isExpression = isExpression;
-
                 this.actionsubData[vfld.fieldEntityName] = new Array();
                 this.subfield.push(vfld);
             }
@@ -207,7 +300,7 @@ export class FormComponent implements OnInit {
         var error = false;
         for (let fld of this.subfield) {
             fld = this.validationRequireField(fld, this.actionsubData[fld.fieldEntityName]);
-            console.log("msg", fld.errormsg);
+
             if (fld.errormsg == "") {
                 fld.error = false;
                 if (fld.fieldNature != 1) {
@@ -257,6 +350,7 @@ export class FormComponent implements OnInit {
 
         } else {
             if (conf.fieldNature == 1) {
+
                 if (typeof data.value !== 'undefined') {
                     if (data.value !== "") {
                         return this.validationTypeField(conf, data.value);
@@ -330,7 +424,9 @@ export class FormComponent implements OnInit {
 
         var error = false;
 
+
         for (let fld of this.field) {
+            console.log("do", this.actionData[fld.fieldEntityName]);
             fld = this.validationRequireField(fld, this.actionData[fld.fieldEntityName]);
             if (fld.errormsg == "") {
                 fld.error = false;
@@ -341,11 +437,11 @@ export class FormComponent implements OnInit {
         }
 
         if (typeof this.action.actionSubEntity !== 'undefined') {
-            if (this.actionsubdatacollection.length == 0 && this.action.actionLevelDepth !==1) {
+            if (this.actionsubdatacollection.length == 0 && this.action.actionLevelDepth !== 1) {
                 error = true;
             }
         } else {
-            if (this.choiceDataValidate.length == 0 && this.action.actionLevelDepth !==1) {
+            if (this.choiceDataValidate.length == 0 && this.action.actionLevelDepth !== 1) {
                 error = true;
             }
         }
@@ -356,7 +452,7 @@ export class FormComponent implements OnInit {
             param.action = this.action;
             param.data = this.actionData;
             param.entity = this.entity;
-            param.dimfilter =  this.dimFielter;
+            param.dimfilter = this.dimFielter;
 
             if (typeof this.action.actionSubEntity != 'undefined') {
                 param.subentity = this.subentity;
@@ -366,20 +462,22 @@ export class FormComponent implements OnInit {
                 param.subprocess = this.subprocess;
             }
 
-            this.manager.doAction(param).subscribe((res: Response) => {this.callbackAction(res)});
+            this.manager.doAction(param).subscribe((res: Response) => {
+                this.callbackAction(res)
+            });
 
         }
     }
 
-    callbackAction(action){
-       var res = JSON.parse(action);
+    callbackAction(action) {
+        var res = JSON.parse(action);
 
-       if(res.error == true){
-           this.FormMessage = "Régles : "+res.message;
-       }else{
-           this.FormMessage = "";
-           this.refrechMainView.emit(action);
-       }
+        if (res.error == true) {
+            this.FormMessage = "Régles : " + res.message;
+        } else {
+            this.FormMessage = "";
+            this.refrechMainView.emit(action);
+        }
     }
 
 
@@ -389,15 +487,15 @@ export class FormComponent implements OnInit {
 
     populateform(data) {
 
-        //console.log("actdata",data["entityData"][0]);
+
         this.actionData[this.entity.entityKey] = data["entityData"][0][this.entity.entityKey];
 
         for (let fld of this.field) {
             if (fld.fieldNature !== 1) {
-                if(fld.fieldType!=="datetime"){
+                if (fld.fieldType !== "datetime") {
                     this.actionData[fld.fieldEntityName] = data["entityData"][0][fld.fieldEntityName];
-                }else{
-                    this.actionData[fld.fieldEntityName] = this.datePipe.transform(data["entityData"][0][fld.fieldEntityName],"dd-MM-yyyy");
+                } else {
+                    this.actionData[fld.fieldEntityName] = this.datePipe.transform(data["entityData"][0][fld.fieldEntityName], "dd-MM-yyyy");
                 }
             } else {
                 this.actionData[fld.fieldEntityName] = new Object();
@@ -417,9 +515,9 @@ export class FormComponent implements OnInit {
 
                 for (let fld of this.subfield) {
                     if (fld.fieldNature !== 1) {
-                        if(fld.fieldType!=="datetime"){
-                        subdat[fld.fieldEntityName] = dat[0][fld.fieldEntityName];
-                        }else{
+                        if (fld.fieldType !== "datetime") {
+                            subdat[fld.fieldEntityName] = dat[0][fld.fieldEntityName];
+                        } else {
                             subdat[fld.fieldEntityName] = this.datePipe.transform(dat[0][fld.fieldEntityName]);
                         }
                     } else {
@@ -461,10 +559,10 @@ export class FormComponent implements OnInit {
         return count;
     }
 
-    cleanData(data,fld){
-        console.log("dat",data);
-        if(data[0][fld.fieldEntityName]){
-        return data[0][fld.fieldEntityName][fld.fieldTargetEntityId.entityDisplayfield];
+    cleanData(data, fld) {
+
+        if (data[0][fld.fieldEntityName]) {
+            return data[0][fld.fieldEntityName][fld.fieldTargetEntityId.entityDisplayfield];
         }
         return "-";
     }

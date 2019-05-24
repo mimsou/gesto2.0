@@ -16,12 +16,19 @@
     <div inlineelement style="font-size: 1rem;" >
       {{fldDimData.param.fieldInterfaceName}}
     </div>
-    <div inlineelement *ngIf="fldDimData.param.fieldType !== 'datetime'" >
+    <div inlineelement *ngIf="fldDimData.param.fieldType !== 'datetime' && fldDimData.param.fieldEntityName != steppedField" >
       <input (keyup)="goToSearch($event)" nbInput  fieldSize="xsmall"  [(ngModel)]="fldDimData.data" >
     </div>
    <div inlineelement *ngIf="fldDimData.param.fieldType == 'datetime'" >
-      <input (onChange)="goToSearch($event)" nbInput [dpDayPicker]="datePickerConfig"  fieldSize="xsmall"  [(ngModel)]="fldDimData.data" >
+      <input (Change)="goToSearch($event)" nbInput [dpDayPicker]="datePickerConfig"  fieldSize="xsmall"  [(ngModel)]="fldDimData.data" >
   </div>
+
+    <div inlineelement *ngIf="fldDimData.param.fieldEntityName == steppedField"  >
+     <select (change)="goToSearch($event)" nbInput    fieldSize="xsmall"  [(ngModel)]="fldDimData.data" >
+          <option [value]="" >-</option>
+          <option *ngFor="let stp of steps" [value]="stp.stepId" >{{stp.stepName}}</option>
+     </select>
+    </div>
 
 
 

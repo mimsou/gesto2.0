@@ -168,7 +168,7 @@
 
                                     <select (click)="stopClick($event)" (change)="garantAccess($event)">
                                         <option value="0"> Pas d'access</option>
-                                        <option value="1"> in </option>
+                                        <option value="1"> in</option>
                                         <option value="2"> not in (Tous sauf)</option>
                                     </select>
                                 </div>
@@ -187,7 +187,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr *ngFor="let datas of accessData" (click)="roleDataAccess(datas,$event)"  [ngClass]="{'selectedListr' : roleInRoleData(datas.role)  }">
+                                    <tr *ngFor="let datas of accessData" (click)="roleDataAccess(datas,$event)"
+                                        [ngClass]="{'selectedListr' : roleInRoleData(datas.role)  }">
                                         <td *ngFor="let datafield of getDataAccessField(dataSelectedEntity)">
                                             {{datas[datafield.fieldEntityName]}}
                                         </td>
@@ -1112,6 +1113,70 @@
                                 <nb-accordion-item-body>
 
                                 </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='process'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    Process {{selectedProcess.processDesignation}}
+                                </nb-accordion-item-header>
+
+                                <nb-accordion-item-body>
+
+
+                                </nb-accordion-item-body>
+
+                            </nb-accordion-item>
+
+                            <nb-accordion-item   full-heigth full-heigth-all-child>
+                                <nb-accordion-item-header>
+                                    Jointure
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body   >
+
+
+                                    Entitée départ : <select (click)="stopClick($event)"
+                                                             (change)="getJoin($event,'d')">
+                                    <option [value]="0">-</option>
+                                    <option *ngFor="let entitie of entities" [value]="entitie.entityId">
+                                        {{entitie.entityEntity}}
+                                    </option>
+                                </select><br><br>
+
+                                    Entitée d'arrivé :
+
+                                    <select (click)="stopClick($event)" (change)="getJoin($event,'a')">
+                                        <option [value]="0">-</option>
+                                        <option *ngFor="let entitie of entities" [value]="entitie.entityId">
+                                            {{entitie.entityEntity}}
+                                        </option>
+                                    </select>
+
+
+                                </nb-accordion-item-body>
+
+                                <nb-accordion-item-body   full-heigth full-heigth-all-child>
+
+                                       <nb-list>
+
+                                            <nb-list-item *ngFor="let join of joins" (click)="setJoin(join,joins)">
+                                              <div class="row"> <div class="col-md-10"><span *ngFor="let path of join.routePath"> -> {{path.ent}} </span></div>    <div class="col-md-2"> <i colorPrimary ActionIcone
+                                                                                                                                                                             [ngClass]="{'fa-check-circle' : join.routeState == 1  }"
+                                                                                                                                                                                 class="fa "> </i></div>
+                                              </div>
+
+                                            </nb-list-item>
+
+                                       </nb-list>
+
+                                </nb-accordion-item-body>
+
                             </nb-accordion-item>
 
 

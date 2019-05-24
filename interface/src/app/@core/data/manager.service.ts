@@ -1,6 +1,7 @@
 ﻿import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiLink} from './api.link'
+import {delay} from "rxjs/internal/operators";
 
 
 @Injectable({
@@ -341,6 +342,18 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getdata/`, JSON.stringify(param));
     }
 
+    getJoinData(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getjoindata/`, JSON.stringify(param));
+    }
+
+
+    setJoin(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/setjoin/`, JSON.stringify(param));
+    }
+
+    getGenField(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getgenfield/`, JSON.stringify(param));
+    }
 
 
 }

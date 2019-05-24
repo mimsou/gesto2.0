@@ -19,7 +19,6 @@ export class ExpressionComponent implements AfterViewInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (typeof changes.value != "undefined") {
             this.init(changes.value.currentValue);
-            console.log('change', changes.value.currentValue);
         }
     }
 
@@ -60,6 +59,11 @@ export class ExpressionComponent implements AfterViewInit, OnChanges {
                     return 'f';
                 },
                 php: function (x) {
+                    if (x == undefined)
+                        throw new Error("Paramétre 'x' non définie");
+
+                    return 'f';
+                }, dql: function (x) {
                     if (x == undefined)
                         throw new Error("Paramétre 'x' non définie");
 
@@ -160,7 +164,7 @@ export class ExpressionComponent implements AfterViewInit, OnChanges {
         };
 
         this.expressionElement = $("#expressionarea").expressionBuilder(options);
-console.log("the val",this.value)
+
         if (typeof this.value !== 'undefined') {
             var tt = JSON.parse(JSON.stringify(this.value));
         }else{

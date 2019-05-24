@@ -88,6 +88,9 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     selectFrom: any = [];
     stepform: any = "";
     accessData: any;
+    entDepart: any;
+    entArrive: any;
+    joins: any;
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -158,7 +161,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
 
         var pages = new PagesRoutingModule();
-        this.menuService.RootUpdate(pages.getRoutes()).subscribe(menu => console.log("ok root"));
+        this.menuService.RootUpdate(pages.getRoutes()).subscribe(menu => this.doNthing());
         this.loadController("");
 
         /*Update route in backend*/
@@ -559,7 +562,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         if (load) {
             this.menuService.RoleAll().subscribe(role => this.setRoleOption(role));
         } else {
-            this.menuService.RoleAll().subscribe(role => console.log("no load"));
+            this.menuService.RoleAll().subscribe(role => this.doNthing());
         }
     }
 
@@ -571,13 +574,13 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         obj.text = "";
         arr.push(obj);
         for (let rl of role) {
-            console.log("dtrole", rl);
+
             var obj = new Object();
             obj.id = rl.roleId;
             obj.text = rl.roleLibelle;
             arr.push(obj);
         }
-        console.log("role", arr)
+
 
         this.dataRole = arr;
     }
@@ -594,7 +597,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         if (load) {
             this.menuService.MenuAll().subscribe(menu => this.menus = this.menufromObject(menu))
         } else {
-            this.menuService.MenuAll().subscribe(menu => console.log("no load"))
+            this.menuService.MenuAll().subscribe(menu => this.doNthing())
         }
     }
 
@@ -602,7 +605,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         if (load) {
             this.menuService.LinkAll().subscribe(link => this.link = this.menufromObject(link));
         } else {
-            this.menuService.LinkAll().subscribe(menu => console.log("no load"))
+            this.menuService.LinkAll().subscribe(menu => this.doNthing())
         }
     }
 
@@ -684,7 +687,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     }
 
-    dataRefrechData(){
+    dataRefrechData() {
 
         var param = {}
 
@@ -707,7 +710,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             param.entity = this.dataSelectedEntity
             param.mode = mode
             param.role = this.selectedrole
-            this.menuService.updateAccessData(param).subscribe(data => console.log("pos ok"));
+            this.menuService.updateAccessData(param).subscribe(data => this.doNthing());
         }
 
 
@@ -722,7 +725,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             param.entity = this.dataSelectedEntity
             param.role = this.selectedrole
             param.data = data[this.dataSelectedEntity.entityKey]
-            console.log(param);
+
             this.menuService.updateRoleAccessData(param).subscribe(data => this.dataRefrechData());
         }
 
@@ -876,6 +879,10 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     }
 
+    doNthing() {
+        return true;
+    };
+
 
     connectEntity() {
 
@@ -887,7 +894,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
                     poselm.id = $(event.el).attr("id").substring(4);
                     poselm.pos = event.pos;
                     ent.entityPos = parseInt(poselm.pos["1"] - 5) + "," + parseInt(poselm.pos[0] - 5);
-                    this.menuService.entityPos(poselm.pos, poselm.id).subscribe(schema => console.log("pos ok"));
+                    this.menuService.entityPos(poselm.pos, poselm.id).subscribe(schema => this.doNthing());
                 }.bind(this)
             })
 
@@ -969,6 +976,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.paramPanel = 'process';
         this.selectFrom = [];
         this.setStepForm(process);
+        this.getJoin(false, false);
     }
 
     setStepForm(process) {
@@ -1161,7 +1169,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             if (action.actionIsmainLevel == 1) {
                 this.EntityAction.push(action.actionEntity);
             } else {
-                console.log(action);
+
                 this.EntityAction.push(action.actionSubEntity);
             }
 
@@ -1411,7 +1419,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
         if (typeof this.selectedActions.updateField !== 'undefined') {
             var exps = "";
-            console.log("updf", this.selectedActions.updateField);
+
             for (let fld of this.selectedActions.updateField) {
                 if (field.fieldId == fld.updateFieldId.fieldId) {
                     if (typeof fld.updateExpression !== 'undefined') {
@@ -1600,7 +1608,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     setExpressionListreg(listreg, $event) {
 
-        console.log("lstreg", this.selectedList);
 
         $event.stopPropagation();
 
@@ -1630,6 +1637,47 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     refrechListreg() {
         this.loadProcess();
         this.newListreg();
+    }
+
+    getJoin($event, entite) {
+
+        if ($event) {
+            var ent = $event.target.selectedOptions[0].value;
+
+
+            if (entite == 'd') {
+                this.entDepart = ent;
+            } else if (entite == 'a') {
+                this.entArrive = ent;
+            }
+        }
+
+        this.joins = new Array();
+
+        if (this.entDepart && this.entArrive) {
+
+            var param = {}
+            param.entDepart = this.entDepart
+            param.entArrive = this.entArrive
+            param.process = this.selectedProcess
+
+            this.menuService.getJoinData(param).subscribe(joins => this.populateJoinList(joins));
+
+        }
+
+    }
+
+    setJoin(join,joins){
+
+        var param = {}
+        param.join = join
+        param.joins =joins
+        this.menuService.setJoin(param).subscribe(joins => this.getJoin(false, false));
+
+    }
+
+    populateJoinList(joins) {
+        this.joins = joins;
     }
 
 

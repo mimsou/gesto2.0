@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component,   EventEmitter,   OnInit, Output} from '@angular/core';
 
 @Component({
     selector: 'ngx-dimention',
@@ -9,15 +9,21 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 export class DimentionComponent implements OnInit {
 
     constructor() {
+
     }
 
     @Output() filterChange: EventEmitter<any> = new EventEmitter();
     entityDim: any;
     fieldDim: any;
+    steps:any;
+    steppedField:any;
     @Output() dimData:any = new Array();
     entityDimData: any = new Array();
     fieldDimData: any = new Array();
     datePickerConfig: any = {};
+    differ;
+
+
 
     ngOnInit() {
         this.entityDimData = new Array();
@@ -35,10 +41,16 @@ export class DimentionComponent implements OnInit {
     }
 
     initDimention(process) {
+
         this.entityDimData = new Array();
         this.fieldDimData = new Array();
         this.entityDim = process[0].gestEntityDimention;
         this.fieldDim =  process[0].gestFieldDimention;
+        this.steps = process[0].steps
+
+       this.steppedField =  process[0].gestEntity[0].entityStepperField;
+
+        console.log(        this.steps)
 
         for(let entDim of this.entityDim) {
             var dimobs = new Object();

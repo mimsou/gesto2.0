@@ -11,6 +11,7 @@ import {
     List,
     Dim
 } from "../../../../@core/data/user.model";
+import {delay} from "rxjs/internal/operators";
 
 @Component({
     selector: 'ngx-list',
@@ -136,6 +137,7 @@ export class ListComponent implements OnInit {
         var param = new Object();
         param.id = this.list.listId;
         param.dimfilter =  this.dimfilter;
+
         this.manager.getDatalist(param).subscribe(list =>this.setData(list) );
 
     }
@@ -164,7 +166,8 @@ export class ListComponent implements OnInit {
 
     setDemFilter($event) {
         this.dimfilter = $event;
-        this.refrechListData();
+        setTimeout( () => {  this.refrechListData() }, 100 );
+
     }
 
     doAction(action, data) {
