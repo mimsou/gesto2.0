@@ -222,3 +222,22 @@ nb-card-header{
   width: 20px;
   margin: 2px;
 }
+
+.showElement{
+  opacity: 100;
+}
+
+.hideElement{
+  opacity: 0;
+}
+
+.col-md-0 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 0%;
+  flex: 0 0 0%;
+  max-width: 1%;
+}
+
+:host ::ng-deep .ck-editor__editable {
+  min-height: 200px;
+}

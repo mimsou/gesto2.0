@@ -405,7 +405,7 @@
             <div class="row" full-heigth>
 
 
-                <div class="col-md-10 row" full-heigth>
+                <div class="col-md-10 row mainWarp" full-heigth>
 
                     <div class="col-md-2" row style="height: 70%">
 
@@ -572,7 +572,7 @@
                     </div>
 
 
-                    <div id="plumbcontainer" class="col-md-10" style="height: 75%">
+                    <div id="plumbcontainer" class="col-md-10" style="height: 75%" (click)="stopClick($event)">
                         <div entityoption>
                             <i (click)="refrechRelationalEntity($event)"
                                style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
@@ -926,6 +926,7 @@
                                                 <option value="2">Generate</option>
                                                 <option value="3">Update</option>
                                                 <option value="4">Delete</option>
+                                                <option value="5">Print</option>
                                             </select></div>
                                             <br>
                                             <div *ngIf="!hideActionType" class="panelFormGroup">
@@ -1078,12 +1079,18 @@
                 </div>
 
 
-                <div class="col-md-2" full-heigth>
+                <div class="col-md-2 paramWarp" (click)="stopClick($event)" full-heigth>
 
                     <nb-card full-heigth full-heigth-all-child>
 
                         <nb-card-header noborder style="text-align: center !important">
-                            <div title>Paramétre</div>
+                            <div title>Paramétre  <i *ngIf="paramexp == 0" colorPrimary ActionIcone
+                                                     class="fa fa-expand"
+                                                     (click)="expandParam($event)"></i>
+                                <i *ngIf="paramexp == 1" colorPrimary ActionIcone
+                                   class="fa fa-compress"
+                                   (click)="collapsParam($event)"></i>
+                            </div>
                         </nb-card-header>
 
 
@@ -1183,7 +1190,7 @@
                         </nb-accordion>
 
 
-                        <nb-accordion #fieldparam *ngIf="paramPanel=='action'" (click)="onSettingClick($event)"
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='action'" (click)="onSettingClick($event)" (drag)="onSettingClick($event)"
                                       full-heigth full-heigth-all-child>
 
                             <nb-accordion-item [expanded]="true">
@@ -1207,6 +1214,8 @@
                                                 <option value="2">Generate</option>
                                                 <option value="3">Update</option>
                                                 <option value="4">Delete</option>
+                                                <option value="5">Print</option>
+
                                             </select></div>
                                             <div *ngIf="!hideActionType">
 
@@ -1220,7 +1229,7 @@
                                                 <option value="0">Sub entity only</option>
 
                                             </select></div>
-                                            <div *ngIf="actionform.actionIsmainLevel==1">
+                                            <div *ngIf="actionform.actionIsmainLevel==1 ">
 
                                                 Profondeur : <select type="text"
                                                                      [(ngModel)]="actionform.actionLevelDepth" nbInput
@@ -1232,7 +1241,7 @@
                                                 <option value="2">2</option>
 
                                             </select></div>
-                                            <div *ngIf="actionform.actionLevelDepth==2">
+                                            <div *ngIf="actionform.actionLevelDepth==2 && actionform.actionType != 5">
 
                                                 Mode selection : <select type="text"
                                                                          [(ngModel)]="actionform.actionExistingSubEntity"
@@ -1245,7 +1254,7 @@
                                                 <option value="0">non</option>
 
                                             </select></div>
-                                            <div *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 0) || actionform.actionIsmainLevel == 0">
+                                            <div *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  (actionform.actionExistingSubEntity == 0 ||  actionform.actionType == 5)) || actionform.actionIsmainLevel == 0 ">
 
                                                 <input type="text" formControlName="actionEntityName"
                                                        [(ngModel)]="actionform.actionSubEntity" nbInput fullWidth
@@ -1253,7 +1262,7 @@
 
                                             </div>
 
-                                            <div *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 1)">
+                                            <div *ngIf="((actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) &&  actionform.actionExistingSubEntity == 1) && actionform.actionType != 5">
 
                                                 Sub Process : <select type="text"
                                                                       [(ngModel)]="actionform.actionSubProcess"
@@ -1271,7 +1280,7 @@
                                             </select>
 
                                             </div>
-                                            <div *ngIf="actionform.actionExistingSubEntity==1">
+                                            <div *ngIf="actionform.actionExistingSubEntity==1 && actionform.actionType != 5">
 
                                                 From step: <select type="text"
                                                                    [(ngModel)]="actionform.actionFromStep"
@@ -1288,7 +1297,7 @@
                                             </select>
 
                                             </div>
-                                            <div *ngIf="actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0">
+                                            <div *ngIf="(actionform.actionLevelDepth == 2 || actionform.actionIsmainLevel == 0) && actionform.actionType != 5">
 
                                                 Add SubEntity : <select type="text"
                                                                         [(ngModel)]="actionform.actionAddSubEntity"
@@ -1303,7 +1312,7 @@
                                             </select></div>
 
 
-                                            <div>
+                                            <div  *ngIf="actionform.actionType != 5">
 
                                                 Go to step: <select type="text"
                                                                     [(ngModel)]="actionform.actionNextStep"
@@ -1334,6 +1343,41 @@
                                             </button>
                                         </form>
                                     </div>
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                            <nb-accordion-item *ngIf="selectedActions.actionType == 5">
+                                <nb-accordion-item-header>
+                                   Editer le contenu de l'impression
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+                                    <div style="height: 500px;">
+
+                                        Titre :<br>
+                                        <input type="text" [(ngModel)]="this.selectedActions.actionPrintPageTitle" nbInput fullWidth
+                                               fieldSize="xsmall" placeholder="Titre" >
+
+                                        Entéte :<br>
+                                        <editor #edh [(ngModel)]="this.selectedActions.actionPrintHead" (click)="stopClick($event)"   [init]="{plugins: 'link'}"></editor>
+                                        Millieu de page :<br>
+                                        <editor #edm [(ngModel)]="this.selectedActions.actionPrintMiddle"  (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
+                                        Bas de page :<br>
+                                        <editor #edf [(ngModel)]="this.selectedActions.actionPrintFooter"  (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
+
+
+                                        <br>
+
+                                        <button style="margin-right: 10px;"
+                                                [disabled]="!actionformcontrole.valid"
+                                                nbButton
+                                                (click)="submitPrintDetail()" size="xsmall">
+                                            Sauvegarder
+                                        </button>
+
+
+                                    </div>
+
                                 </nb-accordion-item-body>
                             </nb-accordion-item>
 

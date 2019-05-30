@@ -185,6 +185,39 @@ class GestActions
      */
     private $viewField;
 
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_print_page_title", type="string", length=50000, nullable=true)
+     */
+    private $actionPrintPageTitle;
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_print_head", type="string", length=50000, nullable=true)
+     */
+    private $actionPrintHead;
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_print_middle", type="string", length=50000, nullable=true)
+     */
+    private $actionPrintMiddle;
+
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_print_footer", type="string", length=50000, nullable=true)
+     */
+    private $actionPrintFooter;
+
     /**
      * Constructor
      */
@@ -525,6 +558,54 @@ class GestActions
                 $actionAcreg->setAcregAction(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getActionPrintHead(): ?string
+    {
+        return $this->actionPrintHead;
+    }
+
+    public function setActionPrintHead(?string $actionPrintHead): self
+    {
+        $this->actionPrintHead = $actionPrintHead;
+
+        return $this;
+    }
+
+    public function getActionPrintMiddle(): ?string
+    {
+        return $this->actionPrintMiddle;
+    }
+
+    public function setActionPrintMiddle(?string $actionPrintMiddle): self
+    {
+        $this->actionPrintMiddle = $actionPrintMiddle;
+
+        return $this;
+    }
+
+    public function getActionPrintFooter(): ?string
+    {
+        return $this->actionPrintFooter;
+    }
+
+    public function setActionPrintFooter(?string $actionPrintFooter): self
+    {
+        $this->actionPrintFooter = $actionPrintFooter;
+
+        return $this;
+    }
+
+    public function getActionPrintPageTitle(): ?string
+    {
+        return $this->actionPrintPageTitle;
+    }
+
+    public function setActionPrintPageTitle(?string $actionPrintPageTitle): self
+    {
+        $this->actionPrintPageTitle = $actionPrintPageTitle;
 
         return $this;
     }

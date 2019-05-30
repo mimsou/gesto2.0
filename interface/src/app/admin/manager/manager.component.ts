@@ -9,7 +9,9 @@ import {PagesRoutingModule} from '../../pages/pages-routing.module'
 import {Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
 import {Entitie, Field} from "../../@core/data/data.model";
 import {jsPlumb} from 'jsplumb';
-import * as $ from 'jquery';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+
 import {Observable, Subject} from "rxjs/Rx";
 import {E} from "@angular/core/src/render3";
 
@@ -28,9 +30,11 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     @ViewChild('flipaction') flipaction: any;
     @ViewChild('revealpage') revealpages: any;
     @ViewChild('entits') public entits: any;
-    @ViewChild('updateexpression') updateExpressions: any;
     @ViewChild('updateexpressionag') updateExpressionsag: any;
     @ViewChild('updateexpressions') updateExpressionss: any;
+    @ViewChild('edh') edh: any;
+    @ViewChild('edm') edm: any;
+    @ViewChild('edf') edf: any;
 
 
     jsPlumbInstance;
@@ -91,6 +95,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     entDepart: any;
     entArrive: any;
     joins: any;
+    paramexp: any = 0;
+
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -105,6 +111,9 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     allList: Array<List> = [];
     EntityAction: Array<Entitie> = [];
     EntityList: Array<Entitie> = [];
+    enteteEditor: any;
+    millieuEditor: any;
+    basdepageEditor: any;
 
 
     tokerolen: any;
@@ -155,6 +164,13 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+
+
+        this.enteteEditor = ClassicEditor ;
+        this.millieuEditor = ClassicEditor;
+        this.basdepageEditor = ClassicEditor;
+
+        console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ))
 
         this.selectedProcess = new Process();
         this.selectedSteps = new Step();
@@ -251,10 +267,23 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
 
     onSubmitActionDetails() {
+
         var param = {};
         this.actionform.actionEntity = this.selectedProcess.gestEntity[0].entityId;
         param.process = this.selectedProcess;
         param.action = this.actionform;
+        this.menuService.addAction(param).subscribe(action => this.loadProcess());
+
+    }
+
+    submitPrintDetail() {
+
+
+        var param = {};
+        param.process = this.selectedProcess;
+        param.action = this.copyObj(this.selectedActions);
+        param.action.actionEntity = this.selectedProcess.gestEntity[0].entityId;
+        param.action.actionSubEntity = this.selectedActions.actionSubEntity.entityId  ;
         this.menuService.addAction(param).subscribe(action => this.loadProcess());
 
     }
@@ -1144,7 +1173,29 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         this.menuService.DimentionDelete(param).subscribe(dim => this.loadProcess());
     }
 
+    expandParam() {
+        $(".mainWarp").switchClass("showElement", "hideElement", 50);
+        $(".mainWarp").addClass("col-md-0");
+        $(".mainWarp").removeClass("col-md-10");
+        $(".paramWarp").addClass("col-md-12");
+        $(".paramWarp").removeClass("col-md-2");
+        this.paramexp = 1;
+
+    }
+
+
+    collapsParam() {
+
+        $(".mainWarp").addClass("col-md-10");
+        $(".mainWarp").removeClass("col-md-0");
+        $(".paramWarp").addClass("col-md-2");
+        $(".paramWarp").removeClass("col-md-12");
+        $(".mainWarp").switchClass("hideElement", "showElement", 1000);
+        this.paramexp = 0;
+    }
+
     selectAction(action, $event) {
+
 
         $event.stopPropagation();
         this.paramPanel = 'action';
@@ -1169,7 +1220,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             if (action.actionIsmainLevel == 1) {
                 this.EntityAction.push(action.actionEntity);
             } else {
-
                 this.EntityAction.push(action.actionSubEntity);
             }
 
@@ -1199,6 +1249,9 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             }
 
         }
+
+
+     
 
 
     }
@@ -1667,11 +1720,11 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     }
 
-    setJoin(join,joins){
+    setJoin(join, joins) {
 
         var param = {}
         param.join = join
-        param.joins =joins
+        param.joins = joins
         this.menuService.setJoin(param).subscribe(joins => this.getJoin(false, false));
 
     }

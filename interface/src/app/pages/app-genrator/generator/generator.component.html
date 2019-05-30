@@ -1,11 +1,15 @@
 <div class="row" full-heigth full-heigth-all-child>
 
     <div class="listWarp col-md-12  showElement" full-heigth full-heigth-all-child  >
-        <ngx-list #list (fireAction)="doAction($event)" (fireCretateAction)="createAction($event)"></ngx-list>
+        <ngx-list #list (fireAction)="doAction($event)"   (fireCretateAction)="createAction($event)"></ngx-list>
     </div>
 
     <div class="formWarp col-md-0 hideElement" full-heigth full-heigth-all-child >
         <ngx-form (refrechMainView)="refrechView()" #form></ngx-form>
+    </div>
+
+    <div class="printWarp col-md-0 hideElement" full-heigth full-heigth-all-child >
+        <ngx-print (refrechMainView)="refrechView()" #print></ngx-print>
     </div>
 
 

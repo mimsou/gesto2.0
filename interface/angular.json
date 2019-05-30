@@ -25,7 +25,10 @@
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
                 "output": "/assets/img/markers"
-              }
+              },
+              { "glob": "**/*", "input": "node_modules/tinymce/skins", "output": "/skins/" },
+              { "glob": "**/*", "input": "node_modules/tinymce/themes", "output": "/themes/" },
+              { "glob": "**/*", "input": "node_modules/tinymce/plugins", "output": "/plugins/" }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
@@ -52,7 +55,9 @@
               "node_modules/echarts/dist/echarts.min.js",
               "node_modules/echarts/dist/extension/bmap.min.js",
               "node_modules/chart.js/dist/Chart.min.js",
-              "src/assets/js/select2.min.js"
+              "src/assets/js/select2.min.js",
+              "src/assets/js/ckeditor.js",
+              "node_modules/tinymce/tinymce.min.js"
             ]
           },
           "configurations": {
@@ -111,7 +116,8 @@
               "node_modules/echarts/dist/echarts.min.js",
               "node_modules/echarts/dist/extension/bmap.min.js",
               "node_modules/chart.js/dist/Chart.min.js",
-              "node_modules/ng2-select2/select2.min.js"
+              "node_modules/ng2-select2/select2.min.js",
+              "node_modules/tinymce/tinymce.min.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
@@ -133,7 +139,10 @@
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
                 "output": "/assets/img/markers"
-              }
+              },
+              { "glob": "**/*", "input": "node_modules/tinymce/skins", "output": "/skins/" },
+              { "glob": "**/*", "input": "node_modules/tinymce/themes", "output": "/themes/" },
+              { "glob": "**/*", "input": "node_modules/tinymce/plugins", "output": "/plugins/" }
             ]
           }
         },

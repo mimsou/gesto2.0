@@ -7,6 +7,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { DndModule } from 'ngx-drag-drop';
 import {DpDatePickerModule} from 'ng2-date-picker';
 import { NgSelect2Module  } from 'ng-select2';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 
 import {
@@ -92,7 +94,9 @@ const NB_MODULES = [
     NbStepperModule,
     DpDatePickerModule,
     NbAccordionModule,
-    NgSelect2Module
+    NgSelect2Module,
+    CKEditorModule,
+    EditorModule
 ];
 
 const COMPONENTS = [

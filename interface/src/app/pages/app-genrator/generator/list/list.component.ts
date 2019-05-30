@@ -33,6 +33,7 @@ export class ListComponent implements OnInit {
     user:any;
     @Output() fireAction: EventEmitter<any> = new EventEmitter();
     @Output() fireCretateAction: EventEmitter<any> = new EventEmitter();
+    @Output() firePrint: EventEmitter<any> = new EventEmitter();
 
     constructor(private manager: ManagerService) {
     }
@@ -171,12 +172,14 @@ export class ListComponent implements OnInit {
     }
 
     doAction(action, data) {
-        this.fireAction.emit([action, data, this.dimfilter]);
+            this.fireAction.emit([action, data, this.dimfilter]);
     }
 
     doCreateAction($event) {
         this.fireCretateAction.emit(this.dimfilter);
     }
+
+
 
     isStepperField(fld){
         if( this.entity.entityStepperField == fld.fieldEntityName ){

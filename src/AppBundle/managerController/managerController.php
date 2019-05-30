@@ -1753,10 +1753,13 @@ class managerController extends FOSRestController
         $action->setActionBtnName($param->action->actionName);
         $action->setActionType($param->action->actionType);
         $action->setActionEntity($this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->action->actionEntity));
-        if ($param->action->actionType !== 4) {
+
+        if ($param->action->actionType !== "4") {
             $action->setActionIsmainLevel($param->action->actionIsmainLevel);
             $action->setActionLevelDepth($param->action->actionLevelDepth);
-            $action->setActionNextStep($this->getDoctrine()->getRepository('AppBundle:GestSteps')->find($param->action->actionNextStep));
+            if ($param->action->actionType !== "5" && $param->action->actionType !== 5) {
+                $action->setActionNextStep($this->getDoctrine()->getRepository('AppBundle:GestSteps')->find($param->action->actionNextStep));
+            }
         }
         if ((($param->action->actionLevelDepth == 2 || $param->action->actionIsmainLevel == 0) && $param->action->actionExistingSubEntity == 0) || $param->action->actionIsmainLevel == 0) {
             $action->setActionSubEntity($this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->action->actionSubEntity));
@@ -1766,6 +1769,14 @@ class managerController extends FOSRestController
         if (($param->action->actionLevelDepth == 2 || $param->action->actionIsmainLevel == 0) && $param->action->actionExistingSubEntity == 1) {
             $action->setActionSubProcess($this->getDoctrine()->getRepository('AppBundle:GestProcess')->find($param->action->actionSubProcess));
             $action->setActionExistingSubEntity($param->action->actionExistingSubEntity);
+        }
+
+        if($param->action->actionType == "5" || $param->action->actionType !== 5){
+            $action->setActionExistingSubEntity(0);
+            $action->setActionPrintHead($param->action->actionPrintHead);
+            $action->setActionPrintMiddle($param->action->actionPrintMiddle);
+            $action->setActionPrintFooter($param->action->actionPrintFooter);
+            $action->setActionPrintPageTitle($param->action->actionPrintPageTitle);
         }
 
         if ($param->action->actionLevelDepth == 2 || $param->action->actionIsmainLevel == 0) {
@@ -3187,10 +3198,10 @@ class managerController extends FOSRestController
         $params->entity = $param->entity;
         $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
 
-        if($param->genfield->updateFieldId->fieldType!="datetime"){
-           return $rs;
-        }else{
-            return $rs->format("d-m-Y") ;
+        if ($param->genfield->updateFieldId->fieldType != "datetime") {
+            return $rs;
+        } else {
+            return $rs->format("d-m-Y");
         }
 
     }
@@ -3594,7 +3605,7 @@ class managerController extends FOSRestController
 
         $date = $now = new \DateTime("NOW");
 
-        $datestring =  $date->getTimestamp();
+        $datestring = $date->getTimestamp();
 
         return $datestring;
 

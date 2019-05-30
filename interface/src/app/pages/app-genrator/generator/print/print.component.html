@@ -1,0 +1,55 @@
+<nb-card style="margin-bottom: 2px;">
+
+    <nb-card-header>
+        <div style="font-size: 18px;"><i (click)="switchView()" class="fa fa-list"></i> Impression
+            {{listMainentityform}}
+            <div msg>{{FormMessage}}</div>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body style="overflow: visible">
+        <div class="row">
+            <div  style="width: 20cm;margin: auto;" #content>
+
+                <div headPrint [innerHtml]="action.actionPrintHead"></div><br><br><br>
+
+                <div MiddlePrint style="display: inline-block;margin-left: 40%;font-size: 18px;font-weight: bold;" [innerHtml]="action.actionPrintPageTitle"></div><br><br><br><br>
+
+                <div dataHeader class="row">
+
+                    <div class="col-md-3" *ngFor="let flds of field" containerFlex InputFormGroup>
+                        <div  inlineelement style="font-size: 14px;font-weight: bold;">{{flds.fieldInterfaceName}}</div> <div *ngIf="flds.fieldNature == 1" style="font-size: 12px;font-weight: normal;" >{{actionData[flds.fieldEntityName][flds.fieldTargetEntityId.entityDisplayfield]}}</div>
+                        <div *ngIf="flds.fieldNature == 0" style="font-size: 12px;font-weight: normal;" >{{actionData[flds.fieldEntityName]}}</div>
+                    </div>
+
+                </div>
+
+                <div MiddlePrint [innerHtml]="action.actionPrintMiddle"></div><br><br>
+
+                <div dataDetail>
+
+                    <table class="table table-condensed table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th *ngFor="let flds of subfield">{{flds.fieldInterfaceName}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let datasub of actionsubdatacollection"  (click)="onUpdateSubEntiy(datasub)">
+                            <td *ngFor="let flds of subfield"><span *ngIf="flds.fieldNature !== 1">{{datasub[flds.fieldEntityName]}}</span> <span *ngIf="flds.fieldNature == 1">{{datasub[flds.fieldEntityName].data[0].text}}</span></td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div footerPrint [innerHtml]="action.actionPrintFooter"></div><br><br>
+
+            </div>
+        </div>
+        <button   class="pull-right" (click)="doPrint()" nbButton size="small" >{{action.actionName}}</button>
+
+    </nb-card-body>
+
+</nb-card>

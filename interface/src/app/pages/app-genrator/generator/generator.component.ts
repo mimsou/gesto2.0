@@ -24,12 +24,15 @@ export class GeneratorComponent implements OnInit {
 
     @ViewChild('list') listCompenent: any;
     @ViewChild('form') formComponent: any;
+    @ViewChild('print') printComponent: any;
+
     process: any;
     mainEntity: any;
     mainCreateAction: Action = new Action();
     mainList: any;
     user: any;
     varti: any;
+    displaymode:string;
 
     constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService, private authService: NbAuthService) {
         this.authService.onTokenChange()
@@ -55,11 +58,18 @@ export class GeneratorComponent implements OnInit {
 
         this.setMainEntity();
         $(".formWarp").switchClass("showElement", "hideElement", 50);
+        $(".printWarp").switchClass("showElement", "hideElement", 50);
         $(".listWarp").addClass("col-md-12");
         $(".listWarp").removeClass("col-md-0");
         $(".formWarp").addClass("col-md-0");
         $(".formWarp").removeClass("col-md-12");
+        $(".printWarp").addClass("col-md-0");
+        $(".printWarp").removeClass("col-md-12");
         $(".listWarp").switchClass("hideElement", "showElement", 1000);
+
+
+
+
 
     }
 
@@ -114,10 +124,17 @@ export class GeneratorComponent implements OnInit {
         $(".formWarp").addClass("col-md-12");
         $(".formWarp").removeClass("col-md-0");
         $(".formWarp").switchClass("hideElement", "showElement", 1000);
+        this.displaymode = "f";
 
     }
 
+
+
+
+
     refrechView() {
+
+        if(  this.displaymode == "f"){
 
         $(".formWarp").switchClass("showElement", "hideElement", 50);
         $(".listWarp").addClass("col-md-12");
@@ -126,18 +143,29 @@ export class GeneratorComponent implements OnInit {
         $(".formWarp").removeClass("col-md-12");
         $(".listWarp").switchClass("hideElement", "showElement", 1000);
 
+        }else if(this.displaymode == "p"){
+
+
+            $(".printWarp").switchClass("showElement", "hideElement", 50);
+            $(".listWarp").addClass("col-md-12");
+            $(".listWarp").removeClass("col-md-0");
+            $(".printWarp").addClass("col-md-0");
+            $(".printWarp").removeClass("col-md-12");
+            $(".listWarp").switchClass("hideElement", "showElement", 1000);
+
+
+
+
+        }
+
+
 
         this.listCompenent.refrechListData();
 
     }
 
     doAction(actionData) {
-        $(".listWarp").switchClass("showElement", "hideElement", 50);
-        $(".listWarp").addClass("col-md-0");
-        $(".listWarp").removeClass("col-md-12");
-        $(".formWarp").addClass("col-md-12");
-        $(".formWarp").removeClass("col-md-0");
-        $(".formWarp").switchClass("hideElement", "showElement", 1000);
+
         var acts: any;
         for (let act of this.process[0].actions) {
             if (act.actionId == actionData[0].actionId) {
@@ -145,14 +173,39 @@ export class GeneratorComponent implements OnInit {
             }
         }
 
-        if (acts.actionType == 3) {
-            this.formComponent.initAction(acts, this.process.steps, actionData[1],actionData[2]);
-        } else if (acts.actionType == 4) {
-            var param = {};
-            param.data = actionData[1];
-            param.action = act;
-            this.manager.deleteEntityData(param).subscribe(result => this.refrechView());
+        if (acts.actionType == 5) {
+            this.displaymode = "p";
+
+            $(".listWarp").switchClass("showElement", "hideElement", 50);
+            $(".listWarp").addClass("col-md-0");
+            $(".listWarp").removeClass("col-md-12");
+            $(".printWarp").addClass("col-md-12");
+            $(".printWarp").removeClass("col-md-0");
+            $(".printWarp").switchClass("hideElement", "showElement", 1000);
+
+            this.printComponent.initAction(acts, this.process.steps, actionData[1],actionData[2]);
+
+        }else{
+
+            this.displaymode = "f";
+            $(".listWarp").switchClass("showElement", "hideElement", 50);
+            $(".listWarp").addClass("col-md-0");
+            $(".listWarp").removeClass("col-md-12");
+            $(".formWarp").addClass("col-md-12");
+            $(".formWarp").removeClass("col-md-0");
+            $(".formWarp").switchClass("hideElement", "showElement", 1000);
+
+
+            if (acts.actionType == 3) {
+                this.formComponent.initAction(acts, this.process.steps, actionData[1],actionData[2]);
+            } else if (acts.actionType == 4) {
+                var param = {};
+                param.data = actionData[1];
+                param.action = act;
+                this.manager.deleteEntityData(param).subscribe(result => this.refrechView());
+            }
         }
+
 
     }
 
