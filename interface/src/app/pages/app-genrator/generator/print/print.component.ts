@@ -436,14 +436,17 @@ export class PrintComponent implements OnInit, DoCheck {
 
         //this.saveToPdf(content,2);
 
+        console.log("r",this.listMainentityform)
+
          html2canvas(content,{
            scale:1
         }).then(function(canvas) {
             var img = canvas.toDataURL("image/png");
             var doc = new JsPdf();
+            var title = $(content).find("#htitle").html();
             doc.addImage(img,'JPEG',5,5);
-            doc.save('Impression.pdf');
-        });
+            doc.save(title+'.pdf');
+        })
 
     }
 
