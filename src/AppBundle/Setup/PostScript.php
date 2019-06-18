@@ -164,6 +164,28 @@ class PostScript
 
     }
 
+
+    /**
+     * Clears the Symfony cache.
+     *
+     * @param Event $event
+     */
+    public static function InstallNpm(Event $event)
+    {
+        $options = static::getOptions($event);
+
+        $consoleDir = static::getConsoleDir($event, 'clear the cache');
+
+        var_dump($consoleDir) ;
+
+        if (null === $consoleDir) {
+            return;
+        }
+
+        static::executeCommand($event, $consoleDir, 'npm install' , $options['process-timeout']);
+
+    }
+
     /**
      * Installs the assets under the web root directory.
      *
