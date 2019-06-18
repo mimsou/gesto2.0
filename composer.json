@@ -52,7 +52,7 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
-            "Appbundle\\Setup\\PostScript::UpdateDatabase"
+            "AppBundle\\Setup\\PostScript::UpdateDatabase"
         ],
         "post-install-cmd": [
             "@symfony-scripts"

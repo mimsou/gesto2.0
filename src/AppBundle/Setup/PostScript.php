@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Appbundle\Setup;
+namespace AppBundle\Setup;
 
 use Symfony\Component\ClassLoader\ClassCollectionLoader;
 use Symfony\Component\Filesystem\Filesystem;
