@@ -176,13 +176,11 @@ class PostScript
 
         $consoleDir = "interface";
 
-        var_dump($consoleDir) ;
-
         if (null === $consoleDir) {
             return;
         }
 
-        static::executeCommand($event, $consoleDir, 'npm install' , $options['process-timeout']);
+        static::executeSysCommand($event, $consoleDir, 'npm install' , $options['process-timeout']);
 
     }
 
@@ -326,6 +324,23 @@ EOF
         $php = ProcessExecutor::escape(static::getPhp(false));
         $phpArgs = implode(' ', array_map(array('Composer\Util\ProcessExecutor', 'escape'), static::getPhpArguments()));
         $console = ProcessExecutor::escape($consoleDir.'/console');
+        if ($event->getIO()->isDecorated()) {
+            $console .= ' --ansi';
+        }
+
+        $process = new Process($php.($phpArgs ? ' '.$phpArgs : '').' '.$console.' '.$cmd, null, null, null, $timeout);
+        $process->run(function ($type, $buffer) use ($event) { $event->getIO()->write($buffer, false); });
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException(sprintf("An error occurred when executing the \"%s\" command:\n\n%s\n\n%s", ProcessExecutor::escape($cmd), self::removeDecoration($process->getOutput()), self::removeDecoration($process->getErrorOutput())));
+        }
+    }
+
+
+    protected static function executeSysCommand(Event $event, $consoleDir, $cmd, $timeout = 300)
+    {
+        $php = ProcessExecutor::escape(static::getPhp(false));
+        $phpArgs = implode(' ', array_map(array('Composer\Util\ProcessExecutor', 'escape'), static::getPhpArguments()));
+        $console = ProcessExecutor::escape($consoleDir.'/');
         if ($event->getIO()->isDecorated()) {
             $console .= ' --ansi';
         }
