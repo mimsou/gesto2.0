@@ -174,7 +174,7 @@ class PostScript
     {
         $options = static::getOptions($event);
 
-        $consoleDir = static::getConsoleDir($event, 'clear the cache');
+        $consoleDir = "interface";
 
         var_dump($consoleDir) ;
 
