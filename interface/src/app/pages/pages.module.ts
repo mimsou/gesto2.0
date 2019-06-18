@@ -17,6 +17,7 @@ import { DimentionComponent } from './app-genrator/generator/dimention/dimention
 import { StepPipe } from './app-genrator/generator/step.pipe';
 
 
+
 const PAGES_COMPONENTS = [
   PagesComponent,
     FoundComponent,

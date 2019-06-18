@@ -18,15 +18,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StopClickDirective } from './stop-click.directive';
+import { NbLoginComponent } from './pages/login/login.component';
+import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputModule, NbLayoutModule, } from '@nebular/theme';
+
 
 
 @NgModule({
-  declarations: [AppComponent,StopClickDirective],
+  declarations: [AppComponent,StopClickDirective,NbLoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+      NbAlertModule,
+
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
