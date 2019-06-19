@@ -340,12 +340,16 @@ EOF
     {
         $php = ProcessExecutor::escape(static::getPhp(false));
         $phpArgs = implode(' ', array_map(array('Composer\Util\ProcessExecutor', 'escape'), static::getPhpArguments()));
-        $console = ProcessExecutor::escape($consoleDir.'/');
+        $console = ProcessExecutor::escape($consoleDir);
         if ($event->getIO()->isDecorated()) {
             $console .= ' --ansi';
         }
 
-        $process = new Process($php.($phpArgs ? ' '.$phpArgs : '').' '.$console.' '.$cmd, null, null, null, $timeout);
+        //die('cd '.__DIR__.'/../../../interface');
+
+        $process = new Process( 'npm install', null, null, null, $timeout);
+        $process->setWorkingDirectory(__DIR__.'/../../../interface');
+
         $process->run(function ($type, $buffer) use ($event) { $event->getIO()->write($buffer, false); });
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf("An error occurred when executing the \"%s\" command:\n\n%s\n\n%s", ProcessExecutor::escape($cmd), self::removeDecoration($process->getOutput()), self::removeDecoration($process->getErrorOutput())));
@@ -380,9 +384,9 @@ EOF
         $fs->mkdir(array($binDir, $varDir));
 
         foreach (array(
-            $appDir.'/console' => $binDir.'/console',
-            $appDir.'/phpunit.xml.dist' => $rootDir.'/phpunit.xml.dist',
-        ) as $source => $target) {
+                     $appDir.'/console' => $binDir.'/console',
+                     $appDir.'/phpunit.xml.dist' => $rootDir.'/phpunit.xml.dist',
+                 ) as $source => $target) {
             $fs->rename($source, $target, true);
         }
 
