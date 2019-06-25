@@ -5,6 +5,10 @@ parameters:
 
 services:
 
+    AppBundle\DataFixtures\:
+        resource: '../../src/AppBundle/DataFixtures'
+        tags: ['doctrine.fixture.orm']
+
     AppBundle\Service\AccessSubscriber:
         tags:
             - { name: kernel.event_listener, event: kernel.controller , method: onKernelController }
