@@ -202,7 +202,7 @@ class PostScript
             return;
         }
 
-        static::executeCommand($event, $consoleDir, 'doctrine:fixtures:load', $options['process-timeout']);
+        static::executeCommand($event, $consoleDir, 'doctrine:fixtures:load -n', $options['process-timeout']);
 
     }
 
