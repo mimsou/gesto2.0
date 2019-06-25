@@ -44,7 +44,7 @@ import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputM
             key: 'token',
           },
 
-          baseEndpoint: 'http://127.0.0.1/AFRREST/web/api/',
+          baseEndpoint: 'http://127.0.0.1/AGL/web/api/',
            login: {
              endpoint: 'login_check',
              method: 'post',
