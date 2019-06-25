@@ -17,6 +17,8 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Composer\Script\Event;
 use Composer\Util\ProcessExecutor;
+use AppBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
 
 /**
  * @author Jordi Boggiano <j.boggiano@seld.be>
@@ -141,12 +143,12 @@ class PostScript
             $warmup = ' --no-warmup';
         }
 
-        static::executeCommand($event, $consoleDir, 'cache:clear'.$warmup, $options['process-timeout']);
+        static::executeCommand($event, $consoleDir, 'cache:clear' . $warmup, $options['process-timeout']);
     }
 
 
     /**
-     * Clears the Symfony cache.
+     * Create schema
      *
      * @param Event $event
      */
@@ -160,13 +162,13 @@ class PostScript
             return;
         }
 
-        static::executeCommand($event, $consoleDir, 'doctrine:schema:update --force' , $options['process-timeout']);
+        static::executeCommand($event, $consoleDir, 'doctrine:schema:update --force', $options['process-timeout']);
 
     }
 
 
     /**
-     * Clears the Symfony cache.
+     * install NPM
      *
      * @param Event $event
      */
@@ -180,9 +182,32 @@ class PostScript
             return;
         }
 
-        static::executeSysCommand($event, $consoleDir, 'npm install' , $options['process-timeout']);
+        static::executeSysCommand($event, $consoleDir, 'npm install', $options['process-timeout']);
 
     }
+
+
+    /**
+     * Clears the Symfony cache.
+     *
+     * @param Event $event
+     */
+    public static function AddAdmin(Event $event)
+    {
+        $options = static::getOptions($event);
+
+        $consoleDir = static::getConsoleDir($event, 'Install Admin');
+
+        if (null === $consoleDir) {
+            return;
+        }
+
+        static::executeCommand($event, $consoleDir, 'doctrine:fixtures:load', $options['process-timeout']);
+
+    }
+
+
+
 
     /**
      * Installs the assets under the web root directory.
@@ -218,7 +243,7 @@ class PostScript
             return;
         }
 
-        static::executeCommand($event, $consoleDir, 'assets:install '.$symlink.ProcessExecutor::escape($webDir), $options['process-timeout']);
+        static::executeCommand($event, $consoleDir, 'assets:install ' . $symlink . ProcessExecutor::escape($webDir), $options['process-timeout']);
     }
 
     /**
@@ -238,8 +263,8 @@ class PostScript
             if (!static::hasDirectory($event, 'symfony-app-dir', $appDir, 'install the requirements files')) {
                 return;
             }
-            $fs->copy(__DIR__.'/../Resources/skeleton/app/SymfonyRequirements.php', $appDir.'/SymfonyRequirements.php', true);
-            $fs->copy(__DIR__.'/../Resources/skeleton/app/check.php', $appDir.'/check.php', true);
+            $fs->copy(__DIR__ . '/../Resources/skeleton/app/SymfonyRequirements.php', $appDir . '/SymfonyRequirements.php', true);
+            $fs->copy(__DIR__ . '/../Resources/skeleton/app/check.php', $appDir . '/check.php', true);
         } else {
             $binDir = $options['symfony-bin-dir'];
             $varDir = $options['symfony-var-dir'];
@@ -249,22 +274,22 @@ class PostScript
             if (!static::hasDirectory($event, 'symfony-bin-dir', $binDir, 'install the requirements files')) {
                 return;
             }
-            $fs->copy(__DIR__.'/../Resources/skeleton/app/SymfonyRequirements.php', $varDir.'/SymfonyRequirements.php', true);
-            $fs->copy(__DIR__.'/../Resources/skeleton/app/check.php', $binDir.'/symfony_requirements', true);
-            $fs->remove(array($appDir.'/check.php', $appDir.'/SymfonyRequirements.php', true));
+            $fs->copy(__DIR__ . '/../Resources/skeleton/app/SymfonyRequirements.php', $varDir . '/SymfonyRequirements.php', true);
+            $fs->copy(__DIR__ . '/../Resources/skeleton/app/check.php', $binDir . '/symfony_requirements', true);
+            $fs->remove(array($appDir . '/check.php', $appDir . '/SymfonyRequirements.php', true));
 
-            $fs->dumpFile($binDir.'/symfony_requirements', '#!/usr/bin/env php'."\n".str_replace(".'/SymfonyRequirements.php'", ".'/".$fs->makePathRelative(realpath($varDir), realpath($binDir))."SymfonyRequirements.php'", file_get_contents($binDir.'/symfony_requirements')));
-            $fs->chmod($binDir.'/symfony_requirements', 0755);
+            $fs->dumpFile($binDir . '/symfony_requirements', '#!/usr/bin/env php' . "\n" . str_replace(".'/SymfonyRequirements.php'", ".'/" . $fs->makePathRelative(realpath($varDir), realpath($binDir)) . "SymfonyRequirements.php'", file_get_contents($binDir . '/symfony_requirements')));
+            $fs->chmod($binDir . '/symfony_requirements', 0755);
         }
 
         $webDir = $options['symfony-web-dir'];
 
         // if the user has already removed the config.php file, do nothing
         // as the file must be removed for production use
-        if ($fs->exists($webDir.'/config.php')) {
+        if ($fs->exists($webDir . '/config.php')) {
             $requiredDir = $newDirectoryStructure ? $varDir : $appDir;
 
-            $fs->dumpFile($webDir.'/config.php', str_replace('/../app/SymfonyRequirements.php', '/'.$fs->makePathRelative(realpath($requiredDir), realpath($webDir)).'SymfonyRequirements.php', file_get_contents(__DIR__.'/../Resources/skeleton/web/config.php')));
+            $fs->dumpFile($webDir . '/config.php', str_replace('/../app/SymfonyRequirements.php', '/' . $fs->makePathRelative(realpath($requiredDir), realpath($webDir)) . 'SymfonyRequirements.php', file_get_contents(__DIR__ . '/../Resources/skeleton/web/config.php')));
         }
     }
 
@@ -277,17 +302,17 @@ class PostScript
             return;
         }
 
-        if (!is_dir($appDir.'/SymfonyStandard')) {
+        if (!is_dir($appDir . '/SymfonyStandard')) {
             return;
         }
 
         $fs = new Filesystem();
-        $fs->remove($appDir.'/SymfonyStandard');
+        $fs->remove($appDir . '/SymfonyStandard');
     }
 
     public static function doBuildBootstrap($bootstrapDir)
     {
-        $file = $bootstrapDir.'/bootstrap.php.cache';
+        $file = $bootstrapDir . '/bootstrap.php.cache';
         if (file_exists($file)) {
             unlink($file);
         }
@@ -323,13 +348,15 @@ EOF
     {
         $php = ProcessExecutor::escape(static::getPhp(false));
         $phpArgs = implode(' ', array_map(array('Composer\Util\ProcessExecutor', 'escape'), static::getPhpArguments()));
-        $console = ProcessExecutor::escape($consoleDir.'/console');
+        $console = ProcessExecutor::escape($consoleDir . '/console');
         if ($event->getIO()->isDecorated()) {
             $console .= ' --ansi';
         }
 
-        $process = new Process($php.($phpArgs ? ' '.$phpArgs : '').' '.$console.' '.$cmd, null, null, null, $timeout);
-        $process->run(function ($type, $buffer) use ($event) { $event->getIO()->write($buffer, false); });
+        $process = new Process($php . ($phpArgs ? ' ' . $phpArgs : '') . ' ' . $console . ' ' . $cmd, null, null, null, $timeout);
+        $process->run(function ($type, $buffer) use ($event) {
+            $event->getIO()->write($buffer, false);
+        });
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf("An error occurred when executing the \"%s\" command:\n\n%s\n\n%s", ProcessExecutor::escape($cmd), self::removeDecoration($process->getOutput()), self::removeDecoration($process->getErrorOutput())));
         }
@@ -347,10 +374,12 @@ EOF
 
         //die('cd '.__DIR__.'/../../../interface');
 
-        $process = new Process( 'npm install', null, null, null, $timeout);
-        $process->setWorkingDirectory(__DIR__.'/../../../interface');
+        $process = new Process('npm install', null, null, null, $timeout);
+        $process->setWorkingDirectory(__DIR__ . '/../../../interface');
 
-        $process->run(function ($type, $buffer) use ($event) { $event->getIO()->write($buffer, false); });
+        $process->run(function ($type, $buffer) use ($event) {
+            $event->getIO()->write($buffer, false);
+        });
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf("An error occurred when executing the \"%s\" command:\n\n%s\n\n%s", ProcessExecutor::escape($cmd), self::removeDecoration($process->getOutput()), self::removeDecoration($process->getErrorOutput())));
         }
@@ -360,7 +389,7 @@ EOF
     {
         $php = ProcessExecutor::escape(static::getPhp(false));
         $phpArgs = implode(' ', array_map(array('Composer\Util\ProcessExecutor', 'escape'), static::getPhpArguments()));
-        $cmd = ProcessExecutor::escape(__DIR__.'/../Resources/bin/build_bootstrap.php');
+        $cmd = ProcessExecutor::escape(__DIR__ . '/../Resources/bin/build_bootstrap.php');
         $bootstrapDir = ProcessExecutor::escape($bootstrapDir);
         $autoloadDir = ProcessExecutor::escape($autoloadDir);
         $useNewDirectoryStructure = '';
@@ -368,8 +397,10 @@ EOF
             $useNewDirectoryStructure = ProcessExecutor::escape('--use-new-directory-structure');
         }
 
-        $process = new Process($php.($phpArgs ? ' '.$phpArgs : '').' '.$cmd.' '.$bootstrapDir.' '.$autoloadDir.' '.$useNewDirectoryStructure, getcwd(), null, null, $timeout);
-        $process->run(function ($type, $buffer) use ($event) { $event->getIO()->write($buffer, false); });
+        $process = new Process($php . ($phpArgs ? ' ' . $phpArgs : '') . ' ' . $cmd . ' ' . $bootstrapDir . ' ' . $autoloadDir . ' ' . $useNewDirectoryStructure, getcwd(), null, null, $timeout);
+        $process->run(function ($type, $buffer) use ($event) {
+            $event->getIO()->write($buffer, false);
+        });
         if (!$process->isSuccessful()) {
             throw new \RuntimeException('An error occurred when generating the bootstrap file.');
         }
@@ -384,14 +415,14 @@ EOF
         $fs->mkdir(array($binDir, $varDir));
 
         foreach (array(
-                     $appDir.'/console' => $binDir.'/console',
-                     $appDir.'/phpunit.xml.dist' => $rootDir.'/phpunit.xml.dist',
+                     $appDir . '/console' => $binDir . '/console',
+                     $appDir . '/phpunit.xml.dist' => $rootDir . '/phpunit.xml.dist',
                  ) as $source => $target) {
             $fs->rename($source, $target, true);
         }
 
         foreach (array('/logs', '/cache') as $dir) {
-            $fs->rename($appDir.$dir, $varDir.$dir);
+            $fs->rename($appDir . $dir, $varDir . $dir);
         }
 
         $gitignore = <<<EOF
@@ -422,18 +453,18 @@ EOF;
         <server name="KERNEL_DIR" value="$appDir/" />
     </php>
 EOF;
-        $phpunit = str_replace(array('<directory>../src', '"bootstrap.php.cache"', $phpunitKernelBefore), array('<directory>src', '"'.$varDir.'/bootstrap.php.cache"', $phpunitKernelAfter), file_get_contents($rootDir.'/phpunit.xml.dist'));
-        $composer = str_replace('"symfony-app-dir": "app",', "\"symfony-app-dir\": \"app\",\n        \"symfony-bin-dir\": \"bin\",\n        \"symfony-var-dir\": \"var\",", file_get_contents($rootDir.'/composer.json'));
+        $phpunit = str_replace(array('<directory>../src', '"bootstrap.php.cache"', $phpunitKernelBefore), array('<directory>src', '"' . $varDir . '/bootstrap.php.cache"', $phpunitKernelAfter), file_get_contents($rootDir . '/phpunit.xml.dist'));
+        $composer = str_replace('"symfony-app-dir": "app",', "\"symfony-app-dir\": \"app\",\n        \"symfony-bin-dir\": \"bin\",\n        \"symfony-var-dir\": \"var\",", file_get_contents($rootDir . '/composer.json'));
 
-        $fs->dumpFile($webDir.'/app.php', str_replace($appDir.'/bootstrap.php.cache', $varDir.'/bootstrap.php.cache', file_get_contents($webDir.'/app.php')));
-        $fs->dumpFile($webDir.'/app_dev.php', str_replace($appDir.'/bootstrap.php.cache', $varDir.'/bootstrap.php.cache', file_get_contents($webDir.'/app_dev.php')));
-        $fs->dumpFile($binDir.'/console', str_replace(array(".'/bootstrap.php.cache'", ".'/AppKernel.php'"), array(".'/".$fs->makePathRelative(realpath($varDir), realpath($binDir))."bootstrap.php.cache'", ".'/".$fs->makePathRelative(realpath($appDir), realpath($binDir))."AppKernel.php'"), file_get_contents($binDir.'/console')));
-        $fs->dumpFile($rootDir.'/phpunit.xml.dist', $phpunit);
-        $fs->dumpFile($rootDir.'/composer.json', $composer);
+        $fs->dumpFile($webDir . '/app.php', str_replace($appDir . '/bootstrap.php.cache', $varDir . '/bootstrap.php.cache', file_get_contents($webDir . '/app.php')));
+        $fs->dumpFile($webDir . '/app_dev.php', str_replace($appDir . '/bootstrap.php.cache', $varDir . '/bootstrap.php.cache', file_get_contents($webDir . '/app_dev.php')));
+        $fs->dumpFile($binDir . '/console', str_replace(array(".'/bootstrap.php.cache'", ".'/AppKernel.php'"), array(".'/" . $fs->makePathRelative(realpath($varDir), realpath($binDir)) . "bootstrap.php.cache'", ".'/" . $fs->makePathRelative(realpath($appDir), realpath($binDir)) . "AppKernel.php'"), file_get_contents($binDir . '/console')));
+        $fs->dumpFile($rootDir . '/phpunit.xml.dist', $phpunit);
+        $fs->dumpFile($rootDir . '/composer.json', $composer);
 
-        $fs->dumpFile($rootDir.'/.gitignore', $gitignore);
+        $fs->dumpFile($rootDir . '/.gitignore', $gitignore);
 
-        $fs->chmod($binDir.'/console', 0755);
+        $fs->chmod($binDir . '/console', 0755);
     }
 
     protected static function getOptions(Event $event)
@@ -477,7 +508,7 @@ EOF;
         }
 
         if ($ini) {
-            $arguments[] = '--php-ini='.$ini;
+            $arguments[] = '--php-ini=' . $ini;
         }
 
         return $arguments;
@@ -486,7 +517,7 @@ EOF;
     /**
      * Returns a relative path to the directory that contains the `console` command.
      *
-     * @param Event  $event      The command event
+     * @param Event $event The command event
      * @param string $actionName The name of the action
      *
      * @return string|null The path to the console directory, null if not found
@@ -531,7 +562,7 @@ EOF;
      */
     protected static function useSymfonyAutoloader(array $options)
     {
-        return isset($options['symfony-app-dir']) && is_file($options['symfony-app-dir'].'/autoload.php');
+        return isset($options['symfony-app-dir']) && is_file($options['symfony-app-dir'] . '/autoload.php');
     }
 
     private static function removeDecoration($string)
