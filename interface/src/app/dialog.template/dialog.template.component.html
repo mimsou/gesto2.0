@@ -1,0 +1,7 @@
+<ngx-smart-modal #messageModale identifier="messageModale" customClass="medium-modal">
+  <h1>System</h1>
+  <div *ngIf="messageModale.hasData()">
+    <pre>{{ messageModale.getData()}}</pre>
+  </div>
+  <button type="button" nbButton size="xsmall"  (click)="messageModale.close()">Close</button>
+</ngx-smart-modal>
