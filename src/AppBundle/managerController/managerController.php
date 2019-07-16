@@ -2,6 +2,7 @@
 
 namespace AppBundle\managerController;
 
+
 use AppBundle\Annotation\ActionName;
 use AppBundle\Entity\GestAccessPath;
 use AppBundle\Entity\GestDataAccess;
@@ -17,21 +18,26 @@ use AppBundle\Entity\GestRelations;
 use AppBundle\Entity\GestRole;
 use AppBundle\Entity\GestSteps;
 use AppBundle\Entity\GestListRegle;
-use AppBundle\Entity\Facture;
 use AppBundle\Entity\UpdateForm;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
 use AppBundle\Entity\GestMenu;
 use AppBundle\Menu;
-use JMS\Serializer\SerializerBuilder;
-use Symfony\Component\Validator\Constraints\Date;
-use Doctrine\ORM\Query;
+use Nette\PhpGenerator\PhpNamespace;
+use Symfony\Component\Console\Input\ArgvInput;
+
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Debug\Debug;
 
 
 class managerController extends FOSRestController
@@ -59,7 +65,8 @@ class managerController extends FOSRestController
             ->from('AppBundle:GestRole', 'u')->getQuery()->getArrayResult();
 
         if ($restresult === null) {
-            return new View("there are no role", Response::HTTP_NOT_FOUND);
+            //return new View("there are no role", Response::HTTP_NOT_FOUND);
+            return new View("ok", Response::HTTP_NOT_FOUND , array("message"=>utf8_decode("Role inexistant"),"Access-Control-Expose-Headers"=>"message"));
         }
 
         return $restresult;
@@ -332,10 +339,18 @@ class managerController extends FOSRestController
         }
 
         $em->createQuery('delete from AppBundle:GestRelations a  where a.checks = 0')->execute();
-        $em->createQuery('delete from AppBundle:GestEntity a  where a.checks = 0')->execute();
         $em->createQuery('delete from AppBundle:Gestfields a  where a.checks = 0')->execute();
+        $em->createQuery('delete from AppBundle:GestEntity a  where a.checks = 0')->execute();
+
 
         $em->flush();
+
+        $this->clearCache();
+
+        $this->updateDatabase();
+
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Les changements sur la structure de la BD on été prise en charge"),"Access-Control-Expose-Headers"=>"message"));
+        //return new View(Response::HTTP_OK);
 
 
     }
@@ -549,7 +564,8 @@ class managerController extends FOSRestController
             ->leftJoin('u.role', 'a')->getQuery()->getArrayResult();
 
         if ($restresult === null) {
-            return new View("there are no controller exist", Response::HTTP_NOT_FOUND);
+            //return new View("there are no controller exist", Response::HTTP_NOT_FOUND);
+            return new View("ok", Response::HTTP_NOT_FOUND , array("message"=>utf8_decode("Controlleur inexistant "),"Access-Control-Expose-Headers"=>"message"));
         }
 
 
@@ -566,7 +582,8 @@ class managerController extends FOSRestController
     {
         $singleresult = $this->getDoctrine()->getRepository('AppBundle:GestRole')->find($id);
         if ($singleresult === null) {
-            return new View("role not found", Response::HTTP_NOT_FOUND);
+            //return new View("role not found", Response::HTTP_NOT_FOUND);
+            return new View("ok", Response::HTTP_NOT_FOUND , array("message"=>utf8_decode("Role Inexistant"),"Access-Control-Expose-Headers"=>"message"));
         }
         return $singleresult;
     }
@@ -594,7 +611,8 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
-        return new View("role Added Successfully", Response::HTTP_OK);
+        //return new View("role Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Role ajouté avec success"),"Access-Control-Expose-Headers"=>"message"));
     }
 
 
@@ -616,6 +634,7 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("Entity pos update Successfully", Response::HTTP_OK);
+
 
     }
 
@@ -643,7 +662,8 @@ class managerController extends FOSRestController
         $em->persist($menu);
         $em->flush();
 
-        return new View("role update Successfully", Response::HTTP_OK);
+        //return new View("role update Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Role mise à jour avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -676,7 +696,8 @@ class managerController extends FOSRestController
 
         }
 
-        return new View("role deleted successfully", Response::HTTP_OK);
+        //return new View("role deleted successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Role supprimé avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -714,7 +735,8 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-        return new View("user Added from role Successfully", Response::HTTP_OK);
+        //return new View("user Added from role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été affecté a l'utilisateur ".$usr->getUsername()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -748,7 +770,8 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-        return new View("user removed from role Successfully", Response::HTTP_OK);
+        //return new View("user removed from role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été supprimé pour l'utilisateur ".$usr->getUsername()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -771,12 +794,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestAccessPath')->find($ap)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Controller Added to role Successfully", Response::HTTP_OK);
+        //return new View("Controller Added to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été affecté a l'action selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -799,12 +825,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestAccessPath')->find($ap)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Controller removed from role Successfully", Response::HTTP_OK);
+        //return new View("Controller removed from role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été supprimé pour l'action selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -827,12 +856,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestMenu')->find($link)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Link Added to role Successfully", Response::HTTP_OK);
+        //return new View("Link Added to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été affecté pour le menu selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -855,12 +887,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestMenu')->find($link)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Link removed to role Successfully", Response::HTTP_OK);
+        //return new View("Link removed to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été supprimer pour le menu selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -883,12 +918,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestSteps')->find($id)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Step Added to role Successfully", Response::HTTP_OK);
+        //return new View("Step Added to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été affecté pour l'etat selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -911,12 +949,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestSteps')->find($id)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Step removed to role Successfully", Response::HTTP_OK);
+        //return new View("Step removed to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été suprrimé pour l'etat selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -939,12 +980,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($id)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Action Added to role Successfully", Response::HTTP_OK);
+        //return new View("Action Added to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été affecté pour l'action selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -967,12 +1011,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($id)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("Action removed to role Successfully", Response::HTTP_OK);
+        //return new View("Action removed to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été supprimé pour l'action selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -995,12 +1042,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestList')->find($id)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("List Added to role Successfully", Response::HTTP_OK);
+        //return new View("List Added to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été affécté pour la liste selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1023,12 +1073,15 @@ class managerController extends FOSRestController
             $this->getDoctrine()->getRepository('AppBundle:GestList')->find($id)
         );
 
+        $rolname = $role->getRoleLibelle();
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($role);
         $em->flush();
 
 
-        return new View("List removed to role Successfully", Response::HTTP_OK);
+        //return new View("List removed to role Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le role ".$rolname." a été supprimé pour la liste selectioné"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1049,7 +1102,8 @@ class managerController extends FOSRestController
 
 
         if ($restresult === null) {
-            return new View("there are no menus exist", Response::HTTP_NOT_FOUND);
+            //return new View("there are no menus exist", Response::HTTP_NOT_FOUND);
+            return new View("ok", Response::HTTP_NOT_FOUND , array("message"=>utf8_decode("Menu Inexistant"),"Access-Control-Expose-Headers"=>"message"));
         }
 
         /*   foreach ($restresult as $key => $item) {
@@ -1100,7 +1154,8 @@ class managerController extends FOSRestController
         $singleresult = $qb->getQuery()->getArrayResult();
 
         if ($singleresult === null) {
-            return new View("menu not found", Response::HTTP_NOT_FOUND);
+            //return new View("menu not found", Response::HTTP_NOT_FOUND);
+            return new View("ok", Response::HTTP_NOT_FOUND , array("message"=>utf8_decode("Menu Inexistant"),"Access-Control-Expose-Headers"=>"message"));
         }
         return $singleresult;
     }
@@ -1127,7 +1182,8 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
-        return new View("Menu Added Successfully", Response::HTTP_OK);
+        //return new View("Menu Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Menu ajouté avec success"),"Access-Control-Expose-Headers"=>"message"));
     }
 
     /**
@@ -1153,7 +1209,8 @@ class managerController extends FOSRestController
         $em->persist($menu);
         $em->flush();
 
-        return new View("Menu update Successfully", Response::HTTP_OK);
+        //return new View("Menu update Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Menu mise à jour avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1180,7 +1237,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("Link saved under menu Successfully", Response::HTTP_OK);
+        //return new View("Link saved under menu Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("lien ".$menu->getMenuLibelle()." ajouter sous le menu ".$menuparent->getMenuLibelle()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1207,6 +1265,7 @@ class managerController extends FOSRestController
 
         return new View("Link saved under menu Successfully", Response::HTTP_OK);
 
+
     }
 
 
@@ -1220,7 +1279,7 @@ class managerController extends FOSRestController
         $sn = $this->getDoctrine()->getManager();
         $menu = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->find($id);
         if (empty($menu)) {
-            return new View("menu not found", Response::HTTP_NOT_FOUND);
+            return new View("ok", Response::HTTP_NOT_FOUND , array("message"=>utf8_decode("Menu Inexistant"),"Access-Control-Expose-Headers"=>"message"));
         } else {
 
             $menuchilds = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $id));
@@ -1235,7 +1294,8 @@ class managerController extends FOSRestController
             $sn->remove($menu);
             $sn->flush();
         }
-        return new View("menu eleted successfully", Response::HTTP_OK);
+        //return new View("menu eleted successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Menu ".$menu->getMenuLibelle()." Supprimer avec success"),"Access-Control-Expose-Headers"=>"message"));
     }
 
 
@@ -1308,7 +1368,7 @@ class managerController extends FOSRestController
         $em->persist($action);
 
         $list = new GestList();
-        $list->setListName("Lies des " . $param->processEntity->entityEntity);
+        $list->setListName("Liste des " . $param->processEntity->entityEntity);
         $list->setListEntityName($param->processEntity->entityId);
         $list->setListIsMain(1);
 
@@ -1335,7 +1395,8 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-        return new View("Process Added Successfully", Response::HTTP_OK);
+        //return new View("Process Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Process ".$param->processName." ajouté avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1386,7 +1447,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("Process deleted Successfully", Response::HTTP_OK);
+        //return new View("Process deleted Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Process ".$process->getProcessDesignation()." suprrimer avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1600,7 +1662,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("step Added from process Successfully", Response::HTTP_OK);
+        //return new View("step Added from process Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Etat du Process a été mise à jour"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1636,7 +1699,8 @@ class managerController extends FOSRestController
         $em->persist($process);
         $em->flush();
 
-        return new View("Process Added Successfully", Response::HTTP_OK);
+        //return new View("Process Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Etat ajouté avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1671,7 +1735,8 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-        return new View("Steps removed Successfully", Response::HTTP_OK);
+        //return new View("Steps removed Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Etat supprimé avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1697,7 +1762,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("Action saved under step Successfully", Response::HTTP_OK);
+        //return new View("Action saved under step Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'action ".$action->getActionName()." a été ajouté sous l'etat ".$step->getStepName()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1723,7 +1789,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("action removed from step Successfully", Response::HTTP_OK);
+        //return new View("action removed from step Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'action ".$action->getActionName()." a été supprimé de l'etat ".$step->getStepName()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1771,7 +1838,7 @@ class managerController extends FOSRestController
             $action->setActionExistingSubEntity($param->action->actionExistingSubEntity);
         }
 
-        if($param->action->actionType == "5" || $param->action->actionType !== 5){
+        if ($param->action->actionType == "5" || $param->action->actionType !== 5) {
             $action->setActionExistingSubEntity(0);
             $action->setActionPrintHead($param->action->actionPrintHead);
             $action->setActionPrintMiddle($param->action->actionPrintMiddle);
@@ -1794,7 +1861,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("Action Added Successfully", Response::HTTP_OK);
+        //return new View("Action Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'action ".$action->getActionName()." a été ajouté avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1813,7 +1881,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("List removed Successfully", Response::HTTP_OK);
+        //return new View("List removed Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'action ".$action->getActionName()." a été supprimé avec success"),"Access-Control-Expose-Headers"=>"message"));
 
 
     }
@@ -1853,7 +1922,8 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-        return new View("update Field expression succefuly", Response::HTTP_OK);
+        //return new View("update Field expression succefuly", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'expression a été sauvegarder"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1888,8 +1958,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-
-        return new View("Action Regle expression update succefuly ", Response::HTTP_OK);
+        //return new View("Action Regle expression update succefuly ", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'expression de l'action a été sauvegarder"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -1924,7 +1994,8 @@ class managerController extends FOSRestController
         $em->flush();
 
 
-        return new View("List regle expression update succefuly ", Response::HTTP_OK);
+        //return new View("List regle expression update succefuly ", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'expression de la liste a été sauvegarder"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -2115,7 +2186,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("List saved under step Successfully", Response::HTTP_OK);
+        //return new View("List saved under step Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("La liste ".$list->getListName()." a été sauvegardé sous l'etat ".$step->getStepName()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -2141,7 +2213,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("List removed from step Successfully", Response::HTTP_OK);
+        //return new View("List removed from step Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("La liste ".$list->getListName()." a été supprimé sous l'etat ".$step->getStepName()),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -2168,7 +2241,8 @@ class managerController extends FOSRestController
         $em->persist($process);
         $em->flush();
 
-        return new View("List Added Successfully", Response::HTTP_OK);
+        //return new View("List Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Liste ajouter avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -2187,7 +2261,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("List removed Successfully", Response::HTTP_OK);
+        //return new View("List removed Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Liste supprimé avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -2287,7 +2362,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("Dimention Added Successfully", Response::HTTP_OK);
+        //return new View("Dimention Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Dimention ajouter avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -2362,7 +2438,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("Dimention removed Successfully", Response::HTTP_OK);
+        //return new View("Dimention removed Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("Dimention supprimé avec success"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -4293,7 +4370,8 @@ class managerController extends FOSRestController
         $em->persist($field);
         $em->flush();
 
-        return new View("field updated Successfully", Response::HTTP_OK);
+        //return new View("field updated Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("le champ a été mise à jour"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -4325,7 +4403,8 @@ class managerController extends FOSRestController
         $em->persist($entity);
         $em->flush();
 
-        return new View("Entity  updated Successfully", Response::HTTP_OK);
+        //return new View("Entity  updated Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'entité a été mise à jour"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -4612,7 +4691,8 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("l'access a été mise à jour", Response::HTTP_OK);
+        //return new View("l'access a été mise à jour", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'access au données a été mise à jour"),"Access-Control-Expose-Headers"=>"message"));
 
     }
 
@@ -4654,7 +4734,456 @@ class managerController extends FOSRestController
         }
 
 
-        return new View("l'access a été mise à jour", Response::HTTP_OK);
+        //return new View("l'access a été mise à jour", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK , array("message"=>utf8_decode("l'access au données a été mise à jour"),"Access-Control-Expose-Headers"=>"message"));
+
+    }
+
+
+    /**
+     * @Rest\Patch("/addentity/")
+     */
+
+    public function patchAddEntityAction(Request $request)
+    {
+
+        set_time_limit(0);
+
+        $param = json_decode($request->getContent());
+
+        $namespace = new PhpNamespace('AppBundle\Entity');
+
+        $class = $namespace->addClass(ucfirst($param->className));
+
+        $class->addComment(ucfirst($param->className));
+        $class->addComment('@ORM\Table(name="' . ucfirst($param->className) . '")');
+        $class->addComment('@ORM\Entity');
+        $prop = $class->addProperty("id");
+        $prop->setVisibility('private')
+            ->addComment('@var string')
+            ->addComment('@ORM\Column(name="id", type="string", length=10, nullable=false)')
+            ->addComment('@ORM\Id')
+            ->addComment('@ORM\GeneratedValue(strategy="NONE")');
+
+
+        $namespace->addUse('Doctrine\Common\Collections\ArrayCollection');
+        $namespace->addUse('Doctrine\Common\Collections\Collection');
+        $namespace->addUse('Doctrine\ORM\Mapping as ORM');
+
+        $path = __DIR__ . '/../Entity/';
+
+        $classfile = ucfirst($param->className) . '.php';
+
+        $handle = fopen($path . $classfile, 'w') or die('Cannot open file:  ' . $classfile);
+
+        fwrite($handle, "<?php \n" . $namespace);
+
+        fclose($handle);
+
+
+        $ret = $this->clearCache();
+
+        $ret .= $this->generateSetterGetter();
+
+        $ret .= $this->updateDatabase();
+
+
+        return new View($ret,Response::HTTP_OK);
+
+
+    }
+
+
+    /**
+     * @Rest\Patch("/removefieldfromentity/")
+     */
+
+    public function patchaRemovefieldfromentityAction(Request $request)
+    {
+
+        set_time_limit(0);
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $mainEntity = $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
+
+        $field = $entity = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($param->field->fieldId);
+
+        $ManyToOneRelation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findOneBy(array("relationEntitie" => $mainEntity, "relationKey" => $field->getFieldEntityName()));
+
+        if($ManyToOneRelation){
+            $entity = $ManyToOneRelation->getRelationsTable();
+            $entityIdM = $entity->getEntityId();
+
+
+            $inverseField = $this->getDoctrine()->getRepository('AppBundle:GestFields')->findOneBy(array("fieldEntityName" => $ManyToOneRelation->getRelationInverseKey()));
+
+            if($inverseField) {
+                $em->remove($inverseField);
+            }
+
+            $em->remove($ManyToOneRelation);
+
+        }else{
+            $entityIdM = false;
+        }
+
+
+        $OneToManyRelation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findOneBy(array("relationsTable" => $mainEntity, "relationInverseKey" => $field->getFieldEntityName()));
+
+        if($OneToManyRelation){
+
+            $entity = $OneToManyRelation->getRelationEntitie();
+
+            $entityIdO = $entity->getEntityId();
+
+            $em->remove($OneToManyRelation);
+        }else{
+            $entityIdO = false;
+        }
+
+        $em->remove($field);
+
+
+        $em->flush();
+
+
+        $this->patchRegenerateEntityAction($mainEntity->getEntityId());
+
+        if ($entityIdM) {
+            $this->patchRegenerateEntityAction($entityIdM);
+        }
+
+
+        if ($entityIdO) {
+            $this->patchRegenerateEntityAction($entityIdO);
+        }
+
+
+        $ret = $this->clearCache();
+
+        $ret .= $this->generateSetterGetter();
+
+        $ret .= $this->updateDatabase();
+
+        return new View($ret, Response::HTTP_OK);
+
+
+    }
+
+
+    /**
+     * @Rest\Patch("/addfieldtoentity/")
+     */
+
+    public function patchaAddfieldtoentityAction(Request $request)
+    {
+
+        set_time_limit(0);
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        $mainEntity = $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
+
+        $field = new GestFields();
+
+        $field->setFieldEntity($mainEntity);
+
+        if ($param->field->oneToManys) {
+
+            $targetfield = $entity = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($param->field->fieldrelation);
+            $targetEntity = $targetfield->getFieldEntity();
+
+            $field->setFieldTargetEntityId($targetEntity);
+            $field->setFieldTargetEntity($targetEntity->getEntityEntity());
+            $field->setFieldNature(1);
+
+            $relation = new GestRelations();
+            $relation->setRelationEntitie($mainEntity);
+            $relation->setRelationsTable($targetEntity);
+            $relation->setRelationKey($param->field->fieldName);
+            $relation->setRelationTableName($targetEntity->getEntityEntity());
+
+            if ($param->field->inversed) {
+                $relation->setRelationInverseKey($param->field->fieldName . "Coll");
+            }
+
+            $relation->setChecks(1);
+
+            $em->persist($relation);
+
+        } else {
+
+            $field->setFieldNature(0);
+
+        }
+
+        if ($param->field->id) {
+            $mainEntity->setEntityKey($param->field->fieldName);
+            $em->persist($mainEntity);
+        }
+
+        $clmname = $this->camelToUnderscore($param->field->fieldName);
+
+        $field->setFieldEntityName($param->field->fieldName);
+        $field->setFieldColumnName($clmname);
+        $field->setFieldType($param->field->type);
+        $field->setChecks(1);
+        $field->setFieldLength($param->field->length);
+        $field->setFieldOrder(10);
+
+
+        $em->persist($field);
+        $em->flush();
+
+        $this->patchRegenerateEntityAction($mainEntity->getEntityId());
+
+        if ($param->field->oneToManys) {
+            $this->patchRegenerateEntityAction($targetEntity->getEntityId());
+        }
+
+
+        $ret = $this->clearCache();
+
+        $ret .= $this->generateSetterGetter();
+
+        $ret .= $this->updateDatabase();
+
+
+        return new View($ret, Response::HTTP_OK);
+
+    }
+
+
+    /**
+     * @Rest\Patch("/regenerateentity/")
+     */
+
+    public function patchRegenerateEntityAction($entity)
+    {
+
+        set_time_limit(0);
+
+        $ent = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($entity);
+
+        $fields = $ent->getFields();
+
+        $namespace = new PhpNamespace('AppBundle\Entity');
+
+        $class = $namespace->addClass(ucfirst($ent->getEntityEntity()));
+
+        $class->addComment(ucfirst($ent->getEntityEntity()));
+        $class->addComment('@ORM\Table(name="' . ucfirst($ent->getEntityEntity()) . '")');
+        $class->addComment('@ORM\Entity');
+
+
+        foreach ($fields as $fld) {
+
+
+            $fieldName = $fld->getFieldEntityName();
+            $clmnname = $fld->getFieldColumnName();
+            $clmnType = $fld->getFieldType();
+            $clmnLength = $fld->getFieldLength();
+            $ManyToOneRelation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findOneBy(array("relationEntitie" => $ent, "relationKey" => $fieldName));
+
+            if ($ent->getEntityKey() == $fieldName) {
+
+                $propid = $class->addProperty($fieldName);
+                $propid->setVisibility('private')
+                    ->addComment('@var string')
+                    ->addComment('@ORM\Column(name="' . $this->camelToUnderscore($fieldName) . '", type="' . $clmnType . '", length=10, nullable=false)')
+                    ->addComment('@ORM\Id')
+                    ->addComment('@ORM\GeneratedValue(strategy="NONE")');
+
+                $method = $class->addMethod("set".ucfirst($fieldName))
+                    ->setVisibility('public')
+                    ->setBody('$this->'.$fieldName." = $".$fieldName.'; return $this;');
+
+                $method->addParameter($fieldName);
+
+
+            } else {
+
+                if ($ManyToOneRelation) {
+
+                    if ($ManyToOneRelation->getRelationInverseKey() !== null) {
+                        $inverdedby = ',inversedBy="' . $ManyToOneRelation->getRelationInverseKey() . '"';
+                    } else {
+                        $inverdedby = '';
+                    }
+
+                    $prop = $class->addProperty($fieldName);
+                    $prop->setVisibility('private')
+                        ->addComment('@var \\' . $ManyToOneRelation->getRelationsTable()->getEntityEntity())
+                        ->addComment('@ORM\ManyToOne(targetEntity="' . $ManyToOneRelation->getRelationsTable()->getEntityEntity() . '"' . $inverdedby . ')')
+                        ->addComment('@ORM\JoinColumns({')
+                        ->addComment('@ORM\JoinColumn(name="' . $this->camelToUnderscore($clmnname) . '", referencedColumnName="' . $this->camelToUnderscore($ManyToOneRelation->getRelationsTable()->getEntityKey()) . '")')
+                        ->addComment('})');
+
+                } else {
+
+                    $prop = $class->addProperty($fieldName);
+
+                    $prop->setVisibility('private')
+                        ->addComment('@var ' . $clmnType . "|null")
+                        ->addComment('@ORM\Column(name="' . $this->camelToUnderscore($fieldName) . '", type="' . $clmnType . '", length=100, nullable=true)');
+
+                }
+            }
+        }
+
+        $OneToManyRelation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findBy(array("relationsTable" => $ent));
+
+        foreach ($OneToManyRelation as $fldRel) {
+            if ($fldRel->getRelationInverseKey() !== null) {
+                $prop = $class->addProperty($fldRel->getRelationInverseKey());
+                $prop->setVisibility('private')
+                    ->addComment('@var \Doctrine\Common\Collections\Collection')
+                    ->addComment('@ORM\OneToMany(targetEntity="' . $fldRel->getRelationEntitie()->getEntityEntity() . '", mappedBy="' . $fldRel->getRelationKey() . '" , cascade={"persist"})');
+            }
+        }
+
+        $namespace->addUse('Doctrine\Common\Collections\ArrayCollection');
+        $namespace->addUse('Doctrine\Common\Collections\Collection');
+        $namespace->addUse('Doctrine\ORM\Mapping as ORM');
+
+        $path = __DIR__ . '/../Entity/';
+
+        $classfile = ucfirst($ent->getEntityEntity()) . '.php';
+
+        $handle = fopen($path . $classfile, 'w') or die('Cannot open file:  ' . $classfile);
+
+        fwrite($handle, "<?php \n" . $namespace);
+
+        fclose($handle);
+
+
+        return new View(Response::HTTP_OK);
+
+
+    }
+
+
+    private function camelToUnderscore($string, $us = "_")
+    {
+        return strtolower(preg_replace(
+            '/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', $us, $string));
+    }
+
+    public function clearCache()
+    {
+
+        set_time_limit(0);
+
+        try {
+
+            $application = new Application($this->container->get('kernel'));
+
+
+            $application->setAutoExit(false);
+
+
+            $input = new ArrayInput(array("command" => "cache:warmup", "--env" => "prod", "--no-debug" => ""));
+
+
+            $output = new BufferedOutput();
+
+
+            $retval = $application->run($input, $output);
+
+            if (!$retval) {
+                return $output->fetch();
+            } else {
+                return "Command was not successful.\n";
+            }
+
+
+
+        } catch (\Exception $exception) {
+
+            return $output->fetch();
+
+        }
+
+
+    }
+
+
+    public function generateSetterGetter()
+    {
+
+        set_time_limit(0);
+
+        $input = new ArgvInput();
+
+        $env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev', true);
+
+        $debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption('--no-debug', true) && $env !== 'prod';
+
+        if ($debug) {
+            Debug::enable();
+        }
+
+        $kernel = new \AppKernel($env, $debug);
+
+
+        $application = new Application($kernel);
+
+
+        $application->setAutoExit(false);
+
+
+        $inputs = new ArrayInput(array("command" => "make:entity", "name" => "AppBundle", "--regenerate" => true, "-n" => true));
+
+
+        $output = new BufferedOutput();
+
+
+        $retval = $application->run($inputs, $output);
+
+
+        if (!$retval) {
+            return $output->fetch();
+        } else {
+            return "Command was not successful.\n";
+        }
+
+
+
+    }
+
+
+    public function updateDatabase()
+    {
+
+
+        set_time_limit(0);
+
+        $application = new Application($this->container->get('kernel'));
+
+
+        $application->setAutoExit(false);
+
+
+        $input = new ArrayInput(array("command" => "doctrine:schema:update", "--force" => true, "--complete" => true));
+
+
+        $output = new BufferedOutput();
+
+
+        $retval = $application->run($input, $output);
+
+        if (!$retval) {
+            return $output->fetch();
+        } else {
+            return "Command was not successful.\n";
+        }
+
 
     }
 

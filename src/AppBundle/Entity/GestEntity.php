@@ -114,6 +114,16 @@ class GestEntity
 
     private $relations;
 
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestRelations", mappedBy="relationsTable" , cascade={"persist"})
+     */
+
+    private $inverseRelations;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -163,6 +173,7 @@ class GestEntity
         $this->fieldsInversedTarget = new ArrayCollection();
         $this->daAccessData = new ArrayCollection();
         $this->rdAccessData = new ArrayCollection();
+        $this->inverseRelations = new ArrayCollection();
     }
 
     public function getEntityId(): ?int
@@ -495,6 +506,37 @@ class GestEntity
             // set the owning side to null (unless already changed)
             if ($rdAccessData->getRdEntity() === $this) {
                 $rdAccessData->setRdEntity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestRelations[]
+     */
+    public function getInverseRelations(): Collection
+    {
+        return $this->inverseRelations;
+    }
+
+    public function addInverseRelation(GestRelations $inverseRelation): self
+    {
+        if (!$this->inverseRelations->contains($inverseRelation)) {
+            $this->inverseRelations[] = $inverseRelation;
+            $inverseRelation->setRelationsTable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInverseRelation(GestRelations $inverseRelation): self
+    {
+        if ($this->inverseRelations->contains($inverseRelation)) {
+            $this->inverseRelations->removeElement($inverseRelation);
+            // set the owning side to null (unless already changed)
+            if ($inverseRelation->getRelationsTable() === $this) {
+                $inverseRelation->setRelationsTable(null);
             }
         }
 

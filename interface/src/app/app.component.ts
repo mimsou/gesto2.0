@@ -26,8 +26,8 @@ export class AppComponent implements OnInit {
       }
     });
 
-
     themeService.changeTheme("default");
+
   }
 
     ngOnInit(): void {

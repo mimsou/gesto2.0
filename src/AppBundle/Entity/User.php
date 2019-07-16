@@ -26,15 +26,13 @@ class User extends BaseUser
      *
      * @ORM\ManyToMany(targetEntity="GestRole", mappedBy="user")
      */
-    private $role;
+    private $rols;
 
     public function __construct()
     {
         parent::__construct();
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rols = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {
@@ -46,24 +44,44 @@ class User extends BaseUser
      */
     public function getRols(): Collection
     {
-        return $this->role;
+        return $this->rols;
     }
 
-    public function addRols(GestRole $role): self
+    public function addRols(GestRole $rols): self
     { 
-        if (!$this->role->contains($role)) {
-            $this->role[] = $role;
-            $role->addRap($this);
+        if (!$this->rols->contains($rols)) {
+            $this->rols[] = $rols;
+            $rols->addRap($this);
         }
 
         return $this;
     }
 
-    public function removeRols(GestRole $role): self
+    public function removeRols(GestRole $rols): self
     {
-        if ($this->role->contains($role)) {
-            $this->role->removeElement($role);
-            $role->removeRap($this);
+        if ($this->rols->contains($rols)) {
+            $this->rols->removeElement($rols);
+            $rols->removeRap($this);
+        }
+
+        return $this;
+    }
+
+    public function addRol(GestRole $rol): self
+    {
+        if (!$this->rols->contains($rol)) {
+            $this->rols[] = $rol;
+            $rol->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRol(GestRole $rol): self
+    {
+        if ($this->rols->contains($rol)) {
+            $this->rols->removeElement($rol);
+            $rol->removeUser($this);
         }
 
         return $this;
@@ -71,7 +89,7 @@ class User extends BaseUser
 
 
 
-
-
+    
+    
 
 }

@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit,OnDestroy, AfterViewInit, ViewChild, TemplateRef} from '@angular/core';
 import {NbAuthService, NbAuthJWTToken} from '@nebular/auth';
 import {ManagerService} from "../../@core/data/manager.service";
 import {UserService} from "../../@core/data/user.service";
@@ -10,10 +10,15 @@ import {Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
 import {Entitie, Field} from "../../@core/data/data.model";
 import {jsPlumb} from 'jsplumb';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {NgxSmartModalService} from 'ngx-smart-modal';
+import {Subject} from "rxjs/Rx";
+import  { MessageService } from '../../message.service'
 
 
 import {Observable, Subject} from "rxjs/Rx";
 import {E} from "@angular/core/src/render3";
+import {takeUntil} from "rxjs/internal/operators";
+
 
 
 @Component({
@@ -21,7 +26,7 @@ import {E} from "@angular/core/src/render3";
     templateUrl: './manager.component.html',
     styleUrls: ['./manager.component.scss']
 })
-export class ManagerComponent implements OnInit, AfterViewInit {
+export class ManagerComponent implements OnInit, AfterViewInit , OnDestroy {
 
     @ViewChild('addmenu') cardrev: OneInputFormComponent;
     @ViewChild('flipuser') flipusers: any;
@@ -38,7 +43,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
 
     jsPlumbInstance;
-
+    ngUnsubscribe = new Subject();
     menus: Array<GestMenu> = [];
     link: Array<GestMenu> = [];
     roles: Array<GestRole> = [];
@@ -96,7 +101,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     entArrive: any;
     joins: any;
     paramexp: any = 0;
-
+    className: any = "";
+    newatribute: any = new Object();
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -118,9 +124,11 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     tokerolen: any;
 
-    constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder) {
-
+    constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private ngxSmartModalService: NgxSmartModalService,private msgService:MessageService) {
+        this.initializeMessgae();
     }
+
+
 
     @HostListener('document:click', ['$event']) clickedOutside($event) {
         this.loadMenu(true);
@@ -158,6 +166,12 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     }
 
+    ngOnDestroy()
+    {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+    }
+
     ngAfterViewInit() {
         this.jsPlumbInstance = jsPlumb.getInstance(this.userService);
         this.loadSchema();
@@ -166,11 +180,11 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     ngOnInit() {
 
 
-        this.enteteEditor = ClassicEditor ;
+        this.enteteEditor = ClassicEditor;
         this.millieuEditor = ClassicEditor;
         this.basdepageEditor = ClassicEditor;
 
-        console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ))
+        console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName))
 
         this.selectedProcess = new Process();
         this.selectedSteps = new Step();
@@ -230,12 +244,26 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     }
 
+
+    initializeMessgae(){
+        this
+            .msgService
+            .getMessages()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((message) =>
+            {
+                this.getResp(message);
+            });
+    }
+
     onRoleOptionClick($event) {
         $event.stopPropagation();
     }
 
     refrechRelationalEntity($event) {
-        $event.stopPropagation();
+        if ($event) {
+            $event.stopPropagation();
+        }
         this.menuService.refrechRelationalEntity().subscribe(field => this.loadSchema());
     }
 
@@ -283,7 +311,7 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         param.process = this.selectedProcess;
         param.action = this.copyObj(this.selectedActions);
         param.action.actionEntity = this.selectedProcess.gestEntity[0].entityId;
-        param.action.actionSubEntity = this.selectedActions.actionSubEntity.entityId  ;
+        param.action.actionSubEntity = this.selectedActions.actionSubEntity.entityId;
         this.menuService.addAction(param).subscribe(action => this.loadProcess());
 
     }
@@ -523,8 +551,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             userd.UserName = user.username;
             userd.UserEmail = user.email;
             userd.USerRoles = user.roles;
-            if (user.role) {
-                userd.role = this.rolefromObject(user.role);
+            if (user.rols) {
+                userd.role = this.rolefromObject(user.rols);
             }
             userss.push(userd)
         }
@@ -651,6 +679,8 @@ export class ManagerComponent implements OnInit, AfterViewInit {
             this.userService.allUser().subscribe(user => this.users = this.userfromObject(user));
             this.flipusers.flipped = false;
         }
+
+
     }
 
     loadController() {
@@ -1251,9 +1281,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
         }
 
 
-     
-
-
     }
 
     onUpdateAction(act) {
@@ -1721,7 +1748,6 @@ export class ManagerComponent implements OnInit, AfterViewInit {
     }
 
     setJoin(join, joins) {
-
         var param = {}
         param.join = join
         param.joins = joins
@@ -1731,6 +1757,54 @@ export class ManagerComponent implements OnInit, AfterViewInit {
 
     populateJoinList(joins) {
         this.joins = joins;
+    }
+
+
+    addEntity($event) {
+        $event.stopPropagation();
+        var param = {};
+        param.className = this.className
+        this.menuService.addEntity(param).subscribe(resp => this.getRespAndReloadSchema(resp));
+    }
+
+
+    RemoveField(fld,$event) {
+
+
+        var param = {}
+        param.entity = this.selectedEntity;
+        param.field = fld;
+        $event.stopPropagation();
+        this.menuService.removeEntityField(param).subscribe(resp => this.getRespAndReloadSchema(resp));
+
+
+    }
+
+
+    SaveField($event) {
+
+
+        var param = {}
+        param.entity = this.selectedEntity;
+        param.field = this.newatribute;
+        $event.stopPropagation();
+        this.menuService.addEntityField(param).subscribe(resp => this.getRespAndReloadSchema(resp));
+
+
+    }
+
+    getRespAndReloadSchema(resp) {
+        this.ngxSmartModalService.resetModalData('messageModal');
+        this.ngxSmartModalService.setModalData(resp, 'messageModal')
+        this.ngxSmartModalService.open('messageModal');
+        this.refrechRelationalEntity(null);
+    }
+
+
+    getResp(resp) {
+        this.ngxSmartModalService.resetModalData('messageModal');
+        this.ngxSmartModalService.setModalData( resp, 'messageModal');
+        this.ngxSmartModalService.open('messageModal');
     }
 
 

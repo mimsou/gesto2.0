@@ -574,9 +574,21 @@
 
                     <div id="plumbcontainer" class="col-md-10" style="height: 75%" (click)="stopClick($event)">
                         <div entityoption>
+                            Rafréchir
                             <i (click)="refrechRelationalEntity($event)"
                                style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
-                            Rafréchir
+
+                        </div>
+
+                        <br><br>
+                        <div entityoption>
+
+                            <input type="text"  style="width:auto;" [(ngModel)]="className" nbInput fullWidth
+                                   fieldSize="xsmall" placeholder="Designation Entité"
+                                    >
+                            <i (click)="addEntity($event)"
+                               style="font-size: 16px; margin-top: 10px;" class="fa fa-plus-circle"></i>
+
                         </div>
 
                         <div roleoption>
@@ -1606,9 +1618,13 @@
                                             <div><strong> Ordre: </strong>
                                                 <div *ngFor="let fld of selectedEntity.fields"><input
                                                         [ngModelOptions]="{standalone: true}"
-                                                        [(ngModel)]="fld.fieldOrder" inputOrdre><span>{{fld.fieldEntityName}}</span><br>
+                                                        [(ngModel)]="fld.fieldOrder" inputOrdre><span>{{fld.fieldEntityName}}</span>   <i  #rmfield colorPrimary ActionIcone
+                                                                                                                                          (click)="RemoveField(fld,$event)"
+                                                                                                                                          class="fa fa-times"></i><br>
                                                 </div>
                                             </div>
+
+
                                             <br> <br>
                                             <button style="margin-right: 10px;" [disabled]="!settingFormControl.valid"
                                                     nbButton
@@ -1617,6 +1633,42 @@
                                             </button>
 
                                         </form>
+
+                                        <br>
+
+                                        <div><strong> Ajouter : </strong>
+                                            <div  >
+                                                <input type="text" [(ngModel)]="newatribute.fieldName" inputNewField placeholder="Nom du champ"><br>
+                                                length <input type="text" [(ngModel)]="newatribute.length" inputOrdre placeholder=""><br>
+                                                Type <select  [(ngModel)]="newatribute.type" ><br>
+                                                <option value="integer">integer</option>
+                                                <option value="string">string</option>
+                                                <option value="datetime">datetime</option>
+                                                <option value="float">float</option>
+                                            </select>
+
+                                                <br>
+                                                <br>
+                                                Many-to-One  <input type="checkbox" [(ngModel)]="newatribute.oneToManys" > <br>
+
+                                                With association Field    <select [(ngModel)]="newatribute.fieldrelation" >  <option  *ngFor="let fldopt of allFieldOption" [value]="fldopt.variableId">{{fldopt.name}}</option> </select>
+
+                                                Inversed <input  type="checkbox" [(ngModel)]="newatribute.inversed" >
+
+                                                <br>
+                                                <br>
+
+
+                                                Id <input type="checkbox" [(ngModel)]="newatribute.id" ><br>
+                                                Null <input type="checkbox" [(ngModel)]="newatribute.notnull" ><br>
+
+                                            </div><br>
+                                            <button style="margin-right: 10px;" (click)="SaveField($event)"
+                                                    nbButton
+                                                    type="button" size="xsmall">
+                                                Ajouter Champ
+                                            </button>
+                                        </div>
                                     </div>
                                 </nb-accordion-item-body>
                             </nb-accordion-item>
@@ -1693,3 +1745,11 @@
     </nb-card-back>
 
 </nb-reveal-card>
+
+<ngx-smart-modal #messageModal identifier="messageModal" customClass="medium-modal" (click)="stopClick($event)">
+    <h1>System AGL</h1>
+    <div *ngIf="messageModal.hasData()">
+        <pre>{{ messageModal.getData()}}</pre>
+    </div>
+    <button  type="button" nbButton size="xsmall"  (click)="stopClick($event);messageModal.close()">Close</button>
+</ngx-smart-modal>

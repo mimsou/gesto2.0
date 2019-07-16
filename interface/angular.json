@@ -42,7 +42,8 @@
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "node_modules/leaflet/dist/leaflet.css",
               "src/app/@theme/styles/styles.scss",
-            "src/assets/css/select2.min.css"
+            "src/assets/css/select2.min.css",
+              "node_modules/ngx-smart-modal/ngx-smart-modal.css"
             ],
             "scripts": [
               "node_modules/jsplumb/dist/js/jsplumb.js",
@@ -57,7 +58,8 @@
               "node_modules/chart.js/dist/Chart.min.js",
               "src/assets/js/select2.min.js",
               "src/assets/js/ckeditor.js",
-              "node_modules/tinymce/tinymce.min.js"
+              "node_modules/tinymce/tinymce.min.js",
+              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js"
             ]
           },
           "configurations": {
@@ -117,7 +119,8 @@
               "node_modules/echarts/dist/extension/bmap.min.js",
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/ng2-select2/select2.min.js",
-              "node_modules/tinymce/tinymce.min.js"
+              "node_modules/tinymce/tinymce.min.js",
+              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
@@ -129,7 +132,8 @@
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss",
-              "node_modules/ng2-select2/select2.min.css"
+              "node_modules/ng2-select2/select2.min.css",
+              "node_modules/ngx-smart-modal/ngx-smart-modal.css"
             ],
             "assets": [
               "src/assets",

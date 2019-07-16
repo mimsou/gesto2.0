@@ -20,11 +20,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StopClickDirective } from './stop-click.directive';
 import { NbLoginComponent } from './pages/login/login.component';
 import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputModule, NbLayoutModule, } from '@nebular/theme';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import {Dialog, DialogTemplateComponent} from './dialog.template/dialog.template.component';
+import { AppHttpInterceptor } from './http.interceptor'
+import  { MessageService } from './message.service'
 
 
 
 @NgModule({
-  declarations: [AppComponent,StopClickDirective,NbLoginComponent],
+  declarations: [AppComponent,StopClickDirective,NbLoginComponent, DialogTemplateComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -44,7 +48,7 @@ import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputM
             key: 'token',
           },
 
-          baseEndpoint: 'http://127.0.0.1/AGL/web/api/',
+          baseEndpoint: 'http://127.0.0.1/AFRREST/web/api/',
            login: {
              endpoint: 'login_check',
              method: 'post',
@@ -65,7 +69,9 @@ import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputM
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
       { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true},
-    AuthGuard, NbAuthService ,
+      { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true},
+      NgxSmartModalService,
+    AuthGuard, NbAuthService ,MessageService
   ],
 })
 export class AppModule {

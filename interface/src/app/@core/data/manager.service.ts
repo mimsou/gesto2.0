@@ -355,5 +355,18 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getgenfield/`, JSON.stringify(param));
     }
 
+    addEntity(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addentity/`, JSON.stringify(param));
+    }
+
+    addEntityField(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addfieldtoentity/`, JSON.stringify(param));
+    }
+
+    removeEntityField(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/removefieldfromentity/`, JSON.stringify(param));
+    }
+
+
 
 }

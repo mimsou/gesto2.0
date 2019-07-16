@@ -63,7 +63,7 @@ class GestRelations
     /**
      * @var \GestEntity
      *
-     * @ORM\ManyToOne(targetEntity="GestEntity")
+     * @ORM\ManyToOne(targetEntity="GestEntity" ,inversedBy="inverseRelations")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="relations_table", referencedColumnName="entity_id")
      * })

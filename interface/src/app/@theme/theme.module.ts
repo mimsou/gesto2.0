@@ -9,6 +9,8 @@ import {DpDatePickerModule} from 'ng2-date-picker';
 import { NgSelect2Module  } from 'ng-select2';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
+
 
 
 import {
@@ -96,7 +98,8 @@ const NB_MODULES = [
     NbAccordionModule,
     NgSelect2Module,
     CKEditorModule,
-    EditorModule
+    EditorModule,
+    NgxSmartModalModule
 ];
 
 const COMPONENTS = [
