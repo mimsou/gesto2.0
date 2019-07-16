@@ -7,10 +7,11 @@ import {
     CanLoad, Route
 } from '@angular/router';
 
-import {NbAuthService} from '@nebular/auth';
+import {NbAuthService, } from '@nebular/auth';
+import {take} from "rxjs/internal/operators";
 
 @Injectable()
-export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
+export class AuthGuardAdmin implements CanActivate, CanActivateChild, CanLoad {
 
     constructor(private router: Router, private authService: NbAuthService) {
 
@@ -20,10 +21,25 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     baseurl: any = "http://localhost:4200/";
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
         let url: string = state.url;
-        console.log
-        
-        return this.authService.isAuthenticated();
+
+        console.log("ss",route);
+
+        let obsValue = undefined
+
+        this.authService.onTokenChange().pipe(take(1)).
+            subscribe((token) => {
+                    obsValue  = token.getPayload();
+            })
+
+       if(this.authService.isAuthenticated() && obsValue.roles.includes("ROLE_ADMIN")){
+           return true;
+       }else{
+           this.router.navigate(['auth/login']);
+       }
+
+
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

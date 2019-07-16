@@ -3,6 +3,7 @@ import {Routes, RouterModule, ExtraOptions} from '@angular/router';
 import { ManagerComponent } from './manager/manager.component';
 import{ AuthGuard } from '../@core/data/auth.guard.service';
 import { AdminComponent } from './admin.component';
+import {AuthGuardAdmin} from "../@core/data/auth.guard.admin.service";
 
 
 const routes: Routes = [{
@@ -11,7 +12,7 @@ const routes: Routes = [{
   children: [{
     path: 'manager',
     component: ManagerComponent,
-    canActivate:[AuthGuard]
+    canActivate:[AuthGuardAdmin]
   }, {
     path: '',
     redirectTo: 'manager',

@@ -5,8 +5,10 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { ManagerComponent } from './manager/manager.component';
 import { AdminComponent } from './admin.component';
 import { AuthGuard } from '../auth.guard.service';
+import {AuthGuardAdmin} from "../@core/data/auth.guard.admin.service";
 import { CallbackdirDirective } from '../callbackdir.directive';
 import { ExpressionComponent } from './manager/expression/expression.component';
+
 
 
 
@@ -28,7 +30,7 @@ const DIRECTIVE_DEC = [
   ],
   declarations: [...ADMIN_COMPONENTS,...DIRECTIVE_DEC, ExpressionComponent],
   providers:[
-    AuthGuard
+    AuthGuard,AuthGuardAdmin
   ]
 })
 export class adminModule { }

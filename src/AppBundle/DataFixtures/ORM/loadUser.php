@@ -3,6 +3,7 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\GestRole;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\User;
@@ -18,7 +19,14 @@ class loadUser implements FixtureInterface
             ->setPlainPassword('admin')
             ->setRoles(array("ROLE_ADMIN"));
 
+
+        $role = (new GestRole())->setRoleLibelle('ROLE_ADMIN')->addUser($user);
+
         $manager->persist($user);
+
+        $manager->persist($role);
+
         $manager->flush();
+
     }
 }
