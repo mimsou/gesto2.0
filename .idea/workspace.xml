@@ -3,12 +3,15 @@
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/src/AppBundle/managerController/managerController.php" />
     <bookmark url="file://$PROJECT_DIR$/src/AppBundle/Entity/GestJoinRoutes.php" line="61" />
-    <bookmark url="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts" line="98" />
+    <bookmark url="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts" line="105" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="203b243c-22f2-446d-a8d7-f56a7b7947ac" name="Default" comment="">
+    <list default="true" id="203b243c-22f2-446d-a8d7-f56a7b7947ac" name="Default" comment="try install data base at first install">
+      <change afterPath="$PROJECT_DIR$/interface/src/app/message.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/src/app/message.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AFRREST.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AFRREST.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface/console" beforeDir="false" afterPath="$PROJECT_DIR$/interface/console" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -100,67 +103,80 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.module.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/interface/src/app/app.module.ts">
+      <file leaf-file-name="manager.component.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="46" column="49" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="49" />
+            <state relative-caret-position="1682">
+              <caret line="1770" column="29" selection-start-line="1770" selection-start-column="29" selection-end-line="1770" selection-end-column="29" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#157#205#0" expanded="true" />
+                <element signature="e#0#111#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PostScript.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Setup/PostScript.php">
+      <file leaf-file-name="manager.service.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/interface/src/app/@core/data/manager.service.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="176" column="32" selection-start-line="176" selection-start-column="32" selection-end-line="176" selection-end-column="32" />
+            <state relative-caret-position="774">
+              <caret line="366" column="86" selection-start-line="366" selection-start-column="86" selection-end-line="366" selection-end-column="86" />
               <folding>
-                <element signature="e#7#236#0#PHP" expanded="true" />
-                <element signature="e#292#348#0#PHP" expanded="true" />
+                <element signature="e#0#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="console" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/interface/console">
+      <file leaf-file-name="managerController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/managerController/managerController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+            <state relative-caret-position="8832">
+              <caret line="4373" column="154" selection-start-line="4373" selection-start-column="7" selection-end-line="4373" selection-end-column="154" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="composer.json" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Bcn.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Bcn.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="89" column="21" selection-start-line="87" selection-start-column="5" selection-end-line="89" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Crb.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Crb.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-456">
+              <caret line="68" column="31" selection-start-line="68" selection-start-column="31" selection-end-line="68" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EntityTestB.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/EntityTestB.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="composer.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/composer.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
+            <state relative-caret-position="459">
+              <caret line="57" column="52" lean-forward="true" selection-start-line="57" selection-start-column="52" selection-end-line="57" selection-end-column="52" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScriptHandler.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vendor/sensio/distribution-bundle/Composer/ScriptHandler.php">
+      <file leaf-file-name="manager.component.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="37" column="3" selection-start-line="37" selection-start-column="3" selection-end-line="37" selection-end-column="3" />
-              <folding>
-                <element signature="e#292#348#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Article.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Article.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+            <state relative-caret-position="417">
+              <caret line="1661" column="101" selection-start-line="1661" selection-start-column="99" selection-end-line="1661" selection-end-column="101" />
             </state>
           </provider>
         </entry>
@@ -170,44 +186,44 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$relation</find>
-      <find>INDEN</find>
-      <find>choiceData</find>
-      <find>doac</find>
-      <find>_result</find>
-      <find>-ge</find>
-      <find>$actionProcess</find>
-      <find>-gen-</find>
-      <find>$this-&gt;currentProcess</find>
-      <find>console</find>
-      <find>console.lo</find>
-      <find>validationRequireField</find>
-      <find>Type</find>
-      <find>/action/</find>
-      <find>actionType</find>
-      <find>doCreateAction</find>
-      <find>doAction</find>
-      <find>col-md-10 row</find>
-      <find>createAction</find>
-      <find>&lt;i</find>
-      <find>managerController</find>
-      <find>plumbcontainer</find>
-      <find>actionform</find>
-      <find>selectAction</find>
-      <find>cked</find>
-      <find>edh</find>
-      <find>/action</find>
-      <find>actionData</find>
-      <find>doPr</find>
-      <find>datalist</find>
+      <find>BaseUser</find>
+      <find>updateUser</find>
+      <find>adduser</find>
+      <find>u</find>
+      <find>input</find>
+      <find>addEntity</find>
+      <find>executeCommand</find>
+      <find>Event</find>
+      <find>ProcessExecutor</find>
+      <find>$definition</find>
+      <find>/addentity</find>
+      <find>Entité</find>
+      <find>user.role</find>
+      <find>user.rols</find>
+      <find>roleInUserRole</find>
+      <find>roleInLinkRole</find>
+      <find>@nebular</find>
+      <find>\user</find>
+      <find>constructor</find>
+      <find>refrechRelationalEntity</find>
+      <find>intercept</find>
+      <find>takeUntil</find>
+      <find>yes</find>
+      <find>rols</find>
+      <find>,&quot;Access-Control-Expose-Headers&quot;</find>
+      <find>role</find>
+      <find>getFieldEntityName</find>
+      <find>Ordre</find>
+      <find>entityId</find>
+      <find>Entity  updated Successfully</find>
     </findStrings>
     <replaceStrings>
       <replace>App\Entity</replace>
@@ -219,6 +235,7 @@
       <replace>validationRequireField</replace>
       <replace>listreg</replace>
       <replace>setChecks</replace>
+      <replace>),&quot;Access-Control-Expose-Headers&quot;</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\xampp_b\htdocs\plateforme\src\app\@theme\components\input-edit</dir>
@@ -232,57 +249,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestProcess.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestRelations.php" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/interface/.gitignore" />
-        <option value="$PROJECT_DIR$/interface/src/app/@core/data/api.link.ts" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestDataAccess.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestRole.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestEntity.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestRoleData.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/ArticleBcn.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Bcn.php" />
-        <option value="$PROJECT_DIR$/interface/src/app/pages/pages.component.ts" />
-        <option value="$PROJECT_DIR$/interface/src/app/@core/data/auth.guard.service.ts" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Solde.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestFields.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestJoinRoutes.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Article.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Renouvellement.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Facture.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Crb.php" />
-        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/expression/expression.component.ts" />
-        <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/autocombo/autocombo.component.html" />
-        <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/form/form.component.html" />
-        <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/list/list.component.html" />
-        <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/dimention/dimention.component.html" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/form/form.component.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/dimention/dimention.component.ts" />
-        <option value="$PROJECT_DIR$/interface/src/app/@core/data/manager.service.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/print/print.component.spec.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/generator.component.html" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/list/list.component.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/generator.component.ts" />
-        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.scss" />
-        <option value="$PROJECT_DIR$/interface/src/app/@theme/theme.module.ts" />
-        <option value="$PROJECT_DIR$/interface/angular.json" />
-        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/autocombo/autocombo.component.ts" />
         <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestActions.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Entity/User.php" />
-        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.html" />
-        <option value="$PROJECT_DIR$/src/AppBundle/managerController/managerController.php" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/print/print.component.html" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/print/print.component.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/pages.module.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/app-routing.module.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/login/login.component.d.ts" />
         <option value="$PROJECT_DIR$/interface/src/app/pages/login/login.component.js" />
-        <option value="$PROJECT_DIR$/interface/src/app/app.module.ts" />
-        <option value="$PROJECT_DIR$/composer.json" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Setup/PostScript.php" />
         <option value="$PROJECT_DIR$/interface/console" />
+        <option value="$PROJECT_DIR$/bin/console" />
+        <option value="$PROJECT_DIR$/bin/ff.php" />
+        <option value="$PROJECT_DIR$/app/config/services.yml" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Datafixtures/ORM/loadUser.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/interface/src/app/@core/data/api.link.ts" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Setup/PostScript.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Test.php" />
+        <option value="$PROJECT_DIR$/app/AppKernel.php" />
+        <option value="$PROJECT_DIR$/composer.json" />
+        <option value="$PROJECT_DIR$/interface/src/app/pages/pages-menu.ts" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestRelations.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/GestEntity.php" />
+        <option value="$PROJECT_DIR$/interface/src/app/pages/pages.component.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.scss" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Testa.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/Renouvellement.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/User.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Entity/FondType.php" />
+        <option value="$PROJECT_DIR$/interface/package.json" />
+        <option value="$PROJECT_DIR$/interface/src/app/@theme/components/index.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/@theme/theme.module.ts" />
+        <option value="$PROJECT_DIR$/interface/angular.json" />
+        <option value="$PROJECT_DIR$/interface/src/app/app.component.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.html" />
+        <option value="$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.spec.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/app.module.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/message.service.ts" />
+        <option value="$PROJECT_DIR$/src/AppBundle/userController/userController.php" />
+        <option value="$PROJECT_DIR$/interface/src/app/http.interceptor.ts" />
+        <option value="$PROJECT_DIR$/interface/src/index.html" />
+        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/@core/data/manager.service.ts" />
+        <option value="$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.html" />
+        <option value="$PROJECT_DIR$/src/AppBundle/managerController/managerController.php" />
       </list>
     </option>
   </component>
@@ -361,6 +378,10 @@
       <path value="$PROJECT_DIR$/vendor/jms/metadata" />
       <path value="$PROJECT_DIR$/vendor/fig/link-util" />
       <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
+      <path value="$PROJECT_DIR$/vendor/nette/php-generator" />
+      <path value="$PROJECT_DIR$/vendor/nette/utils" />
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -374,7 +395,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -387,10 +407,57 @@
               <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
+            <path>
+              <item name="AFRREST" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="AFRREST" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="AFRREST" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="@core" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="AFRREST" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="admin" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="AFRREST" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="admin" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="manager" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="AFRREST" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AFRREST" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="interface" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="dialog.template" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -408,15 +475,16 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/interface/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp_b\htdocs\AFRREST\interface\src\app\@theme" />
+      <recent name="C:\xampp_b\htdocs\plateforme\src\app" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp_b\htdocs\AFRREST\interface\src\app\@theme\components" />
+      <recent name="C:\xampp_b\htdocs\AFRREST\app\config" />
       <recent name="C:\xampp_b\htdocs\AFRREST\interface" />
       <recent name="C:\xampp_b\htdocs\AFRREST\src\AppBundle\Setup" />
       <recent name="C:\xampp_b\htdocs\AFRREST\interface\src\app\pages" />
-      <recent name="C:\xampp_b\htdocs\AFRREST\interface\src\app\pages\app-genrator\generator\print" />
-      <recent name="C:\xampp_b\htdocs\AFRREST\interface\src\assets\js" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp_b\htdocs\plateforme\src\app" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -538,7 +606,14 @@
       <workItem from="1558941021485" duration="47854000" />
       <workItem from="1560156248269" duration="2827000" />
       <workItem from="1560242904671" duration="5014000" />
-      <workItem from="1560762468538" duration="9578000" />
+      <workItem from="1560762468538" duration="21382000" />
+      <workItem from="1561371555280" duration="2586000" />
+      <workItem from="1561455175918" duration="5006000" />
+      <workItem from="1561624291665" duration="33103000" />
+      <workItem from="1562055605957" duration="16091000" />
+      <workItem from="1562228123063" duration="15612000" />
+      <workItem from="1562754657340" duration="10032000" />
+      <workItem from="1562916488282" duration="24969000" />
     </task>
     <task id="LOCAL-00001" summary="Update templating component">
       <created>1549355311169</created>
@@ -806,11 +881,81 @@
       <option name="project" value="LOCAL" />
       <updated>1560862891040</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="try install data base at first install">
+      <created>1560863321179</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1560863321179</updated>
+    </task>
+    <task id="LOCAL-00040" summary="try install data base at first install">
+      <created>1560863623917</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1560863623917</updated>
+    </task>
+    <task id="LOCAL-00041" summary="try install data base at first install">
+      <created>1560934551464</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1560934551464</updated>
+    </task>
+    <task id="LOCAL-00042" summary="try install data base at first install">
+      <created>1561455905399</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1561455905399</updated>
+    </task>
+    <task id="LOCAL-00043" summary="try install data base at first install">
+      <created>1561457118497</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1561457118497</updated>
+    </task>
+    <task id="LOCAL-00044" summary="try install data base at first install">
+      <created>1561457705168</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1561457705168</updated>
+    </task>
+    <task id="LOCAL-00045" summary="try install data base at first install">
+      <created>1561458636340</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1561458636340</updated>
+    </task>
+    <task id="LOCAL-00046" summary="try install data base at first install">
+      <created>1561458830465</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1561458830465</updated>
+    </task>
+    <task id="LOCAL-00047" summary="try install data base at first install">
+      <created>1561459783916</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1561459783916</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Entity Managing in backend">
+      <created>1563271176906</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1563271176906</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="838482000" />
+    <option name="totallyTimeSpent" value="957685000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -823,18 +968,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="7" weight="0.32897604" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5021322" side_tool="true" weight="0.22004357" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.32897604" />
       <window_info anchor="bottom" id="Run" order="3" weight="0.32897604" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.4978678" visible="true" weight="0.22004357" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4978678" weight="0.31590414" />
       <window_info anchor="bottom" id="TypeScript" order="0" sideWeight="0.49946696" weight="0.12527233" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49839744" visible="true" weight="0.21588486" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49839744" visible="true" weight="0.15405117" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="3" weight="0.32995737" />
+      <window_info anchor="right" id="Database" order="3" side_tool="true" weight="0.32995737" />
       <window_info id="Structure" order="1" sideWeight="0.5016026" side_tool="true" weight="0.20735608" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
@@ -843,6 +987,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="SQL Generator" order="13" weight="0.32897604" />
+      <window_info anchor="bottom" id="Messages" order="8" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Database Console" order="13" sideWeight="0.4978678" weight="0.32897604" />
@@ -915,7 +1060,8 @@
     <MESSAGE value="Minor updates" />
     <MESSAGE value="Update login component : inproject integration" />
     <MESSAGE value="try install data base at first install" />
-    <option name="LAST_COMMIT_MESSAGE" value="try install data base at first install" />
+    <MESSAGE value="Entity Managing in backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entity Managing in backend" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -930,225 +1076,137 @@
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="8" />
+      <option name="time" value="11" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/generator.component.scss">
+    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/autocombo/autocombo.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        <state>
+          <caret selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/generator.component.ts">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestEntity.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="60" selection-start-line="2" selection-start-column="59" selection-end-line="2" selection-end-column="60" />
+        <state relative-caret-position="323">
+          <caret line="114" column="23" selection-start-line="114" selection-start-column="23" selection-end-line="114" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@ckeditor/ckeditor5-angular/fesm2015/ckeditor-ckeditor5-angular.js">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Etat.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5979" />
+        <state relative-caret-position="-204" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@ckeditor/ckeditor5-angular/esm5/ckeditor.js">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Testi.php" />
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Renouvellement.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2528" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@ckeditor/ckeditor5-angular/esm2015/ckeditor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1071" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@ckeditor/ckeditor5-angular/fesm5/ckeditor-ckeditor5-angular.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6324" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
+        <state relative-caret-position="400">
+          <caret line="62" column="34" selection-start-line="62" selection-start-column="34" selection-end-line="62" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.scss">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Service.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="241" column="17" selection-start-line="241" selection-start-column="17" selection-end-line="241" selection-end-column="17" />
+        <state relative-caret-position="306">
+          <caret line="48" column="33" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/FondType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
+          <folding>
+            <element signature="e#36#84#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/theme/theme.options.d.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/package-lock.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="1541" column="45" selection-start-line="1541" selection-start-column="45" selection-end-line="1541" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/theme/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/theme/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@theme/components/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@theme/dialog/dialog.module.d.ts" />
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@theme/dialog/dialog-config.d.ts" />
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@theme/dialog/dialog.service.d.ts" />
     <entry file="file://$PROJECT_DIR$/interface/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1610" />
+        <state relative-caret-position="859">
+          <caret line="51" column="24" selection-start-line="51" selection-start-column="23" selection-end-line="51" selection-end-column="24" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/angular.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="30" column="96" selection-start-line="30" selection-start-column="96" selection-end-line="30" selection-end-column="96" />
+        <state relative-caret-position="415">
+          <caret line="44" column="45" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts">
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@theme/theme.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="1253" column="5" selection-start-line="1253" selection-start-column="5" selection-end-line="1253" selection-end-column="5" />
+        <state relative-caret-position="-201">
+          <caret line="101" column="23" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
           <folding>
-            <element signature="e#0#88#0" expanded="true" />
+            <element signature="e#0#60#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@types/jspdf/index.d.ts">
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@core/data/user.service.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="192" column="16" selection-start-line="192" selection-start-column="8" selection-end-line="192" selection-end-column="16" />
+        <state relative-caret-position="357">
+          <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/pages-menu.back.ts">
+    <entry file="file://$PROJECT_DIR$/interface/src/app/app.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1581" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/pages-menu.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="41" lean-forward="true" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+        <state relative-caret-position="493">
+          <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#157#205#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/autocombo/autocombo.component.ts">
+    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/admin.module.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret line="4" column="39" lean-forward="true" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/print/print.component.back.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="69" column="6" lean-forward="true" selection-start-line="69" selection-start-column="6" selection-end-line="81" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestActions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3213">
-          <caret line="191" column="48" selection-start-line="191" selection-start-column="48" selection-end-line="191" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1156">
-          <caret line="71" selection-start-line="71" selection-end-line="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/generator.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="46" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11662">
-          <caret line="1357" column="78" selection-start-line="1357" selection-start-column="78" selection-end-line="1357" selection-end-column="78" />
-          <folding>
-            <element signature="n#div#0;n#div#0;n#nb-card#0;n#nb-card-back#0;n#nb-reveal-card#0;n#!!top" />
-            <element signature="n#style#0;n#div#0;n#nb-accordion-item-body#0;n#nb-accordion-item#1;n#nb-accordion#2;n#nb-card#0;n#div#1;n#div#0;n#nb-card#0;n#nb-card-back#0;n#nb-reveal-card#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/print/print.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7446">
-          <caret line="454" column="28" selection-start-line="454" selection-start-column="28" selection-end-line="454" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#114#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/managerController/managerController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44268">
-          <caret line="2604" column="46" selection-start-line="2604" selection-start-column="46" selection-end-line="2604" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Crb.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="84" column="21" lean-forward="true" selection-start-line="84" selection-start-column="21" selection-end-line="84" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/app-genrator/generator/print/print.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="31" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="31" />
-          <folding>
-            <element signature="n#style#0;n#nb-card#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#nb-card-body#0;n#nb-card#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#nb-card-body#0;n#nb-card#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#nb-card-body#0;n#nb-card#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/components/login/login.component.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#94#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/components/login/login.component.metadata.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/components/login/login.component.ngfactory.js.map">
-      <provider editor-type-id="sourcemapFileViewerProvider" />
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/pages.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/components/login/login.component.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/TestA.php">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/src/app/admin/admin.component.ts">
       <provider selected="true" editor-type-id="text-editor">
@@ -1159,110 +1217,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/admin.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="50" lean-forward="true" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/@core/module-import-guard.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/@core/core.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#82#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/admin.module.spec.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/@theme/theme.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1258">
-          <caret line="10" column="54" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/pages-routing.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="69" lean-forward="true" selection-start-line="7" selection-start-column="69" selection-end-line="7" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/app.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#157#205#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/auth.module.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/auth.module.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="20" lean-forward="true" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/components/auth-block/auth-block.component.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/interface/src/app/app-routing.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="12" lean-forward="true" selection-start-line="11" selection-end-line="11" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/login/login.component.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state>
           <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#157#207#0" expanded="true" />
+            <element signature="e#0#69#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/interface/node_modules/@nebular/auth/components/auth.component.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/src/app/pages/login/login.component.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#0#94#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.scss">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/interface/src/app/app.module.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="46" column="49" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="49" />
+        <state relative-caret-position="366">
+          <caret line="73" column="44" selection-start-line="73" selection-start-column="44" selection-end-line="73" selection-end-column="44" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#157#205#0" expanded="true" />
@@ -1270,45 +1240,193 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Article.php">
+    <entry file="file://$PROJECT_DIR$/vendor/friendsofsymfony/rest-bundle/View/View.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+        <state relative-caret-position="193">
+          <caret line="148" column="20" selection-start-line="148" selection-start-column="20" selection-end-line="148" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/sensio/distribution-bundle/Composer/ScriptHandler.php">
+    <entry file="file://$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/dialog.template/dialog.template.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="57" selection-start-column="44" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/message.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="42" lean-forward="true" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/userController/userController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="202" column="87" selection-start-line="202" selection-start-column="87" selection-end-line="202" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/User.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="37" column="3" selection-start-line="37" selection-start-column="3" selection-end-line="37" selection-end-column="3" />
+          <caret line="6" column="27" lean-forward="true" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/friendsofsymfony/user-bundle/Model/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="202" column="31" selection-start-line="202" selection-start-column="20" selection-end-line="202" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="2" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/http.interceptor.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="28" column="84" selection-start-line="28" selection-start-column="84" selection-end-line="28" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestMenu.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="104" column="34" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestProcess.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="156" column="41" selection-start-line="156" selection-start-column="20" selection-end-line="156" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestActions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="237" column="33" selection-start-line="237" selection-start-column="20" selection-end-line="237" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestList.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="118" column="31" selection-start-line="118" selection-start-column="20" selection-end-line="118" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestSteps.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="114" column="31" selection-start-line="114" selection-start-column="20" selection-end-line="114" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/@core/data/manager.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="774">
+          <caret line="366" column="86" selection-start-line="366" selection-start-column="86" selection-end-line="366" selection-end-column="86" />
           <folding>
-            <element signature="e#292#348#0#PHP" expanded="true" />
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/GestFields.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="176" column="38" selection-start-line="176" selection-start-column="20" selection-end-line="176" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/EntityTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="30" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="417">
+          <caret line="1661" column="101" selection-start-line="1661" selection-start-column="99" selection-end-line="1661" selection-end-column="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Crb.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-456">
+          <caret line="68" column="31" selection-start-line="68" selection-start-column="31" selection-end-line="68" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interface/src/app/admin/manager/manager.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1682">
+          <caret line="1770" column="29" selection-start-line="1770" selection-start-column="29" selection-end-line="1770" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#111#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Bcn.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="89" column="21" selection-start-line="87" selection-start-column="5" selection-end-line="89" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/managerController/managerController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8832">
+          <caret line="4373" column="154" selection-start-line="4373" selection-start-column="7" selection-end-line="4373" selection-end-column="154" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/EntityTestB.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/composer.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Setup/PostScript.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="176" column="32" selection-start-line="176" selection-start-column="32" selection-end-line="176" selection-end-column="32" />
-          <folding>
-            <element signature="e#7#236#0#PHP" expanded="true" />
-            <element signature="e#292#348#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interface/console">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+        <state relative-caret-position="459">
+          <caret line="57" column="52" lean-forward="true" selection-start-line="57" selection-start-column="52" selection-end-line="57" selection-end-column="52" />
         </state>
       </provider>
     </entry>
