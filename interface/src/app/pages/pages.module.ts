@@ -18,6 +18,7 @@ import { StepPipe } from './app-genrator/generator/step.pipe';
 
 
 
+
 const PAGES_COMPONENTS = [
   PagesComponent,
     FoundComponent,
@@ -37,7 +38,7 @@ const PAGES_COMPONENTS = [
       PrintComponent,
     AutocomboComponent,
     DimentionComponent,
-    StepPipe,
+    StepPipe
   ],
   providers:[
     AuthGuard

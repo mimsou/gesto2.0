@@ -5,8 +5,8 @@ import {AuthGuard} from '../@core/data/auth.guard.service';
 
 import {PagesComponent} from './pages.component';
 import {NotFoundComponent} from './miscellaneous/not-found/not-found.component';
-import {FoundComponent} from './miscellaneous/found/found.component';
 import {GeneratorComponent} from './app-genrator/generator/generator.component';
+
 
 
 const routes: Routes = [{
@@ -20,14 +20,14 @@ const routes: Routes = [{
             canActivate: [AuthGuard]
         }]
     }
-     , {
-        path: '',
-        redirectTo: 'mouvements/entre',
-        pathMatch: 'full',
-    }, {
-        path: '**',
-        component: NotFoundComponent,
-    }],
+        , {
+            path: '',
+            redirectTo: 'bootmenu',
+            pathMatch: 'full',
+        }, {
+            path: '**',
+            component: NotFoundComponent,
+        }],
 }];
 
 @NgModule({

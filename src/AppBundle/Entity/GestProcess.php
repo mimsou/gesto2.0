@@ -134,6 +134,19 @@ class GestProcess
 
 
 
+    /**
+     * @var \GestModule
+     *
+     * @ORM\ManyToOne(targetEntity="GestModule" ,inversedBy="process"  )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="process_module", referencedColumnName="module_id")
+     * })
+     */
+    private $processModule;
+
+
+
+
 
     /**
      * Constructor
@@ -388,6 +401,18 @@ class GestProcess
     public function setProcessRequiredim(?string $processRequiredim): self
     {
         $this->processRequiredim = $processRequiredim;
+
+        return $this;
+    }
+
+    public function getProcessModule(): ?GestModule
+    {
+        return $this->processModule;
+    }
+
+    public function setProcessModule(?GestModule $processModule): self
+    {
+        $this->processModule = $processModule;
 
         return $this;
     }

@@ -87,6 +87,19 @@ class GestMenu
 
 
 
+    /**
+     * @var \GestModule
+     *
+     * @ORM\ManyToOne(targetEntity="GestModule" ,inversedBy="menu"  )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="menu_module", referencedColumnName="module_id")
+     * })
+     */
+    private $menuModule;
+
+
+
+
 
     /**
      * Constructor
@@ -221,5 +234,19 @@ class GestMenu
 
         return $this;
     }
+
+    public function getMenuModule(): ?GestModule
+    {
+        return $this->menuModule;
+    }
+
+    public function setMenuModule(?GestModule $menuModule): self
+    {
+        $this->menuModule = $menuModule;
+
+        return $this;
+    }
+
+    
 
 }

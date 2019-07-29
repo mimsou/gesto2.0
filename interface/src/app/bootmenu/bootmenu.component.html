@@ -1,0 +1,7 @@
+<div bodyDiv full-heigth="">
+<div mainContainer>
+<div  *ngFor="let module of modules" iconeBloc (click)="GotoModule(module)">
+  <i iconFont [class]="module.moduleIcone"   >  </i> <br> {{module.moduleLibelle}}
+</div>
+</div>
+</div>

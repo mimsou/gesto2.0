@@ -54,6 +54,17 @@ class GestRole
 
 
     /**
+     * @var \GestModule
+     *
+     * @ORM\ManyToOne(targetEntity="GestModule" ,inversedBy="role"  )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="role_module", referencedColumnName="module_id")
+     * })
+     */
+    private $roleModule;
+
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="GestActions", inversedBy="role")
@@ -404,6 +415,19 @@ class GestRole
 
         return $this;
     }
+
+    public function getRoleModule(): ?GestModule
+    {
+        return $this->roleModule;
+    }
+
+    public function setRoleModule(?GestModule $roleModule): self
+    {
+        $this->roleModule = $roleModule;
+
+        return $this;
+    }
+
 
    
 }

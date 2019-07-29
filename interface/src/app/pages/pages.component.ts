@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MENU_ITEMS} from './pages-menu';
 import {ManagerService} from './../@core/data/manager.service';
 import {NbMenuItem} from '@nebular/theme';
+import {ModulestateService} from "../@core/data/modulestate.service";
 
 
 @Component({
@@ -14,14 +15,27 @@ import {NbMenuItem} from '@nebular/theme';
     `,
 })
 
-export class PagesComponent {
-    constructor(private menuService: ManagerService) {
-        this.menuService.getMenu().subscribe(menu => this.setMenu(menu));
+export class PagesComponent implements OnInit {
+
+    module:any;
+
+    constructor(private menuService: ManagerService, private modulestateService: ModulestateService) {
+
+    }
+
+    ngOnInit() {
+        this.module = this.modulestateService.getModuleValue();
+        this.getMenu();
+    }
+
+    getMenu(currentModule) {
+        this.menuService.getMenu(this.module).subscribe(menu => this.setMenu(menu));
     }
 
     menu: NbMenuItem[] = [];
 
     setMenu(menu) {
+        console.log("menui", this.module)
         for (let mn of menu) {
             var men = [];
             men.icone = mn.icone;

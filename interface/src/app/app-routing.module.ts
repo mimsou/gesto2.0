@@ -10,11 +10,13 @@ import {
 } from '@nebular/auth';
 
 import { NbLoginComponent } from './pages/login/login.component'
+import { BootmenuComponent } from './bootmenu/bootmenu.component'
 
 
 const routes: Routes = [
   { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule' },
   { path: 'admin', loadChildren: 'app/admin/admin.module#adminModule' },
+    { path: 'bootmenu', component: BootmenuComponent },
   {
     path: 'auth',
     component: NbAuthComponent,
@@ -45,7 +47,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '', redirectTo: 'bootmenu', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
 

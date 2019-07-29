@@ -14,12 +14,12 @@ export class ManagerService {
     }
 
 
-    MenuAll() {
-        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/menu`);
+    MenuAll(id) {
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/menu/${id}`);
     }
 
-    LinkAll() {
-        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/link`);
+    LinkAll(id) {
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/link/${id}`);
     }
 
     load(id) {
@@ -56,8 +56,8 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/unlinkmenu/`, JSON.stringify(param));
     }
 
-    RoleAll() {
-        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/role`);
+    RoleAll(module) {
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/role/${module}`);
     }
 
     loadRole(id) {
@@ -137,8 +137,8 @@ export class ManagerService {
         return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/allcontroller`);
     }
 
-    getMenu(){
-        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/menufront`);
+    getMenu(id){
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/menufront/${id}`);
     }
 
     getSchema(){
@@ -169,8 +169,8 @@ export class ManagerService {
     return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/actionfromstep/`, JSON.stringify(param));
    }
 
-    getProcess(){
-        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/process`);
+    getProcess(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/process`, JSON.stringify(param));
     }
 
     getSingleProcess(id){
@@ -365,6 +365,15 @@ export class ManagerService {
 
     removeEntityField(param){
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/removefieldfromentity/`, JSON.stringify(param));
+    }
+
+
+    addModule(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addmodule/`, JSON.stringify(param));
+    }
+
+    getAllModule(){
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/getallmodule`);
     }
 
 

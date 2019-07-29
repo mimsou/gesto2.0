@@ -161,6 +161,17 @@ class GestEntity
      */
     private $checks;
 
+
+    /**
+     * @var \GestModule
+     *
+     * @ORM\ManyToOne(targetEntity="GestModule" ,inversedBy="entity"  )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="entity_module", referencedColumnName="module_id")
+     * })
+     */
+    private $entityModule;
+
     /**
      * Constructor
      */
@@ -539,6 +550,18 @@ class GestEntity
                 $inverseRelation->setRelationsTable(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEntityModule(): ?GestModule
+    {
+        return $this->entityModule;
+    }
+
+    public function setEntityModule(?GestModule $entityModule): self
+    {
+        $this->entityModule = $entityModule;
 
         return $this;
     }

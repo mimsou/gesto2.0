@@ -23,12 +23,13 @@ import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputM
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import {Dialog, DialogTemplateComponent} from './dialog.template/dialog.template.component';
 import { AppHttpInterceptor } from './http.interceptor'
-import  { MessageService } from './message.service'
-
+import  { MessageService } from './message.service';
+import { BootmenuComponent } from './bootmenu/bootmenu.component'
+import {ModulestateService} from "./@core/data/modulestate.service";
 
 
 @NgModule({
-  declarations: [AppComponent,StopClickDirective,NbLoginComponent, DialogTemplateComponent],
+  declarations: [AppComponent,StopClickDirective,NbLoginComponent, DialogTemplateComponent, BootmenuComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -71,7 +72,7 @@ import  { MessageService } from './message.service'
       { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true},
       { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true},
       NgxSmartModalService,
-    AuthGuard, NbAuthService ,MessageService
+    AuthGuard, NbAuthService ,MessageService,ModulestateService
   ],
 })
 export class AppModule {

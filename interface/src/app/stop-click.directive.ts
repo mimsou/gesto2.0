@@ -8,7 +8,7 @@ export class StopClickDirective {
     constructor() {
     }
 
-@HostListener('click', ["$event"]);public  onClick(event: any): void {
+@HostListener('click', ["$event"]) public  onClick(event: any): void {
         event.stopPropagation();
     }
 }
