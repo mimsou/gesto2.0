@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
 import {ModulestateService} from "../../../@core/data/modulestate.service";
 import {ManagerService} from "../../../@core/data/manager.service";
 import {NgxSmartModalService} from 'ngx-smart-modal';
+import {NbAuthService } from '@nebular/auth';
+import {take} from "rxjs/internal/operators";
 
 @Component({
     selector: 'ngx-header',
@@ -19,12 +21,13 @@ export class HeaderComponent implements OnInit {
 
     @Input() position = 'normal';
 
-    user: any;
+    user: any={};
     admin: any = false;
     front: any = false;
-    moudleName:any;
-    modules:any = [];
-    modulesInp:any = {};
+    moudleName: any;
+    modules: any = [];
+    modulesInp: any = {};
+    moduleDesignation: any = "";
 
     userMenu = [{title: 'Profile', link: '/pages/dashboard'}, {title: 'Log out'}];
 
@@ -36,26 +39,33 @@ export class HeaderComponent implements OnInit {
                 private authguard: AuthGuard,
                 private router: Router,
                 private ngxSmartModalService: NgxSmartModalService,
-                private  ManagerService:ManagerService,
-                private moduleService:ModulestateService) {
+                private  ManagerService: ManagerService,
+                private moduleService: ModulestateService,
+                private authService: NbAuthService) {
+        this.getCurrentModule()
     }
 
     ngOnInit() {
 
         this.getAllModule()
 
-        this.userService.getUsers()
-            .subscribe((users: any) => this.user = users.nick);
 
 
+        let obsValue;
+
+        this.authService.onTokenChange().pipe(take(1)).
+        subscribe((token) => {
+            obsValue  = token.getPayload();
+        })
+
+        this.user.name = obsValue.username
 
         let root = this.router.url.split('/');
 
-        if ( root[1] == 'pages') {
+        if (root[1] == 'pages') {
             this.front = true;
 
-        } else if ( root[1] == 'admin') {
-            console.log('ddd')
+        } else if (root[1] == 'admin') {
             this.admin = true;
         } else {
             this.front = false;
@@ -64,16 +74,16 @@ export class HeaderComponent implements OnInit {
 
     }
 
-    setModule($event){
-        if( this.modules != "Selectioner un module")
-       this.moduleService.setModule($event.target.selectedOptions[0].value);
+    setModule($event) {
+        if (this.modules != "Selectioner un module")
+            this.moduleService.setModule($event.target.selectedOptions[0].value);
     }
 
-    stopClick($event){
+    stopClick($event) {
         $event.stopPropagation();
     }
 
-    AddModuleDialog($event){
+    AddModuleDialog($event) {
         $event.stopPropagation();
         this.ngxSmartModalService.open('moduleModal');
     }
@@ -101,23 +111,33 @@ export class HeaderComponent implements OnInit {
         this.analyticsService.trackEvent('startSearch');
     }
 
-    addModule(){
+    addModule() {
         var param = {}
         param = this.modulesInp;
-        this.ManagerService.addModule(param).subscribe(resp =>  this.getAllModule());
+        this.ManagerService.addModule(param).subscribe(resp => this.getAllModule());
     }
 
-    getAllModule(){
-        this.ManagerService.getAllModule().subscribe(modules => this.populateModule(modules) );
+    getCurrentModule() {
+        this.ManagerService.getAllModule().subscribe(resp => this.setModuleDesignation(resp));
+    }
+
+    setModuleDesignation(modules) {
+        for (let mod of modules) {
+            if (mod.moduleId == this.moduleService.getModuleValue()) {
+                 this.moduleDesignation = mod.moduleLibelle;
+            }
+        }
+    }
+
+    getAllModule() {
+        this.ManagerService.getAllModule().subscribe(modules => this.populateModule(modules));
 
     }
 
-    populateModule(modules){
+    populateModule(modules) {
         this.modules = modules
         console.log(modules)
     }
-
-
 
 
 }

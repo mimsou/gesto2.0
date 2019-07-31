@@ -606,7 +606,7 @@
                              [style.top]="entitie.entityPos.split(',')[0]+'px'"
                              [style.left]="entitie.entityPos.split(',')[1]+'px'"
                              [ngClass]="{'ent_highlight' :  exist(entitie.entityId , selectedArborecence, 'entityId') ,'ent_highlight_action' :  exist(entitie.entityId , EntityAction, 'entityId')  ,'ent_highlight_list' :  exist(entitie.entityId , EntityList, 'entityId') }">
-
+                            <div *ngIf="entitie.entityModule.length == 0" linkToModule (click)="addentityToModule(entitie,$event)"><i class="fa fa-link"></i></div>
                             <div entityHead><strong>{{entitie.entityEntity}}</strong></div>
 
                             <div entityField>

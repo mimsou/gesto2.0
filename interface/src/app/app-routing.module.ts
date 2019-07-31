@@ -16,7 +16,7 @@ import { BootmenuComponent } from './bootmenu/bootmenu.component'
 const routes: Routes = [
   { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule' },
   { path: 'admin', loadChildren: 'app/admin/admin.module#adminModule' },
-    { path: 'bootmenu', component: BootmenuComponent },
+  { path: 'bootmenu', component: BootmenuComponent },
   {
     path: 'auth',
     component: NbAuthComponent,

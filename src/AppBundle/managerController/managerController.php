@@ -8,6 +8,7 @@ use AppBundle\Entity\GestAccessPath;
 use AppBundle\Entity\GestDataAccess;
 use AppBundle\Entity\GestJoinRoutes;
 use AppBundle\Entity\GestModule;
+use AppBundle\Entity\GestModuleEntity;
 use AppBundle\Entity\GestRoleData;
 use AppBundle\Entity\GestActions;
 use AppBundle\Entity\GestActionsRegle;
@@ -103,7 +104,11 @@ class managerController extends FOSRestController
         $em->createQuery('update AppBundle:Gestfields a set a.checks = 0 where a.checks != 2')->execute();
         $em->createQuery('update AppBundle:GestRelations a set a.checks = 0 where a.checks != 2')->execute();
 
+         //return $metadata;
+
         foreach ($metadata as $classMeta) {
+
+
 
 
             if (strpos($classMeta->table["name"], 'gest_') === false && $classMeta->table["name"] !== 'user' && $classMeta->table["name"] !== 'group' && $classMeta->table["name"] !== 'update_form' && $classMeta->table["name"] !== 'view_form') {
@@ -152,6 +157,8 @@ class managerController extends FOSRestController
                 foreach ($classMeta->getAssociationMappings() as $mapping) {
 
 
+
+
                     $fieldf = $this->getDoctrine()
                         ->getRepository('AppBundle:GestFields')
                         ->findOneBy(
@@ -178,6 +185,7 @@ class managerController extends FOSRestController
                     if ($addtoEntity) {
                         $entity->addField($fieldf);
                     }
+
 
                     if (isset($mapping["joinTable"]["inverseJoinColumns"])) {
                         if (!empty($mapping["joinTable"]["inverseJoinColumns"])) {
@@ -279,6 +287,7 @@ class managerController extends FOSRestController
                     } else if (empty($mapping["mappedBy"])) {
 
 
+
                         $relation = $this->getDoctrine()
                             ->getRepository('AppBundle:GestRelations')
                             ->findOneBy(
@@ -314,6 +323,7 @@ class managerController extends FOSRestController
 
 
         $relations = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findAll();
+
         foreach ($relations as $relation) {
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findOneBy(array("entityEntity" => $relation->getRelationTableName()));
             $relation->setRelationsTable($entity);
@@ -322,6 +332,7 @@ class managerController extends FOSRestController
         }
 
         $fields = $this->getDoctrine()->getRepository('AppBundle:GestFields')->findAll();
+
         foreach ($fields as $field) {
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findOneBy(array("entityEntity" => $field->getFieldTargetEntity()));
             $field->setFieldTargetEntityId($entity);
@@ -362,10 +373,10 @@ class managerController extends FOSRestController
 
 
     /**
-     * @Rest\Get("/schema")
+     * @Rest\Get("/schema/{id}")
      */
 
-    public function getSchemaAction()
+    public function getSchemaAction($id)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -374,9 +385,13 @@ class managerController extends FOSRestController
 
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u', 'p')
+        $qb->select('u', 'p','e')
             ->from('AppBundle:GestEntity', 'u')
-            ->leftJoin('u.fields', 'p')->orderBy("p.fieldOrder");
+            ->leftJoin('u.fields', 'p')
+            ->leftJoin('u.entityModule', 'e')
+            ->where("e.moduleEntityId = ".$id)
+            ->orWhere($qb->expr()->isNull('e.moduleEntityId'))
+            ->orderBy("p.fieldOrder");
 
         $schema["table"] = $qb->getQuery()->getArrayResult();
 
@@ -5264,6 +5279,38 @@ class managerController extends FOSRestController
 
         return $restresult;
     }
+
+    /**
+     * @Rest\Patch("/addentitytomodule/")
+     */
+
+    public function patchAddEntityToModuleAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
+
+        $module = $this->getDoctrine()->getRepository('AppBundle:GestModule')->find($param->module);
+
+        $moduleEntity = new GestModuleEntity();
+
+        $moduleEntity->setEntityModuleId($entity);
+
+        $moduleEntity->setModuleEntityId($module);
+
+        $em->persist($moduleEntity);
+
+        $em->flush();
+
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'entity ".$entity->getEntityEntity()." a été ajouter au module ".$module->getModuleLibelle()), "Access-Control-Expose-Headers" => "message"));
+
+
+    }
+
+
 
 
 }

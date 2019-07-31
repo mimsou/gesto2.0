@@ -141,8 +141,8 @@ export class ManagerService {
         return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/menufront/${id}`);
     }
 
-    getSchema(){
-        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/schema`);
+    getSchema(id){
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/schema/${id}`);
     }
 
     entityPos(pos,id) {
@@ -374,6 +374,11 @@ export class ManagerService {
 
     getAllModule(){
         return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/getallmodule`);
+    }
+
+
+    addEntityToModule(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addentitytomodule/`, JSON.stringify(param));
     }
 
 

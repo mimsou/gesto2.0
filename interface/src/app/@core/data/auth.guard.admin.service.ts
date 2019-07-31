@@ -7,7 +7,7 @@ import {
     CanLoad, Route
 } from '@angular/router';
 
-import {NbAuthService, } from '@nebular/auth';
+import {NbAuthService } from '@nebular/auth';
 import {take} from "rxjs/internal/operators";
 
 @Injectable()

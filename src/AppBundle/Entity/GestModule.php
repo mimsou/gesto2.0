@@ -70,10 +70,10 @@ class GestModule
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="GestEntity", mappedBy="entityModule")
+     * @ORM\OneToMany(targetEntity="GestModuleEntity", mappedBy="moduleEntityId")
      */
 
-    private $entity;
+    private $moduleEntity;
 
 
 
@@ -83,6 +83,7 @@ class GestModule
         $this->menu = new ArrayCollection();
         $this->process = new ArrayCollection();
         $this->entity = new ArrayCollection();
+        $this->moduleEntity = new ArrayCollection();
     }
 
     public function getModuleId(): ?int
@@ -227,34 +228,36 @@ class GestModule
     }
 
     /**
-     * @return Collection|GestRole[]
+     * @return Collection|GestModuleEntity[]
      */
-    public function getEntity(): Collection
+    public function getModuleEntity(): Collection
     {
-        return $this->entity;
+        return $this->moduleEntity;
     }
 
-    public function addEntity(GestRole $entity): self
+    public function addModuleEntity(GestModuleEntity $moduleEntity): self
     {
-        if (!$this->entity->contains($entity)) {
-            $this->entity[] = $entity;
-            $entity->setEntityModule($this);
+        if (!$this->moduleEntity->contains($moduleEntity)) {
+            $this->moduleEntity[] = $moduleEntity;
+            $moduleEntity->setModuleEntityId($this);
         }
 
         return $this;
     }
 
-    public function removeEntity(GestRole $entity): self
+    public function removeModuleEntity(GestModuleEntity $moduleEntity): self
     {
-        if ($this->entity->contains($entity)) {
-            $this->entity->removeElement($entity);
+        if ($this->moduleEntity->contains($moduleEntity)) {
+            $this->moduleEntity->removeElement($moduleEntity);
             // set the owning side to null (unless already changed)
-            if ($entity->getEntityModule() === $this) {
-                $entity->setEntityModule(null);
+            if ($moduleEntity->getModuleEntityId() === $this) {
+                $moduleEntity->setModuleEntityId(null);
             }
         }
 
         return $this;
     }
+
+
 
 }

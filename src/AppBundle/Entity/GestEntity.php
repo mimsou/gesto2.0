@@ -163,12 +163,9 @@ class GestEntity
 
 
     /**
-     * @var \GestModule
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToOne(targetEntity="GestModule" ,inversedBy="entity"  )
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="entity_module", referencedColumnName="module_id")
-     * })
+     * @ORM\OneToMany(targetEntity="GestModuleEntity", mappedBy="entityModuleId" , cascade={"persist"})
      */
     private $entityModule;
 
@@ -185,6 +182,7 @@ class GestEntity
         $this->daAccessData = new ArrayCollection();
         $this->rdAccessData = new ArrayCollection();
         $this->inverseRelations = new ArrayCollection();
+        $this->entityModule = new ArrayCollection();
     }
 
     public function getEntityId(): ?int
@@ -554,17 +552,37 @@ class GestEntity
         return $this;
     }
 
-    public function getEntityModule(): ?GestModule
+    /**
+     * @return Collection|GestModuleEntity[]
+     */
+    public function getEntityModule(): Collection
     {
         return $this->entityModule;
     }
 
-    public function setEntityModule(?GestModule $entityModule): self
+    public function addEntityModule(GestModuleEntity $entityModule): self
     {
-        $this->entityModule = $entityModule;
+        if (!$this->entityModule->contains($entityModule)) {
+            $this->entityModule[] = $entityModule;
+            $entityModule->setEntityModuleId($this);
+        }
 
         return $this;
     }
+
+    public function removeEntityModule(GestModuleEntity $entityModule): self
+    {
+        if ($this->entityModule->contains($entityModule)) {
+            $this->entityModule->removeElement($entityModule);
+            // set the owning side to null (unless already changed)
+            if ($entityModule->getEntityModuleId() === $this) {
+                $entityModule->setEntityModuleId(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 
 

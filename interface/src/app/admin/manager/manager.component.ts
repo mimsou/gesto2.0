@@ -44,6 +44,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     jsPlumbInstance;
     ngUnsubscribe = new Subject();
+    ngUnsubscribea = new Subject();
     menus: Array<GestMenu> = [];
     link: Array<GestMenu> = [];
     roles: Array<GestRole> = [];
@@ -125,7 +126,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     tokerolen: any;
 
-    constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private msgService: MessageService, private selectedMdule: ModulestateService) {
+    constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private msgService: MessageService, private selectedMdule: ModulestateService,private NgxSmartModalServices:NgxSmartModalService) {
         this.initializeMessgae();
         this.initializeSelectedModule();
     }
@@ -170,6 +171,9 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy() {
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
+
+        this.ngUnsubscribea.next();
+        this.ngUnsubscribea.complete();
     }
 
     ngAfterViewInit() {
@@ -259,7 +263,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this
             .selectedMdule
             .getModule()
-            .pipe(takeUntil(this.ngUnsubscribe))
+            .pipe(takeUntil(this.ngUnsubscribea))
             .subscribe((modules) => {
                 this.setModule(modules);
             });
@@ -271,6 +275,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadMenu(true)
         this.loadProcess()
         this.loadLink(true)
+        this.loadSchema()
     }
 
     onRoleOptionClick($event) {
@@ -691,1244 +696,1181 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
     }
-        loadMenuLink(load)
-        {
-            this.loadMenu(load);
-            this.loadLink(load);
-        }
-        ;
 
-        loadUser(val)
-        {
-            if (val !== "") {
-                this.userService.searchUser(val).subscribe(user => this.users = this.userfromObject(user));
-                this.flipusers.flipped = false;
-            } else {
-                this.userService.allUser().subscribe(user => this.users = this.userfromObject(user));
-                this.flipusers.flipped = false;
+    loadMenuLink(load) {
+        this.loadMenu(load);
+        this.loadLink(load);
+    }
+    ;
+
+    loadUser(val) {
+        if (val !== "") {
+            this.userService.searchUser(val).subscribe(user => this.users = this.userfromObject(user));
+            this.flipusers.flipped = false;
+        } else {
+            this.userService.allUser().subscribe(user => this.users = this.userfromObject(user));
+            this.flipusers.flipped = false;
+        }
+
+
+    }
+
+    loadController() {
+        this.menuService.allController().subscribe(ap => this.aps = this.apfromObject(ap));
+    }
+
+    loadSchema() {
+        let id = this.selectedMdule.getModuleValue();
+        this.menuService.getSchema(id).subscribe(schema => this.buildShema(schema));
+    }
+
+
+    buildShema(schema) {
+
+
+        this.entities = schema["table"];
+
+        this.relations = schema["relation"];
+
+        var arrvar = new Array();
+        for (let ent of this.entities) {
+            for (let fld of ent.fields) {
+                var objvar = new Object();
+                objvar.variableId = fld.fieldId;
+                objvar.name = ent.entityEntity + "_" + fld.fieldEntityName;
+                arrvar.push(objvar);
             }
-
-
         }
 
-        loadController()
-        {
-            this.menuService.allController().subscribe(ap => this.aps = this.apfromObject(ap));
-        }
+        this.allFieldOption = arrvar;
 
-        loadSchema()
-        {
-            this.menuService.getSchema().subscribe(schema => this.buildShema(schema));
-        }
-
-        buildShema(schema)
-        {
-
-            this.entities = schema["table"];
-
-            this.relations = schema["relation"];
-
-            var arrvar = new Array();
+        if (typeof this.selectedEntity != "undefined") {
             for (let ent of this.entities) {
-                for (let fld of ent.fields) {
-                    var objvar = new Object();
-                    objvar.variableId = fld.fieldId;
-                    objvar.name = ent.entityEntity + "_" + fld.fieldEntityName;
-                    arrvar.push(objvar);
+                if (ent.entityId == this.selectedEntity.entityId) {
+                    this.selectedEntity = ent
                 }
             }
 
-            this.allFieldOption = arrvar;
-
-            if (typeof this.selectedEntity != "undefined") {
-                for (let ent of this.entities) {
-                    if (ent.entityId == this.selectedEntity.entityId) {
-                        this.selectedEntity = ent
-                    }
-                }
-
-                this.agField = this.getAgField(this.selectedEntity.fields);
-            }
-
-            this.connectEntity();
-
+            this.agField = this.getAgField(this.selectedEntity.fields);
         }
 
+        setTimeout(function () {
+            this.connectEntity()
+        }.bind(this), 300);
 
-        dataOnSelectedEntity($event)
-        {
 
-            var id = $event.target.selectedOptions[0].value;
+    }
 
-            if (id == 0) {
-                this.dataSelectedEntity = new Entitie();
+
+    dataOnSelectedEntity($event) {
+
+        var id = $event.target.selectedOptions[0].value;
+
+        if (id == 0) {
+            this.dataSelectedEntity = new Entitie();
+        }
+
+        for (let entitie of this.entities) {
+            if (id == entitie.entityId) {
+                this.dataSelectedEntity = entitie;
             }
+        }
 
-            for (let entitie of this.entities) {
-                if (id == entitie.entityId) {
-                    this.dataSelectedEntity = entitie;
-                }
-            }
+        var param = {}
 
+        param.entity = this.dataSelectedEntity;
+
+        this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
+
+    }
+
+    dataRefrechData() {
+
+        var param = {}
+
+        param.entity = this.dataSelectedEntity;
+
+        this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
+
+    }
+
+    getDataCallback(data) {
+        this.accessData = data
+    }
+
+    garantAccess($event) {
+
+        var mode = $event.target.selectedOptions[0].value;
+
+        if (!this.isEmpty(this.dataSelectedEntity)) {
             var param = {}
-
-            param.entity = this.dataSelectedEntity;
-
-            this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
-
+            param.entity = this.dataSelectedEntity
+            param.mode = mode
+            param.role = this.selectedrole
+            this.menuService.updateAccessData(param).subscribe(data => this.doNthing());
         }
 
-        dataRefrechData()
-        {
 
+    }
+
+    roleDataAccess(data, $event) {
+
+        $event.stopPropagation();
+
+        if (this.selectedrole !== "") {
             var param = {}
+            param.entity = this.dataSelectedEntity
+            param.role = this.selectedrole
+            param.data = data[this.dataSelectedEntity.entityKey]
 
-            param.entity = this.dataSelectedEntity;
-
-            this.menuService.getAccessData(param).subscribe(data => this.getDataCallback(data));
-
+            this.menuService.updateRoleAccessData(param).subscribe(data => this.dataRefrechData());
         }
 
-        getDataCallback(data)
-        {
-            this.accessData = data
-        }
+    }
 
-        garantAccess($event)
-        {
-
-            var mode = $event.target.selectedOptions[0].value;
-
-            if (!this.isEmpty(this.dataSelectedEntity)) {
-                var param = {}
-                param.entity = this.dataSelectedEntity
-                param.mode = mode
-                param.role = this.selectedrole
-                this.menuService.updateAccessData(param).subscribe(data => this.doNthing());
+    roleInRoleData(role) {
+        for (let dat of role) {
+            if (parseInt(dat.roleId) == parseInt(this.selectedrole)) {
+                return true;
             }
-
-
         }
 
-        roleDataAccess(data, $event)
-        {
+        return false;
+    }
 
+
+    isEmpty(obj) {
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
+                return false;
+        }
+
+        return JSON.stringify(obj) === JSON.stringify({});
+    }
+
+
+    getDataAccessField(entity) {
+        var flds = [];
+
+        if (!this.isEmpty(entity)) {
+            for (let fld of entity.fields) {
+                if (fld.fieldEntityName == entity.entityKey) {
+                    flds[0] = fld;
+                }
+
+                if (fld.fieldEntityName == entity.entityDisplayfield) {
+                    flds[1] = fld;
+                }
+            }
+        }
+
+        return flds;
+    }
+
+
+    onSelectEntity(entity, $event) {
+
+
+        if ($event) {
             $event.stopPropagation();
-
-            if (this.selectedrole !== "") {
-                var param = {}
-                param.entity = this.dataSelectedEntity
-                param.role = this.selectedrole
-                param.data = data[this.dataSelectedEntity.entityKey]
-
-                this.menuService.updateRoleAccessData(param).subscribe(data => this.dataRefrechData());
-            }
-
         }
 
-        roleInRoleData(role)
-        {
-            for (let dat of role) {
-                if (parseInt(dat.roleId) == parseInt(this.selectedrole)) {
-                    return true;
-                }
-            }
-
-            return false;
+        if (this.paramPanel != "action") {
+            this.paramPanel = 'entity';
         }
 
+        if (this.selectedProcess.length == 0 || !$event) {
+            this.selectedEntity = null;
+            this.selectedArborecence = Array();
+            if (this.selectedArborecence.length == 0) {
+                this.selectedEntity = entity;
+                this.setArborcence(entity);
+            }
+        } else {
 
-        isEmpty(obj)
-        {
-            for (var prop in obj) {
-                if (obj.hasOwnProperty(prop))
-                    return false;
+
+            if (this.flipaction.flipped == true || this.paramPanel == "action") {
+                this.actionform.actionSubEntity = entity.entityId;
             }
 
-            return JSON.stringify(obj) === JSON.stringify({});
+            if (this.fliplist.flipped == true) {
+                this.listform.listEntityName = entity.entityId;
+            }
         }
 
+        if (this.flipdim.flipped == true && this.dimform.type == 1) {
+            this.dimform.entityId = entity.entityId;
+        }
 
-        getDataAccessField(entity)
-        {
-            var flds = [];
+        if (typeof this.selectedEntity !== "undefined") {
+            this.agField = this.getAgField(this.selectedEntity.fields);
+        }
 
-            if (!this.isEmpty(entity)) {
-                for (let fld of entity.fields) {
-                    if (fld.fieldEntityName == entity.entityKey) {
-                        flds[0] = fld;
+    }
+
+    setArborcence(entity) {
+        this.selectedArborecence.push(entity);
+        for (let rel of this.relations) {
+            if (rel.relationsTable.entityId == entity.entityId) {
+                this.setArborcence(rel.relationEntitie);
+            }
+        }
+    }
+
+
+    exist(id, objs, search) {
+
+        for (let obj of objs) {
+            if (obj[search] == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    highlightloopaction(id, entFromProcess) {
+
+        for (let rel of this.relations) {
+            if (rel.relationsTable.entityId == id) {
+
+                var exist = false
+                for (let entpr of entFromProcess) {
+                    if (entpr.entityId == rel.relationsTable.entityId) {
+                        exist = true;
                     }
+                }
 
-                    if (fld.fieldEntityName == entity.entityDisplayfield) {
-                        flds[1] = fld;
+                if (exist) {
+                    this.EntityAction.push(rel.relationEntitie);
+                }
+
+            }
+        }
+
+
+    }
+
+
+    highlightlooplist(id, entFromProcess) {
+
+        for (let rel of this.relations) {
+            if (rel.relationsTable.entityId == id) {
+
+                var exist = false
+                for (let entpr of entFromProcess) {
+                    if (entpr.entityId == rel.relationsTable.entityId) {
+                        exist = true;
                     }
                 }
-            }
 
-            return flds;
-        }
-
-
-        onSelectEntity(entity, $event)
-        {
-
-
-            if ($event) {
-                $event.stopPropagation();
-            }
-
-            if (this.paramPanel != "action") {
-                this.paramPanel = 'entity';
-            }
-
-            if (this.selectedProcess.length == 0 || !$event) {
-                this.selectedEntity = null;
-                this.selectedArborecence = Array();
-                if (this.selectedArborecence.length == 0) {
-                    this.selectedEntity = entity;
-                    this.setArborcence(entity);
-                }
-            } else {
-
-
-                if (this.flipaction.flipped == true || this.paramPanel == "action") {
-                    this.actionform.actionSubEntity = entity.entityId;
+                if (exist) {
+                    this.EntityList.push(rel.relationEntitie);
                 }
 
-                if (this.fliplist.flipped == true) {
-                    this.listform.listEntityName = entity.entityId;
-                }
-            }
+                this.highlightlooplist(rel.relationEntitie.entityId, entFromProcess);
 
-            if (this.flipdim.flipped == true && this.dimform.type == 1) {
-                this.dimform.entityId = entity.entityId;
-            }
-
-            if (typeof this.selectedEntity !== "undefined") {
-                this.agField = this.getAgField(this.selectedEntity.fields);
-            }
-
-        }
-
-        setArborcence(entity)
-        {
-            this.selectedArborecence.push(entity);
-            for (let rel of this.relations) {
-                if (rel.relationsTable.entityId == entity.entityId) {
-                    this.setArborcence(rel.relationEntitie);
-                }
             }
         }
 
 
-        exist(id, objs, search)
-        {
+    }
 
-            for (let obj of objs) {
-                if (obj[search] == id) {
-                    return true;
-                }
-            }
-            return false;
+    doNthing() {
+        return true;
+    }
+    ;
+
+
+    connectEntity() {
+
+        this.jsPlumbInstance.reset();
+
+        for (let ent of this.entities) {
+            this.jsPlumbInstance.draggable("ent_" + ent.entityId, {
+                stop: function (event) {
+                    var poselm = {};
+                    poselm.id = $(event.el).attr("id").substring(4);
+                    poselm.pos = event.pos;
+                    ent.entityPos = parseInt(poselm.pos["1"] - 5) + "," + parseInt(poselm.pos[0] - 5);
+                    this.menuService.entityPos(poselm.pos, poselm.id).subscribe(schema => this.doNthing());
+                }.bind(this)
+            })
         }
 
 
-        highlightloopaction(id, entFromProcess)
-        {
+        for (let rel of this.relations) {
 
-            for (let rel of this.relations) {
-                if (rel.relationsTable.entityId == id) {
+            var source = 'field_' + rel.relationEntitie.entityId + "_" + rel.relationKey;
 
-                    var exist = false
-                    for (let entpr of entFromProcess) {
-                        if (entpr.entityId == rel.relationsTable.entityId) {
-                            exist = true;
-                        }
-                    }
+            var target = 'field_' + rel.relationsTable.entityId + "_" + rel.relationsTable.entityKey;
 
-                    if (exist) {
-                        this.EntityAction.push(rel.relationEntitie);
-                    }
+            let src = document.getElementById(source);
 
-                }
-            }
+            let tar = document.getElementById(target);
 
-
-        }
-
-
-        highlightlooplist(id, entFromProcess)
-        {
-
-            for (let rel of this.relations) {
-                if (rel.relationsTable.entityId == id) {
-
-                    var exist = false
-                    for (let entpr of entFromProcess) {
-                        if (entpr.entityId == rel.relationsTable.entityId) {
-                            exist = true;
-                        }
-                    }
-
-                    if (exist) {
-                        this.EntityList.push(rel.relationEntitie);
-                    }
-
-                    this.highlightlooplist(rel.relationEntitie.entityId, entFromProcess);
-
-                }
-            }
-
-
-        }
-
-        doNthing()
-        {
-            return true;
-        }
-        ;
-
-
-        connectEntity()
-        {
-
-
-            for (let ent of this.entities) {
-                this.jsPlumbInstance.draggable("ent_" + ent.entityId, {
-                    stop: function (event) {
-                        var poselm = {};
-                        poselm.id = $(event.el).attr("id").substring(4);
-                        poselm.pos = event.pos;
-                        ent.entityPos = parseInt(poselm.pos["1"] - 5) + "," + parseInt(poselm.pos[0] - 5);
-                        this.menuService.entityPos(poselm.pos, poselm.id).subscribe(schema => this.doNthing());
-                    }.bind(this)
-                })
-
-            }
-
-            this.jsPlumbInstance.deleteEveryConnection();
-
-
-            for (let rel of this.relations) {
-                var source = 'field_' + rel.relationEntitie.entityId + "_" + rel.relationKey;
-                var target = 'field_' + rel.relationsTable.entityId + "_" + rel.relationsTable.entityKey;
+            if (tar !== null && src !== null) {
                 this.jsPlumbInstance.connect({
                     connector: ['Bezier', {stub: [212, 67], cornerRadius: 1, alwaysRespectStubs: true}],
                     source: source,
                     target: target,
                     anchor: ['Right', 'Left'],
                     paintStyle: {stroke: '#456', strokeWidth: 0.7},
-                    endpointStyle: {radius: 5},
+                    endpointStyle: {radius: 10},
                     overlays: [
                         ['Label', {label: "x", location: 0, cssClass: 'connectingConnectorLabel'}]
                     ],
                 });
-
-            }
-
-
-            this.jsPlumbInstance.setContainer("plumbcontainer");
-
-        }
-
-        onAddProcess(val)
-        {
-            if (this.selectedArborecence.length != 0) {
-                var process = {};
-                process.processEntity = this.selectedEntity;
-                process.processName = val;
-                process.module = this.module
-                this.menuService.AddProcess(process).subscribe(process => this.loadProcess());
-            }
-        }
-
-        onAddStep(val)
-        {
-            var step = {};
-            step.process = this.selectedProcess;
-            step.name = val;
-            this.menuService.AddSteps(step).subscribe(process => this.loadProcess());
-        }
-
-        loadProcess()
-        {
-            if (typeof this.module != 'undefined') {
-                var param = {}
-                param.module = this.module;
-                this.menuService.getProcess(param).subscribe(process => this.refrechSelectedProcess(process));
             }
 
         }
 
-        deleteProcess(id, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.ProcessDelete(id).subscribe(process => this.deleteProcessCallback()());
+        this.jsPlumbInstance.repaintEverything(true);
+
+        this.jsPlumbInstance.setContainer("plumbcontainer");
+
+    }
+
+    onAddProcess(val) {
+        if (this.selectedArborecence.length != 0) {
+            var process = {};
+            process.processEntity = this.selectedEntity;
+            process.processName = val;
+            process.module = this.module
+            this.menuService.AddProcess(process).subscribe(process => this.loadProcess());
         }
+    }
 
-        deleteProcessCallback()
-        {
-            this.selectedProcess = [];
-            this.allList = [];
-            this.allAction = [];
-            this.loadProcess()
-        }
+    onAddStep(val) {
+        var step = {};
+        step.process = this.selectedProcess;
+        step.name = val;
+        this.menuService.AddSteps(step).subscribe(process => this.loadProcess());
+    }
 
-        selectProcess(process, $event)
-        {
-            $event.stopPropagation();
-            this.selectedActions = [];
-            this.selectedList = [];
-            this.selectedSteps = [];
-            this.EntityAction = [];
-            this.EntityList = [];
-            this.actionform = new Action();
-            this.hideActionType = false;
-            this.onSelectEntity(process.gestEntity[0]);
-            this.selectedProcess = process;
-            this.allAction = process.actions;
-            this.allList = process.list;
-            this.EntityDimention = process.gestEntityDimention;
-            this.FieldDimention = process.gestFieldDimention;
-            this.paramPanel = 'process';
-            this.selectFrom = [];
-            this.setStepForm(process);
-            this.getJoin(false, false);
-        }
-
-        setStepForm(process)
-        {
-            for (let prs of this.process) {
-                if (prs.gestEntity[0].entityId == process.gestEntity[0].entityId && prs.processId !== process.processId) {
-                    for (let step of prs.steps) {
-                        var stp = new Object();
-                        stp.stepId = step.stepId;
-                        stp.stepName = prs.processDesignation + "_" + step.stepName;
-                        this.selectFrom.push(stp);
-                    }
-                }
-            }
-            return [];
-        }
-
-        addStepFromProcess($event)
-        {
-            $event.stopPropagation();
-            var param = {};
-            param.process = this.selectedProcess;
-            param.step = this.stepform;
-            this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
-        }
-
-        removeStepFromProcess(step, $event)
-        {
-            $event.stopPropagation();
-            var param = {};
-            param.process = this.selectedProcess;
-            param.step = step;
-            this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
-        }
-
-        selectStep(step, $event)
-        {
-            $event.stopPropagation();
-            this.paramPanel = 'step';
-            this.selectedActions = [];
-            this.selectedList = [];
-            this.EntityAction = [];
-            this.EntityList = [];
-            this.selectedSteps = step;
-        }
-
-        deleteStep(id, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.StepDelete(id).subscribe(step => this.loadProcess());
-        }
-
-
-        onAddAction($event)
-        {
-            $event.stopPropagation();
-            if (typeof this.selectedProcess.processId != 'undefined') {
-                this.EntityAction = [];
-                this.selectedActions = [];
-                this.actionform = new Action();
-                this.paramPanel = "action"
-                //this.flipaction.flipped = true;
-            }
-        }
-
-        onAddList($event)
-        {
-            $event.stopPropagation();
-            if (typeof this.selectedProcess.processId != 'undefined') {
-                this.fliplist.flipped = true;
-            }
-        }
-
-        onAddDim($event)
-        {
-            $event.stopPropagation();
-            if (typeof this.selectedProcess.processId != 'undefined') {
-                this.flipdim.flipped = true;
-            }
-        }
-
-
-        actionInStep(action)
-        {
-
-            if (typeof this.selectedSteps.action !== "undefined") {
-
-                for (let actions of this.selectedSteps.action) {
-                    if (actions.actionId == action) {
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
-            }
-        }
-
-        listInStep(list)
-        {
-
-            if (typeof this.selectedSteps.list !== "undefined") {
-
-                for (let lst of this.selectedSteps.list) {
-                    if (lst.listId == list) {
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
-            }
-        }
-
-
-        selectList(list, $event)
-        {
-
-            $event.stopPropagation();
-            this.paramPanel = 'view';
-            if (this.selectedSteps.length == 0) {
-
-                this.EntityList = [];
-
-                this.selectedList = list;
-
-                for (let ent of this.selectedProcess.gestEntity) {
-                    if (list.listEntityName == ent.entityId) {
-                        this.EntityList.push(ent);
-                    }
-                }
-
-
-            } else {
-
-                var listExist = false
-                for (let lst of this.selectedSteps.list) {
-                    if (lst.actionId == list.actionId) {
-                        listExist = true;
-                    }
-                }
-
-                if (!listExist) {
-                    var param = {};
-                    param.list = list;
-                    param.step = this.selectedSteps;
-                    this.menuService.AddListToStep(param).subscribe(list => this.loadProcess());
-                } else {
-                    var param = {};
-                    param.list = list;
-                    param.step = this.selectedSteps;
-                    this.menuService.removeListFromStep(param).subscribe(list => this.loadProcess());
-                }
-
-            }
-
-
-        }
-
-        deleteView(id, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.listDelete(id).subscribe(View => this.loadProcess());
-        }
-
-        deleteAction(id, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.ActionDelete(id).subscribe(Action => this.loadProcess());
-        }
-
-        deleteFldDim(id, type, $event,)
-        {
-            $event.stopPropagation();
+    loadProcess() {
+        if (typeof this.module != 'undefined') {
             var param = {}
-            param.process = this.selectedProcess.processId;
-            param.type = type;
-            param.id = id;
-            this.menuService.DimentionDelete(param).subscribe(dim => this.loadProcess());
+            param.module = this.module;
+            this.menuService.getProcess(param).subscribe(process => this.refrechSelectedProcess(process));
         }
 
-        expandParam()
-        {
-            $(".mainWarp").switchClass("showElement", "hideElement", 50);
-            $(".mainWarp").addClass("col-md-0");
-            $(".mainWarp").removeClass("col-md-10");
-            $(".paramWarp").addClass("col-md-12");
-            $(".paramWarp").removeClass("col-md-2");
-            this.paramexp = 1;
+    }
 
-        }
+    deleteProcess(id, $event) {
+        $event.stopPropagation();
+        this.menuService.ProcessDelete(id).subscribe(process => this.deleteProcessCallback()());
+    }
 
+    deleteProcessCallback() {
+        this.selectedProcess = [];
+        this.allList = [];
+        this.allAction = [];
+        this.loadProcess()
+    }
 
-        collapsParam()
-        {
+    selectProcess(process, $event) {
+        $event.stopPropagation();
+        this.selectedActions = [];
+        this.selectedList = [];
+        this.selectedSteps = [];
+        this.EntityAction = [];
+        this.EntityList = [];
+        this.actionform = new Action();
+        this.hideActionType = false;
+        this.onSelectEntity(process.gestEntity[0]);
+        this.selectedProcess = process;
+        this.allAction = process.actions;
+        this.allList = process.list;
+        this.EntityDimention = process.gestEntityDimention;
+        this.FieldDimention = process.gestFieldDimention;
+        this.paramPanel = 'process';
+        this.selectFrom = [];
+        this.setStepForm(process);
+        this.getJoin(false, false);
+    }
 
-            $(".mainWarp").addClass("col-md-10");
-            $(".mainWarp").removeClass("col-md-0");
-            $(".paramWarp").addClass("col-md-2");
-            $(".paramWarp").removeClass("col-md-12");
-            $(".mainWarp").switchClass("hideElement", "showElement", 1000);
-            this.paramexp = 0;
-        }
-
-        selectAction(action, $event)
-        {
-
-
-            $event.stopPropagation();
-            this.paramPanel = 'action';
-            if (this.selectedSteps.length == 0) {
-
-                this.EntityAction = [];
-
-                this.selectedActions = action;
-
-                var mainEnityId = this.selectedProcess.gestEntity[0].entityId;
-
-                if (action.actionLevelDepth == 2) {
-                    if (typeof  action.actionSubEntity !== 'undefined') {
-                        for (let rel of this.relations) {
-                            if ((rel.relationsTable.entityId == mainEnityId) && (rel.relationEntitie.entityId == action.actionSubEntity.entityId)) {
-                                this.EntityAction.push(action.actionSubEntity);
-                            }
-                        }
-                    }
+    setStepForm(process) {
+        for (let prs of this.process) {
+            if (prs.gestEntity[0].entityId == process.gestEntity[0].entityId && prs.processId !== process.processId) {
+                for (let step of prs.steps) {
+                    var stp = new Object();
+                    stp.stepId = step.stepId;
+                    stp.stepName = prs.processDesignation + "_" + step.stepName;
+                    this.selectFrom.push(stp);
                 }
-
-                if (action.actionIsmainLevel == 1) {
-                    this.EntityAction.push(action.actionEntity);
-                } else {
-                    this.EntityAction.push(action.actionSubEntity);
-                }
-
-                this.onUpdateAction(action);
-
-            } else {
-
-                var actionExist = false
-
-                for (let act of this.selectedSteps.action) {
-                    if (act.actionId == action.actionId) {
-                        actionExist = true;
-                    }
-                }
-
-
-                if (action.actionType != 1 && !actionExist) {
-                    var param = {};
-                    param.action = action;
-                    param.step = this.selectedSteps;
-                    this.menuService.AddActionToStep(param).subscribe(action => this.loadProcess());
-                } else if (action.actionType != 1 && actionExist) {
-                    var param = {};
-                    param.action = action;
-                    param.step = this.selectedSteps;
-                    this.menuService.removeActionFromStep(param).subscribe(action => this.loadProcess());
-                }
-
             }
-
-
         }
+        return [];
+    }
 
-        onUpdateAction(act)
-        {
+    addStepFromProcess($event) {
+        $event.stopPropagation();
+        var param = {};
+        param.process = this.selectedProcess;
+        param.step = this.stepform;
+        this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
+    }
 
+    removeStepFromProcess(step, $event) {
+        $event.stopPropagation();
+        var param = {};
+        param.process = this.selectedProcess;
+        param.step = step;
+        this.menuService.addRemoveStepFromProcee(param).subscribe(step => this.loadProcess());
+    }
+
+    selectStep(step, $event) {
+        $event.stopPropagation();
+        this.paramPanel = 'step';
+        this.selectedActions = [];
+        this.selectedList = [];
+        this.EntityAction = [];
+        this.EntityList = [];
+        this.selectedSteps = step;
+    }
+
+    deleteStep(id, $event) {
+        $event.stopPropagation();
+        this.menuService.StepDelete(id).subscribe(step => this.loadProcess());
+    }
+
+
+    onAddAction($event) {
+        $event.stopPropagation();
+        if (typeof this.selectedProcess.processId != 'undefined') {
+            this.EntityAction = [];
+            this.selectedActions = [];
             this.actionform = new Action();
-            this.actionform = JSON.parse(JSON.stringify(act));
-            if (typeof act.actionExistingSubEntity !== 'undefined') {
-                if (act.actionExistingSubEntity !== 1) {
-                    this.actionform.actionSubEntity = this.copyObj(act.actionSubEntity.entityId);
-                } else {
-                    this.actionform.actionSubProcess = this.copyObj(act.actionSubProcess.processId);
-                    ;
-                }
-            }
-
-            if (typeof act.actionFromStep !== 'undefined') {
-                if (typeof act.actionFromStep !== 'undefined') {
-                    this.actionform.actionFromStep = this.copyObj(act.actionFromStep.stepId);
-                }
-            }
-
-            if (typeof act.actionNextStep !== 'undefined') {
-                if (typeof act.actionNextStep !== 'undefined') {
-                    this.actionform.actionNextStep = this.copyObj(act.actionNextStep.stepId);
-                }
-            }
-
-
-            if (act.actionType == 1) {
-                this.hideActionType = true;
-            } else {
-                this.hideActionType = false;
-            }
-
+            this.paramPanel = "action"
             //this.flipaction.flipped = true;
         }
+    }
 
-        refrechSelectedProcess(process)
-        {
-
-            this.process = process
-            this.fliplist.flipped = false;
-            this.flipaction.flipped = false;
-            this.flipdim.flipped = false;
-
-
-            if (typeof this.selectedProcess.processId !== "undefined") {
-
-                for (let pr of this.process) {
-
-
-                    if (this.selectedProcess.processId == pr.processId) {
-                        this.selectedProcess = pr;
-                        this.allAction = pr.actions;
-                        this.allList = pr.list;
-                        this.EntityDimention = pr.gestEntityDimention;
-                        this.FieldDimention = pr.gestFieldDimention;
-                    }
-
-                    for (let stp of pr.steps) {
-
-                        if (this.selectedSteps.stepId == stp.stepId) {
-                            this.selectedSteps = stp;
-                        }
-
-
-                        for (let act of pr.actions) {
-                            if (this.selectedActions.actionId == act.actionId) {
-                                this.selectedActions = act;
-                            }
-                        }
-
-                        for (let lst of pr.list) {
-                            if (this.selectedList.listId == lst.listId) {
-                                this.selectedList = lst;
-                            }
-                        }
-
-
-                    }
-
-
-                }
-
-
-            }
-
+    onAddList($event) {
+        $event.stopPropagation();
+        if (typeof this.selectedProcess.processId != 'undefined') {
+            this.fliplist.flipped = true;
         }
+    }
 
-        entityInEntityAction(entId)
-        {
+    onAddDim($event) {
+        $event.stopPropagation();
+        if (typeof this.selectedProcess.processId != 'undefined') {
+            this.flipdim.flipped = true;
+        }
+    }
 
-            for (let ent of this.EntityAction) {
-                if (ent.entityId == entId) {
+
+    actionInStep(action) {
+
+        if (typeof this.selectedSteps.action !== "undefined") {
+
+            for (let actions of this.selectedSteps.action) {
+                if (actions.actionId == action) {
                     return true;
                 }
             }
             return false;
+        } else {
+            return false;
         }
+    }
 
-        entityInEntityList(entId)
-        {
+    listInStep(list) {
 
-            for (let ent of this.EntityList) {
-                if (ent.entityId == entId) {
+        if (typeof this.selectedSteps.list !== "undefined") {
+
+            for (let lst of this.selectedSteps.list) {
+                if (lst.listId == list) {
                     return true;
                 }
             }
             return false;
+        } else {
+            return false;
         }
+    }
 
 
-        updateFieldInList(field)
-        {
-            var param = {};
-            param.field = field;
-            param.list = this.selectedList;
-            param.mode = "upd";
-            this.menuService.updateFieldInList(param).subscribe(field => this.loadProcess());
-        }
+    selectList(list, $event) {
 
+        $event.stopPropagation();
+        this.paramPanel = 'view';
+        if (this.selectedSteps.length == 0) {
 
-        updateFieldInAction(field)
-        {
-            var param = {};
-            param.field = field;
-            param.action = this.selectedActions;
-            this.menuService.updateFieldInAction(param).subscribe(field => this.loadProcess());
-        }
+            this.EntityList = [];
 
-        updateFieldRequireInAction(field)
-        {
-            var param = {};
-            param.field = field;
-            param.action = this.selectedActions;
-            this.menuService.updateFieldRequire(param).subscribe(field => this.loadProcess());
-        }
+            this.selectedList = list;
 
-        updateFieldInActionExp($event)
-        {
-            var param = {};
-            param.field = this.selectedField;
-            param.action = this.selectedActions;
-            param.exp = $event;
-            param.mode = "exp";
-            this.menuService.updateFieldInAction(param).subscribe(field => this.loadProcess());
-        }
-
-        viewFieldInAction(field)
-        {
-            var param = {};
-            param.field = field;
-            param.action = this.selectedActions;
-            this.menuService.viewFieldInAction(param).subscribe(field => this.loadProcess());
-        }
-
-
-        fieldIsInList(field)
-        {
-            if (typeof this.selectedList.field != 'undefined') {
-                for (let fld of this.selectedList.field) {
-                    if (field.fieldId == fld.fieldId) {
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
-            }
-
-        }
-
-        updateFieldIsInAction(field)
-        {
-            if (typeof this.selectedActions.updateField != 'undefined') {
-                for (let fld of this.selectedActions.updateField) {
-                    if (field.fieldId == fld.updateFieldId.fieldId) {
-                        return true;
-                    }
-                }
-
-                return false;
-            } else {
-                return false;
-            }
-
-        }
-
-        updateFieldRequireIsInAction(field)
-        {
-            if (typeof this.selectedActions.updateField != 'undefined') {
-                for (let fld of this.selectedActions.updateField) {
-                    if (field.fieldId == fld.updateFieldId.fieldId) {
-                        if (fld.updateRequire == 1) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                }
-
-                return false;
-            } else {
-                return false;
-            }
-
-        }
-
-        viewFieldIsInAction(field)
-        {
-            if (typeof this.selectedActions.viewField != 'undefined') {
-                for (let fld of this.selectedActions.viewField) {
-                    if (field.fieldId == fld.fieldId) {
-                        return true;
-                    }
-                }
-
-                return false;
-            } else {
-                return false;
-            }
-
-        }
-
-        setExpression(field, $event)
-        {
-
-            $event.stopPropagation();
-
-            if (typeof this.selectedActions.updateField !== 'undefined') {
-                var exps = "";
-
-                for (let fld of this.selectedActions.updateField) {
-                    if (field.fieldId == fld.updateFieldId.fieldId) {
-                        if (typeof fld.updateExpression !== 'undefined') {
-                            var exp = JSON.parse(fld.updateExpression);
-                            exps = exp.expression;
-                        }
-                    }
-                }
-                this.expValu = exps;
-            } else {
-                this.expValu = "";
-            }
-
-            this.paramPanel = 'expression'
-
-            this.selectedField = field;
-
-        }
-
-        newFieldAg()
-        {
-            this.selectedFieldAg = [];
-            this.fieldForm.fieldAlias = "";
-            this.fieldForm.fieldName = "";
-            this.fieldForm.fieldType = 0;
-            this.expValuAg = "";
-        }
-
-        deleteAgField(field, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.deleteAgField(field).subscribe(field => this.refrechAgField());
-
-        }
-
-        setExpressionAg(field, $event)
-        {
-
-            $event.stopPropagation();
-
-            if (typeof field.fieldExpression !== 'undefined') {
-                var exp = JSON.parse(field.fieldExpression);
-                this.expValuAg = exp.expression;
-            } else {
-                this.expValuAg = "";
-            }
-
-            this.fieldForm.fieldAlias = field.fieldEntityName;
-            this.fieldForm.fieldName = field.fieldInterfaceName;
-            this.fieldForm.fieldType = field.fieldType;
-
-            this.selectedFieldAg = field;
-
-        }
-
-
-        selectEntityDimention(dim, $event)
-        {
-            $event.stopPropagation();
-            this.paramPanel = 'entitydim';
-            this.selectedEntityDimention = dim;
-        }
-
-
-        selectFieldDimention(dim, $event)
-        {
-            $event.stopPropagation();
-            this.paramPanel = 'fielddim';
-            this.selectedFieldDimention = dim;
-        }
-
-        resetDimentionSelection()
-        {
-            this.selectedFieldDimention = [];
-            this.selectedEntityDimention = [];
-        }
-
-
-        onSelectField(field, $event)
-        {
-            $event.stopPropagation();
-            this.paramPanel = 'field';
-            this.selectedField = field;
-            if (this.flipdim.flipped == true) {
-                this.dimform.fieldId = field.fieldId;
-            }
-        }
-
-        onSettingClick($event)
-        {
-            $event.stopPropagation();
-        }
-
-        SetStepSelection(step)
-        {
-
-            for (let pr of this.process) {
-                if (pr.processId == step) {
-                    this.subStepSelection = pr.steps;
-                }
-            }
-        }
-
-        getAgField(flds)
-        {
-            if (typeof flds != 'undefined') {
-                var arr = new Array();
-                for (let fld of flds) {
-                    if (fld.fieldNature == 2) {
-                        arr.push(fld);
-                    }
-                }
-                return arr;
-            }
-        }
-
-        copyObj(obj)
-        {
-            return JSON.parse(JSON.stringify(obj));
-        }
-
-        updateFieldAgExp($event)
-        {
-            var param = {};
-            param.entity = this.selectedEntity;
-            param.form = this.fieldForm;
-            param.fieldAg = this.selectedFieldAg;
-            param.exp = $event;
-            this.menuService.updateFieldExpAg(param).subscribe(field => this.refrechAgField());
-        }
-
-        refrechAgField()
-        {
-            this.loadProcess();
-            this.loadSchema();
-            this.newFieldAg();
-
-        }
-
-
-        newAcreg()
-        {
-            this.selectedAcreg = [];
-            this.acregForm.acregName = "";
-            this.acregForm.acregAlias = "";
-            this.acregForm.acregErrormessage = "";
-            this.expValuAcreg = "";
-        }
-
-        deleteAcreg(acreg, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.deleteAcreg(acreg).subscribe(field => this.refrechAcreg());
-        }
-
-        setExpressionAcreg(acreg, $event)
-        {
-
-            $event.stopPropagation();
-
-            if (typeof acreg.acregExpression !== 'undefined') {
-                var exp = JSON.parse(acreg.acregExpression);
-                this.expValuAcreg = exp.expression;
-            } else {
-                this.expValuAcreg = "";
-            }
-
-            this.acregForm.acregName = acreg.acregName;
-            this.acregForm.acregAlias = acreg.acregAlias;
-            this.acregForm.acregErrormessage = acreg.acregErrormessage;
-
-            this.selectedAcreg = acreg;
-
-        }
-
-        updateAcregExp($event)
-        {
-            var param = {};
-            param.action = this.selectedActions;
-            param.acreg = this.selectedAcreg;
-            param.form = this.acregForm;
-            param.exp = $event;
-            this.menuService.updateAcregAg(param).subscribe(field => this.refrechAcreg());
-        }
-
-        refrechAcreg()
-        {
-            this.loadProcess();
-            this.newAcreg();
-        }
-
-
-        newListreg()
-        {
-            this.selectedListreg = [];
-            this.listregForm.listregName = "";
-            this.listregForm.listregAlias = "";
-            this.expValuListreg = "";
-        }
-
-        deleteListreg(acreg, $event)
-        {
-            $event.stopPropagation();
-            this.menuService.deleteListreg(acreg).subscribe(field => this.refrechListreg());
-        }
-
-        setExpressionListreg(listreg, $event)
-        {
-
-
-            $event.stopPropagation();
-
-            if (typeof listreg.listregExpression !== 'undefined') {
-                var exp = JSON.parse(listreg.listregExpression);
-                this.expValuListreg = exp.expression;
-            } else {
-                this.expValuListreg = "";
-            }
-
-            this.listregForm.listregName = listreg.listregName;
-            this.listregForm.listregAlias = listreg.listregAlias;
-
-            this.selectedListreg = listreg;
-
-        }
-
-        updateListregExp($event)
-        {
-            var param = {};
-            param.list = this.selectedList;
-            param.listreg = this.selectedListreg;
-            param.form = this.listregForm;
-            param.exp = $event;
-            this.menuService.updateListregAg(param).subscribe(field => this.refrechListreg());
-        }
-
-        refrechListreg()
-        {
-            this.loadProcess();
-            this.newListreg();
-        }
-
-        getJoin($event, entite)
-        {
-
-            if ($event) {
-                var ent = $event.target.selectedOptions[0].value;
-
-
-                if (entite == 'd') {
-                    this.entDepart = ent;
-                } else if (entite == 'a') {
-                    this.entArrive = ent;
+            for (let ent of this.selectedProcess.gestEntity) {
+                if (list.listEntityName == ent.entityId) {
+                    this.EntityList.push(ent);
                 }
             }
 
-            this.joins = new Array();
 
-            if (this.entDepart && this.entArrive) {
+        } else {
 
-                var param = {}
-                param.entDepart = this.entDepart
-                param.entArrive = this.entArrive
-                param.process = this.selectedProcess
-
-                this.menuService.getJoinData(param).subscribe(joins => this.populateJoinList(joins));
-
+            var listExist = false
+            for (let lst of this.selectedSteps.list) {
+                if (lst.actionId == list.actionId) {
+                    listExist = true;
+                }
             }
 
-        }
+            if (!listExist) {
+                var param = {};
+                param.list = list;
+                param.step = this.selectedSteps;
+                this.menuService.AddListToStep(param).subscribe(list => this.loadProcess());
+            } else {
+                var param = {};
+                param.list = list;
+                param.step = this.selectedSteps;
+                this.menuService.removeListFromStep(param).subscribe(list => this.loadProcess());
+            }
 
-        setJoin(join, joins)
-        {
-            var param = {}
-            param.join = join
-            param.joins = joins
-            this.menuService.setJoin(param).subscribe(joins => this.getJoin(false, false));
-
-        }
-
-        populateJoinList(joins)
-        {
-            this.joins = joins;
-        }
-
-
-        addEntity($event)
-        {
-            $event.stopPropagation();
-            var param = {};
-            param.className = this.className
-            this.menuService.addEntity(param).subscribe(resp => this.getRespAndReloadSchema(resp));
-        }
-
-
-        RemoveField(fld, $event)
-        {
-
-
-            var param = {}
-            param.entity = this.selectedEntity;
-            param.field = fld;
-            $event.stopPropagation();
-            this.menuService.removeEntityField(param).subscribe(resp => this.getRespAndReloadSchema(resp));
-
-
-        }
-
-
-        SaveField($event)
-        {
-
-
-            var param = {}
-            param.entity = this.selectedEntity;
-            param.field = this.newatribute;
-            $event.stopPropagation();
-            this.menuService.addEntityField(param).subscribe(resp => this.getRespAndReloadSchema(resp));
-
-
-        }
-
-        getRespAndReloadSchema(resp)
-        {
-            this.ngxSmartModalService.resetModalData('messageModal');
-            this.ngxSmartModalService.setModalData(resp, 'messageModal')
-            this.ngxSmartModalService.open('messageModal');
-            this.refrechRelationalEntity(null);
-        }
-
-
-        getResp(resp)
-        {
-            this.ngxSmartModalService.resetModalData('messageModal');
-            this.ngxSmartModalService.setModalData(resp, 'messageModal');
-            this.ngxSmartModalService.open('messageModal');
         }
 
 
     }
+
+    deleteView(id, $event) {
+        $event.stopPropagation();
+        this.menuService.listDelete(id).subscribe(View => this.loadProcess());
+    }
+
+    deleteAction(id, $event) {
+        $event.stopPropagation();
+        this.menuService.ActionDelete(id).subscribe(Action => this.loadProcess());
+    }
+
+    deleteFldDim(id, type, $event,) {
+        $event.stopPropagation();
+        var param = {}
+        param.process = this.selectedProcess.processId;
+        param.type = type;
+        param.id = id;
+        this.menuService.DimentionDelete(param).subscribe(dim => this.loadProcess());
+    }
+
+    expandParam() {
+        $(".mainWarp").switchClass("showElement", "hideElement", 50);
+        $(".mainWarp").addClass("col-md-0");
+        $(".mainWarp").removeClass("col-md-10");
+        $(".paramWarp").addClass("col-md-12");
+        $(".paramWarp").removeClass("col-md-2");
+        this.paramexp = 1;
+
+    }
+
+
+    collapsParam() {
+
+        $(".mainWarp").addClass("col-md-10");
+        $(".mainWarp").removeClass("col-md-0");
+        $(".paramWarp").addClass("col-md-2");
+        $(".paramWarp").removeClass("col-md-12");
+        $(".mainWarp").switchClass("hideElement", "showElement", 1000);
+        this.paramexp = 0;
+    }
+
+    selectAction(action, $event) {
+
+
+        $event.stopPropagation();
+        this.paramPanel = 'action';
+        if (this.selectedSteps.length == 0) {
+
+            this.EntityAction = [];
+
+            this.selectedActions = action;
+
+            var mainEnityId = this.selectedProcess.gestEntity[0].entityId;
+
+            if (action.actionLevelDepth == 2) {
+                if (typeof  action.actionSubEntity !== 'undefined') {
+                    for (let rel of this.relations) {
+                        if ((rel.relationsTable.entityId == mainEnityId) && (rel.relationEntitie.entityId == action.actionSubEntity.entityId)) {
+                            this.EntityAction.push(action.actionSubEntity);
+                        }
+                    }
+                }
+            }
+
+            if (action.actionIsmainLevel == 1) {
+                this.EntityAction.push(action.actionEntity);
+            } else {
+                this.EntityAction.push(action.actionSubEntity);
+            }
+
+            this.onUpdateAction(action);
+
+        } else {
+
+            var actionExist = false
+
+            for (let act of this.selectedSteps.action) {
+                if (act.actionId == action.actionId) {
+                    actionExist = true;
+                }
+            }
+
+
+            if (action.actionType != 1 && !actionExist) {
+                var param = {};
+                param.action = action;
+                param.step = this.selectedSteps;
+                this.menuService.AddActionToStep(param).subscribe(action => this.loadProcess());
+            } else if (action.actionType != 1 && actionExist) {
+                var param = {};
+                param.action = action;
+                param.step = this.selectedSteps;
+                this.menuService.removeActionFromStep(param).subscribe(action => this.loadProcess());
+            }
+
+        }
+
+
+    }
+
+    onUpdateAction(act) {
+
+        this.actionform = new Action();
+        this.actionform = JSON.parse(JSON.stringify(act));
+        if (typeof act.actionExistingSubEntity !== 'undefined') {
+            if (act.actionExistingSubEntity !== 1) {
+                this.actionform.actionSubEntity = this.copyObj(act.actionSubEntity.entityId);
+            } else {
+                this.actionform.actionSubProcess = this.copyObj(act.actionSubProcess.processId);
+                ;
+            }
+        }
+
+        if (typeof act.actionFromStep !== 'undefined') {
+            if (typeof act.actionFromStep !== 'undefined') {
+                this.actionform.actionFromStep = this.copyObj(act.actionFromStep.stepId);
+            }
+        }
+
+        if (typeof act.actionNextStep !== 'undefined') {
+            if (typeof act.actionNextStep !== 'undefined') {
+                this.actionform.actionNextStep = this.copyObj(act.actionNextStep.stepId);
+            }
+        }
+
+
+        if (act.actionType == 1) {
+            this.hideActionType = true;
+        } else {
+            this.hideActionType = false;
+        }
+
+        //this.flipaction.flipped = true;
+    }
+
+    refrechSelectedProcess(process) {
+
+        this.process = process
+        this.fliplist.flipped = false;
+        this.flipaction.flipped = false;
+        this.flipdim.flipped = false;
+
+
+        if (typeof this.selectedProcess.processId !== "undefined") {
+
+            for (let pr of this.process) {
+
+
+                if (this.selectedProcess.processId == pr.processId) {
+                    this.selectedProcess = pr;
+                    this.allAction = pr.actions;
+                    this.allList = pr.list;
+                    this.EntityDimention = pr.gestEntityDimention;
+                    this.FieldDimention = pr.gestFieldDimention;
+                }
+
+                for (let stp of pr.steps) {
+
+                    if (this.selectedSteps.stepId == stp.stepId) {
+                        this.selectedSteps = stp;
+                    }
+
+
+                    for (let act of pr.actions) {
+                        if (this.selectedActions.actionId == act.actionId) {
+                            this.selectedActions = act;
+                        }
+                    }
+
+                    for (let lst of pr.list) {
+                        if (this.selectedList.listId == lst.listId) {
+                            this.selectedList = lst;
+                        }
+                    }
+
+
+                }
+
+
+            }
+
+
+        }
+
+    }
+
+    entityInEntityAction(entId) {
+
+        for (let ent of this.EntityAction) {
+            if (ent.entityId == entId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    entityInEntityList(entId) {
+
+        for (let ent of this.EntityList) {
+            if (ent.entityId == entId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    updateFieldInList(field) {
+        var param = {};
+        param.field = field;
+        param.list = this.selectedList;
+        param.mode = "upd";
+        this.menuService.updateFieldInList(param).subscribe(field => this.loadProcess());
+    }
+
+
+    updateFieldInAction(field) {
+        var param = {};
+        param.field = field;
+        param.action = this.selectedActions;
+        this.menuService.updateFieldInAction(param).subscribe(field => this.loadProcess());
+    }
+
+    updateFieldRequireInAction(field) {
+        var param = {};
+        param.field = field;
+        param.action = this.selectedActions;
+        this.menuService.updateFieldRequire(param).subscribe(field => this.loadProcess());
+    }
+
+    updateFieldInActionExp($event) {
+        var param = {};
+        param.field = this.selectedField;
+        param.action = this.selectedActions;
+        param.exp = $event;
+        param.mode = "exp";
+        this.menuService.updateFieldInAction(param).subscribe(field => this.loadProcess());
+    }
+
+    viewFieldInAction(field) {
+        var param = {};
+        param.field = field;
+        param.action = this.selectedActions;
+        this.menuService.viewFieldInAction(param).subscribe(field => this.loadProcess());
+    }
+
+
+    fieldIsInList(field) {
+        if (typeof this.selectedList.field != 'undefined') {
+            for (let fld of this.selectedList.field) {
+                if (field.fieldId == fld.fieldId) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+
+    }
+
+    updateFieldIsInAction(field) {
+        if (typeof this.selectedActions.updateField != 'undefined') {
+            for (let fld of this.selectedActions.updateField) {
+                if (field.fieldId == fld.updateFieldId.fieldId) {
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+            return false;
+        }
+
+    }
+
+    updateFieldRequireIsInAction(field) {
+        if (typeof this.selectedActions.updateField != 'undefined') {
+            for (let fld of this.selectedActions.updateField) {
+                if (field.fieldId == fld.updateFieldId.fieldId) {
+                    if (fld.updateRequire == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        } else {
+            return false;
+        }
+
+    }
+
+    viewFieldIsInAction(field) {
+        if (typeof this.selectedActions.viewField != 'undefined') {
+            for (let fld of this.selectedActions.viewField) {
+                if (field.fieldId == fld.fieldId) {
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+            return false;
+        }
+
+    }
+
+    setExpression(field, $event) {
+
+        $event.stopPropagation();
+
+        if (typeof this.selectedActions.updateField !== 'undefined') {
+            var exps = "";
+
+            for (let fld of this.selectedActions.updateField) {
+                if (field.fieldId == fld.updateFieldId.fieldId) {
+                    if (typeof fld.updateExpression !== 'undefined') {
+                        var exp = JSON.parse(fld.updateExpression);
+                        exps = exp.expression;
+                    }
+                }
+            }
+            this.expValu = exps;
+        } else {
+            this.expValu = "";
+        }
+
+        this.paramPanel = 'expression'
+
+        this.selectedField = field;
+
+    }
+
+    newFieldAg() {
+        this.selectedFieldAg = [];
+        this.fieldForm.fieldAlias = "";
+        this.fieldForm.fieldName = "";
+        this.fieldForm.fieldType = 0;
+        this.expValuAg = "";
+    }
+
+    deleteAgField(field, $event) {
+        $event.stopPropagation();
+        this.menuService.deleteAgField(field).subscribe(field => this.refrechAgField());
+
+    }
+
+    setExpressionAg(field, $event) {
+
+        $event.stopPropagation();
+
+        if (typeof field.fieldExpression !== 'undefined') {
+            var exp = JSON.parse(field.fieldExpression);
+            this.expValuAg = exp.expression;
+        } else {
+            this.expValuAg = "";
+        }
+
+        this.fieldForm.fieldAlias = field.fieldEntityName;
+        this.fieldForm.fieldName = field.fieldInterfaceName;
+        this.fieldForm.fieldType = field.fieldType;
+
+        this.selectedFieldAg = field;
+
+    }
+
+
+    selectEntityDimention(dim, $event) {
+        $event.stopPropagation();
+        this.paramPanel = 'entitydim';
+        this.selectedEntityDimention = dim;
+    }
+
+
+    selectFieldDimention(dim, $event) {
+        $event.stopPropagation();
+        this.paramPanel = 'fielddim';
+        this.selectedFieldDimention = dim;
+    }
+
+    resetDimentionSelection() {
+        this.selectedFieldDimention = [];
+        this.selectedEntityDimention = [];
+    }
+
+
+    onSelectField(field, $event) {
+        $event.stopPropagation();
+        this.paramPanel = 'field';
+        this.selectedField = field;
+        if (this.flipdim.flipped == true) {
+            this.dimform.fieldId = field.fieldId;
+        }
+    }
+
+    onSettingClick($event) {
+        $event.stopPropagation();
+    }
+
+    SetStepSelection(step) {
+
+        for (let pr of this.process) {
+            if (pr.processId == step) {
+                this.subStepSelection = pr.steps;
+            }
+        }
+    }
+
+    getAgField(flds) {
+        if (typeof flds != 'undefined') {
+            var arr = new Array();
+            for (let fld of flds) {
+                if (fld.fieldNature == 2) {
+                    arr.push(fld);
+                }
+            }
+            return arr;
+        }
+    }
+
+    copyObj(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    updateFieldAgExp($event) {
+        var param = {};
+        param.entity = this.selectedEntity;
+        param.form = this.fieldForm;
+        param.fieldAg = this.selectedFieldAg;
+        param.exp = $event;
+        this.menuService.updateFieldExpAg(param).subscribe(field => this.refrechAgField());
+    }
+
+    refrechAgField() {
+        this.loadProcess();
+        this.loadSchema();
+        this.newFieldAg();
+
+    }
+
+
+    newAcreg() {
+        this.selectedAcreg = [];
+        this.acregForm.acregName = "";
+        this.acregForm.acregAlias = "";
+        this.acregForm.acregErrormessage = "";
+        this.expValuAcreg = "";
+    }
+
+    deleteAcreg(acreg, $event) {
+        $event.stopPropagation();
+        this.menuService.deleteAcreg(acreg).subscribe(field => this.refrechAcreg());
+    }
+
+    setExpressionAcreg(acreg, $event) {
+
+        $event.stopPropagation();
+
+        if (typeof acreg.acregExpression !== 'undefined') {
+            var exp = JSON.parse(acreg.acregExpression);
+            this.expValuAcreg = exp.expression;
+        } else {
+            this.expValuAcreg = "";
+        }
+
+        this.acregForm.acregName = acreg.acregName;
+        this.acregForm.acregAlias = acreg.acregAlias;
+        this.acregForm.acregErrormessage = acreg.acregErrormessage;
+
+        this.selectedAcreg = acreg;
+
+    }
+
+    updateAcregExp($event) {
+        var param = {};
+        param.action = this.selectedActions;
+        param.acreg = this.selectedAcreg;
+        param.form = this.acregForm;
+        param.exp = $event;
+        this.menuService.updateAcregAg(param).subscribe(field => this.refrechAcreg());
+    }
+
+    refrechAcreg() {
+        this.loadProcess();
+        this.newAcreg();
+    }
+
+
+    newListreg() {
+        this.selectedListreg = [];
+        this.listregForm.listregName = "";
+        this.listregForm.listregAlias = "";
+        this.expValuListreg = "";
+    }
+
+    deleteListreg(acreg, $event) {
+        $event.stopPropagation();
+        this.menuService.deleteListreg(acreg).subscribe(field => this.refrechListreg());
+    }
+
+    setExpressionListreg(listreg, $event) {
+
+
+        $event.stopPropagation();
+
+        if (typeof listreg.listregExpression !== 'undefined') {
+            var exp = JSON.parse(listreg.listregExpression);
+            this.expValuListreg = exp.expression;
+        } else {
+            this.expValuListreg = "";
+        }
+
+        this.listregForm.listregName = listreg.listregName;
+        this.listregForm.listregAlias = listreg.listregAlias;
+
+        this.selectedListreg = listreg;
+
+    }
+
+    updateListregExp($event) {
+        var param = {};
+        param.list = this.selectedList;
+        param.listreg = this.selectedListreg;
+        param.form = this.listregForm;
+        param.exp = $event;
+        this.menuService.updateListregAg(param).subscribe(field => this.refrechListreg());
+    }
+
+    refrechListreg() {
+        this.loadProcess();
+        this.newListreg();
+    }
+
+    getJoin($event, entite) {
+
+        if ($event) {
+            var ent = $event.target.selectedOptions[0].value;
+
+
+            if (entite == 'd') {
+                this.entDepart = ent;
+            } else if (entite == 'a') {
+                this.entArrive = ent;
+            }
+        }
+
+        this.joins = new Array();
+
+        if (this.entDepart && this.entArrive) {
+
+            var param = {}
+            param.entDepart = this.entDepart
+            param.entArrive = this.entArrive
+            param.process = this.selectedProcess
+
+            this.menuService.getJoinData(param).subscribe(joins => this.populateJoinList(joins));
+
+        }
+
+    }
+
+    setJoin(join, joins) {
+        var param = {}
+        param.join = join
+        param.joins = joins
+        this.menuService.setJoin(param).subscribe(joins => this.getJoin(false, false));
+
+    }
+
+    populateJoinList(joins) {
+        this.joins = joins;
+    }
+
+
+    addEntity($event) {
+        $event.stopPropagation();
+        var param = {};
+        param.className = this.className
+        this.menuService.addEntity(param).subscribe(resp => this.getRespAndReloadSchema(resp));
+    }
+
+
+    RemoveField(fld, $event) {
+
+
+        var param = {}
+        param.entity = this.selectedEntity;
+        param.field = fld;
+        $event.stopPropagation();
+        this.menuService.removeEntityField(param).subscribe(resp => this.getRespAndReloadSchema(resp));
+
+
+    }
+
+
+    SaveField($event) {
+
+
+        var param = {}
+        param.entity = this.selectedEntity;
+        param.field = this.newatribute;
+        $event.stopPropagation();
+        this.menuService.addEntityField(param).subscribe(resp => this.getRespAndReloadSchema(resp));
+
+
+    }
+
+    getRespAndReloadSchema(resp) {
+        this.NgxSmartModalServices.resetModalData('messageModal');
+        this.NgxSmartModalServices.setModalData(resp, 'messageModal')
+        this.NgxSmartModalServices.open('messageModal');
+        this.refrechRelationalEntity(null);
+    }
+
+
+    getResp(resp) {
+        this.NgxSmartModalServices.resetModalData('messageModal');
+        this.NgxSmartModalServices.setModalData(resp, 'messageModal');
+        this.NgxSmartModalServices.open('messageModal');
+    }
+
+
+    addentityToModule(entity,$event){
+
+        $event.stopPropagation();
+        var param = {}
+            param.entity = entity;
+            param.module = this.selectedMdule.getModuleValue();
+            this.menuService.addEntityToModule(param).subscribe(resp =>  this.loadSchema() );
+    }
+
+
+}
 
 
 

@@ -3,7 +3,7 @@
      [class.right]="position === 'inverse'">
   <div class="logo-containter">
     <a (click)="toggleSidebar()" href="#" class="navigation"><i class="nb-menu"></i></a>
-    <div class="logo" (click)="goToHome()">Ges<span>to</span></div>
+    <div class="logo" (click)="goToHome()">Ges<span>to </span> <span moduleTitle> Module {{moduleDesignation}}</span></div>
   </div>
  
 </div>
@@ -27,16 +27,17 @@
     <!-- <nb-action class="control-item">
       <nb-search type="rotate-layout" (click)="startSearch()"></nb-search>
     </nb-action> -->
-  </nb-actions>   
+  </nb-actions>
+
+  <ngx-smart-modal #moduleModal identifier="moduleModal" customClass="medium-modal"  (click)="stopClick($event)" >
+    <h1>Ajouter un module</h1>
+    <br>
+    <div>
+      Nom du module <input [(ngModel)]="modulesInp.moduleName"  nbInput="" ><br>
+      Fontawesome icone  <input [(ngModel)]="modulesInp.moduleIcone"  nbInput="" >
+    </div>
+    <br> <br>
+    <button  type="button" nbButton size="xsmall"  (click)="addModule($event)">Ajouter un module</button>
+  </ngx-smart-modal>
 </div>
 
-<ngx-smart-modal #moduleModal identifier="moduleModal" customClass="medium-modal"  (click)="stopClick($event)" >
-  <h1>Ajouter un module</h1>
-  <br>
-   <div>
-     Nom du module <input [(ngModel)]="modulesInp.moduleName"  nbInput="" ><br>
-       Fontawesome icone  <input [(ngModel)]="modulesInp.moduleIcone"  nbInput="" >
-   </div>
-  <br> <br>
-  <button  type="button" nbButton size="xsmall"  (click)="addModule($event)">Ajouter un module</button>
-</ngx-smart-modal>
