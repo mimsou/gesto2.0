@@ -49,7 +49,7 @@ import {ModulestateService} from "./@core/data/modulestate.service";
             key: 'token',
           },
 
-          baseEndpoint: 'http://127.0.0.1/AFRREST/web/api/',
+          baseEndpoint: 'http://10.0.26.199/AFRREST/web/api/',
            login: {
              endpoint: 'login_check',
              method: 'post',

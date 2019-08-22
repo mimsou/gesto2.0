@@ -75,10 +75,21 @@ nb-card-header{
   border-bottom: 1px #9ac4ff solid;
 }
 
+ #plumbcontainer {
+   position: relative;
+   width: 100%;
+   min-height: 1px;
+   padding-right: 15px;
+   padding-left: 15px;
+ }
 
 
 .selectedListr{
   background-color: #f3faff !important;
+}
+
+.adminRole{
+  background-color: #ffefeb !important;
 }
 
 [padingreversed]{
@@ -112,14 +123,47 @@ nb-card-header{
   background-color: #ebeff5;
 }
 [entitiContainer]{
+   width: fit-content;
+   background-color: #ffffff;
+   padding: 5px;
+   margin: 5px;
+   display: inline-block;
+   border-radius: 5px;
+   position: absolute;
+   box-shadow: 0 2px 12px 0 #dfe3eb;
+ }
+
+
+[connectionontainer]{
   width: fit-content;
   background-color: #ffffff;
   padding: 5px;
   margin: 5px;
   display: inline-block;
   border-radius: 5px;
-  position: absolute;
+
   box-shadow: 0 2px 12px 0 #dfe3eb;
+}
+
+[queryContainer]{
+  width: fit-content;
+  background-color: #ffffff;
+  padding: 3px;
+  padding-left: 30px;
+  padding-right: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 12px 0 #dfe3eb;
+}
+
+[connectionLabel]{
+  color: #ff718c;
+  font-weight: bold;
+}
+
+[connectionConfig]{
+  color: #68b3ff;
+  font-weight: lighter;
 }
 
 [entityHead]{
@@ -198,6 +242,11 @@ nb-card-header{
 .active {
   .circle{ background: #1598ff; }
   .label{ color: #5b5b5b; font-weight: 400; }
+}
+
+[labelFixedWidth]{
+  display: inline-block;
+  width: 100px;
 }
 
 

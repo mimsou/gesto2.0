@@ -66,7 +66,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedArborecence = [];
     selectedEntity: any;
     dataSelectedEntity: Entitie = new Entitie();
-    process: any = new Process();
+    process: any = [];
     selectedSteps: Step = [];
     selectedActions: Action = [];
     selectedEntityDimention: Entitie = [];
@@ -105,6 +105,12 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     className: any = "";
     newatribute: any = new Object();
     module: any;
+    conConfig: any = {};
+    connections: any = [];
+    query: any = {};
+    selectedCon:any = {}
+    displayDataHead:any = {}
+    displayDataContent:any = {}
 
 
     menuplaceholder: string = "Ajouter un menu";
@@ -122,13 +128,15 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     enteteEditor: any;
     millieuEditor: any;
     basdepageEditor: any;
+    selectedQuery:any = {};
 
 
     tokerolen: any;
 
-    constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private msgService: MessageService, private selectedMdule: ModulestateService,private NgxSmartModalServices:NgxSmartModalService) {
+    constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private msgService: MessageService, private selectedMdule: ModulestateService, private NgxSmartModalServices: NgxSmartModalService) {
         this.initializeMessgae();
         this.initializeSelectedModule();
+
     }
 
 
@@ -139,7 +147,12 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadUser("");
         this.loadController("");
         this.loadProcess();
-        //this.selectedrole = "";
+        this.resetParam();
+        this.paramPanel = "";
+        this.connectEntity();
+    }
+
+    resetParam() {
         this.selectedProcess = [];
         this.selectedSteps = []
         this.flipaction.flipped = false;
@@ -163,9 +176,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.editable = true;
         this.paramPanel = "";
         this.selectFrom = [];
-        this.connectEntity();
-
-
+        //this.selectedrole = "";
     }
 
     ngOnDestroy() {
@@ -210,6 +221,8 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadLink(true);
         this.loadRole(true);
         this.loadUser("");
+        this.getAllconnection(false);
+
         this.flipusers.showToggleButton = false;
         this.fliplist.showToggleButton = false;
         this.flipdim.showToggleButton = false;
@@ -271,11 +284,14 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     setModule(modules) {
         this.module = modules;
+        //this.resetParam()
         this.loadRole(true)
         this.loadMenu(true)
         this.loadProcess()
         this.loadLink(true)
         this.loadSchema()
+        this.getAllconnection(false)
+
     }
 
     onRoleOptionClick($event) {
@@ -560,6 +576,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
             var roles: GestRole = new GestRole()
             roles.roleId = rol.roleId;
             roles.roleLibelle = rol.roleLibelle;
+            roles.roleGroup = rol.roleGroup;
             roless.push(roles)
         }
 
@@ -1025,9 +1042,12 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
         }
 
+
         this.jsPlumbInstance.repaintEverything(true);
 
+
         this.jsPlumbInstance.setContainer("plumbcontainer");
+
 
     }
 
@@ -1860,14 +1880,78 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    addentityToModule(entity,$event){
+    addentityToModule(entity, $event) {
 
         $event.stopPropagation();
         var param = {}
-            param.entity = entity;
-            param.module = this.selectedMdule.getModuleValue();
-            this.menuService.addEntityToModule(param).subscribe(resp =>  this.loadSchema() );
+        param.entity = entity;
+        param.module = this.selectedMdule.getModuleValue();
+        this.menuService.addEntityToModule(param).subscribe(resp => this.loadSchema());
     }
+
+    addConnectionDialog($event) {
+        $event.stopPropagation();
+        this.NgxSmartModalServices.open('addConnectionModal');
+
+    }
+
+    addConnectionConfig($event) {
+        this.conConfig.module = this.selectedMdule.getModuleValue();
+        this.menuService.saveConnectionConfig(this.conConfig).subscribe(resp => this.getAllconnection(true));
+    }
+
+    getAllconnection(closemodal) {
+        if (closemodal) {
+            this.NgxSmartModalServices.close('addConnectionModal');
+        }
+        var id = this.selectedMdule.getModuleValue();
+        this.menuService.getAllConnections(id).subscribe(connections => this.connections = connections);
+    }
+
+    deleteConnections(connection,$event){
+         $event.stopPropagation();
+
+        this.menuService.deleteConnection(connection).subscribe(resp => this.getAllconnection(true));
+    }
+
+
+    deleteQuery(query,$event){
+        $event.stopPropagation();
+        this.menuService.deleteQuery(query).subscribe(resp => this.getAllconnection(true));
+    }
+
+    addQueryDialog(connection,$event){
+        $event.stopPropagation();
+        this.selectedCon = connection;
+        this.NgxSmartModalServices.open('addQueryModal');
+    }
+
+    addQuery($event) {
+        this.query.connection = this.selectedCon;
+        this.menuService.saveQuery(this.query).subscribe(resp => this.getAllconnection(false));
+    }
+
+    updateQuery($event) {
+        this.menuService.saveQuery(this.selectedQuery).subscribe(resp => this.getAllconnection(false));
+    }
+
+    getQueryResult(query,$event){
+        $event.stopPropagation();
+        this.menuService.getQueryResult(query).subscribe(resp => this.displayQueryResult(resp));
+    }
+
+    displayQueryResult(resp){
+        this.displayDataHead = resp.head;
+        this.displayDataContent = resp.data;
+        this.NgxSmartModalServices.open('displayDataModal');
+    }
+
+    selectQuery(query,$event){
+        $event.stopPropagation();
+        this.paramPanel = "query"
+        this.selectedQuery = query;
+    }
+
 
 
 }

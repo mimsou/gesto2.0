@@ -1,3 +1,4 @@
+<script src="../../@core/data/modulestate.service.spec.ts"></script>
 <nb-reveal-card #revealpage full-heigth full-heigth-all-child>
     <nb-card-front full-heigth full-heigth-all-child>
         <nb-card nostylecard full-heigth full-heigth-all-child>
@@ -28,7 +29,7 @@
 
 
                                     <nb-list-item (click)="ToggleSelectedRole(role,$event)"
-                                                  [ngClass]="{'selectedListr' : role.roleId == selectedrole  }"
+                                                  [ngClass]="{'selectedListr' : role.roleId == selectedrole ,'adminRole' : role.roleGroup == 1   }"
                                                   menuPadding
                                                   *ngFor="let role of roles" forceOverFlow>
 
@@ -572,109 +573,152 @@
                     </div>
 
 
-                    <div id="plumbcontainer" class="col-md-10" style="height: 75%" (click)="stopClick($event)">
-                        <div entityoption>
-                            Rafréchir
-                            <i (click)="refrechRelationalEntity($event)"
-                               style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
-
-                        </div>
-
-                        <br><br>
-                        <div entityoption>
-
-                            <input type="text"  style="width:auto;" [(ngModel)]="className" nbInput fullWidth
-                                   fieldSize="xsmall" placeholder="Designation Entité"
-                                    >
-                            <i (click)="addEntity($event)"
-                               style="font-size: 16px; margin-top: 10px;" class="fa fa-plus-circle"></i>
-
-                        </div>
-
+                    <div class="col-md-10" style="height: 75%" (click)="stopClick($event)">
                         <div roleoption>
                             <i (click)="refrechRelationalEntity($event)"
                                style="font-size: 16px; margin-top: 10px;" class="fa fa-lock"></i>
                             Role<br>
-                            <ng-select2 (click)="onRoleOptionClick($event)" [width]="200" [(ngModel)]="valueRole"
-                                        (valueChanged)="setRoleValue($event)" ngControl="value" [data]="dataRole">
+                            <ng-select2 (click)="onRoleOptionClick($event)" [width]="200"
+                                        [(ngModel)]="valueRole"
+                                        (valueChanged)="setRoleValue($event)" ngControl="value"
+                                        [data]="dataRole">
 
                             </ng-select2>
                         </div>
+                        <br>
 
-                        <div (click)="onSelectEntity(entitie,$event )" entitiContainer *ngFor="let entitie of entities"
-                             id="ent_{{entitie.entityId}}" [id]='"ent_"+entitie.entityId'
-                             [style.top]="entitie.entityPos.split(',')[0]+'px'"
-                             [style.left]="entitie.entityPos.split(',')[1]+'px'"
-                             [ngClass]="{'ent_highlight' :  exist(entitie.entityId , selectedArborecence, 'entityId') ,'ent_highlight_action' :  exist(entitie.entityId , EntityAction, 'entityId')  ,'ent_highlight_list' :  exist(entitie.entityId , EntityList, 'entityId') }">
-                            <div *ngIf="entitie.entityModule.length == 0" linkToModule (click)="addentityToModule(entitie,$event)"><i class="fa fa-link"></i></div>
-                            <div entityHead><strong>{{entitie.entityEntity}}</strong></div>
+                        <nb-tabset full-heigth full-heigth-all-child>
+                            <nb-tab tabTitle="Gestion des entitées" full-heigth full-heigth-all-child>
 
-                            <div entityField>
+                                <div id="plumbcontainer" style="height: 75%">
 
-                                <div fieldItem *ngFor="let field of entitie.fields"
-                                     (click)="onSelectField(field,$event ) "
-                                     id="field_{{entitie.entityId}}_{{field.fieldEntityName}}" entityFieldHover>
-                                    <div containerFlex>
-                                        <div inlineelement>
-                                            {{field.fieldEntityName}}
-                                        </div>
-                                        <div inlineelement>
+                                    <div entityoption>
+                                        Rafréchir
+                                        <i (click)="refrechRelationalEntity($event)"
+                                           style="font-size: 16px; margin-top: 10px;" class="fa fa-refresh"></i>
 
-                                            <i #editUpdate colorInactive ActionIcone
-                                               [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
-                                               *ngIf="entityInEntityAction(entitie.entityId) && viewFieldIsInAction(field)"
-                                               (click)="setExpression(field,$event)"
-                                               class="fa fa-info"></i>
-
-                                            <i #editUpdate colorInactive ActionIcone
-                                               [ngClass]="{'colorPrimary' :  updateFieldIsInAction(field)  }"
-                                               *ngIf="entityInEntityAction(entitie.entityId) && viewFieldIsInAction(field)"
-                                               (click)="updateFieldInAction(field)"
-                                               class="fa fa-edit"></i>
-
-                                            <i #editUpdate colorInactive ActionIcone
-                                               [ngClass]="{'colorPrimary' :  updateFieldRequireIsInAction(field)  }"
-                                               *ngIf="entityInEntityAction(entitie.entityId) && updateFieldIsInAction(field)"
-                                               (click)="updateFieldRequireInAction(field)"
-                                               class="fa fa-lock"></i>
-
-                                            <i #viewUpdate colorInactive ActionIcone
-                                               [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
-                                               *ngIf="entityInEntityAction(entitie.entityId)"
-                                               (click)="viewFieldInAction(field)"
-                                               class="fa fa-th-list"></i>
-
-                                            <i #listUpdate colorInactive ActionIcone
-                                               [ngClass]="{'colorPrimary' :  fieldIsInList(field)  }"
-                                               *ngIf="entityInEntityList(entitie.entityId)"
-                                               (click)="updateFieldInList(field)"
-                                               class="fa fa-list-alt"></i>
-
-
-                                        </div>
                                     </div>
+
+                                    <br><br>
+                                    <div entityoption>
+
+                                        <input type="text" style="width:auto;" [(ngModel)]="className" nbInput fullWidth
+                                               fieldSize="xsmall" placeholder="Designation Entité"
+                                        >
+                                        <i (click)="addEntity($event)"
+                                           style="font-size: 16px; margin-top: 10px;" class="fa fa-plus-circle"></i>
+
+                                    </div>
+
+
+                                    <div (click)="onSelectEntity(entitie,$event )" entitiContainer
+                                         *ngFor="let entitie of entities"
+                                         id="ent_{{entitie.entityId}}" [id]='"ent_"+entitie.entityId'
+                                         [style.top]="entitie.entityPos.split(',')[0]+'px'"
+                                         [style.left]="entitie.entityPos.split(',')[1]+'px'"
+                                         [ngClass]="{'ent_highlight' :  exist(entitie.entityId , selectedArborecence, 'entityId') ,'ent_highlight_action' :  exist(entitie.entityId , EntityAction, 'entityId')  ,'ent_highlight_list' :  exist(entitie.entityId , EntityList, 'entityId') }">
+                                        <div *ngIf="entitie.entityModule.length == 0" linkToModule
+                                             (click)="addentityToModule(entitie,$event)"><i class="fa fa-link"></i>
+                                        </div>
+                                        <div entityHead><strong>{{entitie.entityEntity}}</strong></div>
+
+                                        <div entityField>
+
+                                            <div fieldItem *ngFor="let field of entitie.fields"
+                                                 (click)="onSelectField(field,$event ) "
+                                                 id="field_{{entitie.entityId}}_{{field.fieldEntityName}}"
+                                                 entityFieldHover>
+                                                <div containerFlex>
+                                                    <div inlineelement>
+                                                        {{field.fieldEntityName}}
+                                                    </div>
+                                                    <div inlineelement>
+
+                                                        <i #editUpdate colorInactive ActionIcone
+                                                           [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
+                                                           *ngIf="entityInEntityAction(entitie.entityId) && viewFieldIsInAction(field)"
+                                                           (click)="setExpression(field,$event)"
+                                                           class="fa fa-info"></i>
+
+                                                        <i #editUpdate colorInactive ActionIcone
+                                                           [ngClass]="{'colorPrimary' :  updateFieldIsInAction(field)  }"
+                                                           *ngIf="entityInEntityAction(entitie.entityId) && viewFieldIsInAction(field)"
+                                                           (click)="updateFieldInAction(field)"
+                                                           class="fa fa-edit"></i>
+
+                                                        <i #editUpdate colorInactive ActionIcone
+                                                           [ngClass]="{'colorPrimary' :  updateFieldRequireIsInAction(field)  }"
+                                                           *ngIf="entityInEntityAction(entitie.entityId) && updateFieldIsInAction(field)"
+                                                           (click)="updateFieldRequireInAction(field)"
+                                                           class="fa fa-lock"></i>
+
+                                                        <i #viewUpdate colorInactive ActionIcone
+                                                           [ngClass]="{'colorPrimary' :  viewFieldIsInAction(field)  }"
+                                                           *ngIf="entityInEntityAction(entitie.entityId)"
+                                                           (click)="viewFieldInAction(field)"
+                                                           class="fa fa-th-list"></i>
+
+                                                        <i #listUpdate colorInactive ActionIcone
+                                                           [ngClass]="{'colorPrimary' :  fieldIsInList(field)  }"
+                                                           *ngIf="entityInEntityList(entitie.entityId)"
+                                                           (click)="updateFieldInList(field)"
+                                                           class="fa fa-list-alt"></i>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--  <div *ngFor="let rel of relations" entityFieldHover>
+                                                  <div fieldItem *ngIf="rel.relationEntitie.entityEntity == entitie.entityEntity"
+                                                       id="field_{{entitie.entityId}}_{{rel.relationKey}}">
+                                                      <div containerFlex>
+                                                          <div inlineelement>
+                                                              {{rel.relationKey}}
+                                                          </div>
+                                                          <div inlineelement>
+                                                              <i colorPrimary ActionIcone
+                                                                 class="fa fa-check-circle"></i>
+                                                          </div>
+
+                                                      </div>
+                                                  </div>
+                                              </div> -->
+
+
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
-                                <!--  <div *ngFor="let rel of relations" entityFieldHover>
-                                      <div fieldItem *ngIf="rel.relationEntitie.entityEntity == entitie.entityEntity"
-                                           id="field_{{entitie.entityId}}_{{rel.relationKey}}">
-                                          <div containerFlex>
-                                              <div inlineelement>
-                                                  {{rel.relationKey}}
-                                              </div>
-                                              <div inlineelement>
-                                                  <i colorPrimary ActionIcone
-                                                     class="fa fa-check-circle"></i>
-                                              </div>
-
-                                          </div>
-                                      </div>
-                                  </div> -->
+                            </nb-tab>
+                            <nb-tab tabTitle="Gestion des Données ">
+                                <i _ngcontent-c7="" (click)="addConnectionDialog($event)" class="fa fa-plus-circle"
+                                   style="font-size: 16px; margin-top: 10px;"> Ajouter une connection </i><br><br>
 
 
-                            </div>
+                                <div connectionontainer *ngFor="let con of connections">
 
-                        </div>
+                                    <i class="fa fa-database"> </i> &nbsp; <span
+                                        connectionLabel>{{con.connectionName}}</span> - <span connectionConfig>{{con.connectionDriver}} : {{con.connectionHost}} : {{con.connectionDbname}}</span>
+                                    &nbsp; <i class="fab fa-searchengin" style="font-size: 18px;"
+                                              (click)="addQueryDialog(con,$event)"></i> &nbsp; <i class="fa fa-times"
+                                                                                                  style="font-size: 18px;"
+                                                                                                  (click)="deleteConnections(con,$event)"> </i>
+
+                                    <br> <br>
+
+                                    <div queryContainer *ngFor="let qry of con.query" (click)="selectQuery(qry,$event)"> {{qry.queryName}} &nbsp; <i
+                                            class="fa fa-flash" (click)="getQueryResult(qry,$event)"> </i> &nbsp; <i
+                                            class="fa fa-times" (click)="deleteQuery(qry,$event)"> </i></div>
+                                </div>
+
+
+                            </nb-tab>
+
+                        </nb-tabset>
+
 
                     </div>
 
@@ -1096,9 +1140,9 @@
                     <nb-card full-heigth full-heigth-all-child>
 
                         <nb-card-header noborder style="text-align: center !important">
-                            <div title>Paramétre  <i *ngIf="paramexp == 0" colorPrimary ActionIcone
-                                                     class="fa fa-expand"
-                                                     (click)="expandParam($event)"></i>
+                            <div title>Paramétre <i *ngIf="paramexp == 0" colorPrimary ActionIcone
+                                                    class="fa fa-expand"
+                                                    (click)="expandParam($event)"></i>
                                 <i *ngIf="paramexp == 1" colorPrimary ActionIcone
                                    class="fa fa-compress"
                                    (click)="collapsParam($event)"></i>
@@ -1138,6 +1182,52 @@
                         </nb-accordion>
 
 
+
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='query'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+
+                            <nb-accordion-item [expanded]="true">
+                                <nb-accordion-item-header>
+                                    Requette : {{selectedQuery.queryName}}
+                                </nb-accordion-item-header>
+
+                                <nb-accordion-item-body>
+
+
+                                    Nom de requette :<br>
+                                    <input type="text" [(ngModel)]="selectedQuery.queryName"
+                                           nbInput fullWidth
+                                           fieldSize="xsmall" placeholder="Nom de requette "><br>
+
+                                    Enoncé de requette :<br>
+                                    <input type="text" [(ngModel)]="selectedQuery.queryBody"
+                                           nbInput fullWidth
+                                           fieldSize="xsmall" placeholder="Enoncé de requette "><br>
+
+                                    <button style="margin-right: 10px;"
+                                           (click)="updateQuery()"
+                                            nbButton
+                                            type="submit" size="xsmall">
+                                        Valider
+                                    </button>
+
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+                            <nb-accordion-item>
+                                <nb-accordion-item-header>
+
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+
+
+                        </nb-accordion>
+
+
                         <nb-accordion #fieldparam *ngIf="paramPanel=='process'" (click)="onSettingClick($event)"
                                       full-heigth full-heigth-all-child>
 
@@ -1153,11 +1243,11 @@
 
                             </nb-accordion-item>
 
-                            <nb-accordion-item   full-heigth full-heigth-all-child>
+                            <nb-accordion-item full-heigth full-heigth-all-child>
                                 <nb-accordion-item-header>
                                     Jointure
                                 </nb-accordion-item-header>
-                                <nb-accordion-item-body   >
+                                <nb-accordion-item-body>
 
 
                                     Entitée départ : <select (click)="stopClick($event)"
@@ -1180,19 +1270,22 @@
 
                                 </nb-accordion-item-body>
 
-                                <nb-accordion-item-body   full-heigth full-heigth-all-child>
+                                <nb-accordion-item-body full-heigth full-heigth-all-child>
 
-                                       <nb-list>
+                                    <nb-list>
 
-                                            <nb-list-item *ngFor="let join of joins" (click)="setJoin(join,joins)">
-                                              <div class="row"> <div class="col-md-10"><span *ngFor="let path of join.routePath"> -> {{path.ent}} </span></div>    <div class="col-md-2"> <i colorPrimary ActionIcone
-                                                                                                                                                                             [ngClass]="{'fa-check-circle' : join.routeState == 1  }"
-                                                                                                                                                                                 class="fa "> </i></div>
-                                              </div>
+                                        <nb-list-item *ngFor="let join of joins" (click)="setJoin(join,joins)">
+                                            <div class="row">
+                                                <div class="col-md-10"><span *ngFor="let path of join.routePath"> -> {{path.ent}} </span>
+                                                </div>
+                                                <div class="col-md-2"><i colorPrimary ActionIcone
+                                                                         [ngClass]="{'fa-check-circle' : join.routeState == 1  }"
+                                                                         class="fa "> </i></div>
+                                            </div>
 
-                                            </nb-list-item>
+                                        </nb-list-item>
 
-                                       </nb-list>
+                                    </nb-list>
 
                                 </nb-accordion-item-body>
 
@@ -1202,7 +1295,8 @@
                         </nb-accordion>
 
 
-                        <nb-accordion #fieldparam *ngIf="paramPanel=='action'" (click)="onSettingClick($event)" (drag)="onSettingClick($event)"
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='action'" (click)="onSettingClick($event)"
+                                      (drag)="onSettingClick($event)"
                                       full-heigth full-heigth-all-child>
 
                             <nb-accordion-item [expanded]="true">
@@ -1324,7 +1418,7 @@
                                             </select></div>
 
 
-                                            <div  *ngIf="actionform.actionType != 5">
+                                            <div *ngIf="actionform.actionType != 5">
 
                                                 Go to step: <select type="text"
                                                                     [(ngModel)]="actionform.actionNextStep"
@@ -1361,21 +1455,25 @@
 
                             <nb-accordion-item *ngIf="selectedActions.actionType == 5">
                                 <nb-accordion-item-header>
-                                   Editer le contenu de l'impression
+                                    Editer le contenu de l'impression
                                 </nb-accordion-item-header>
                                 <nb-accordion-item-body>
                                     <div style="height: 500px;">
 
                                         Titre :<br>
-                                        <input type="text" [(ngModel)]="this.selectedActions.actionPrintPageTitle" nbInput fullWidth
-                                               fieldSize="xsmall" placeholder="Titre" >
+                                        <input type="text" [(ngModel)]="this.selectedActions.actionPrintPageTitle"
+                                               nbInput fullWidth
+                                               fieldSize="xsmall" placeholder="Titre">
 
                                         Entéte :<br>
-                                        <editor #edh [(ngModel)]="this.selectedActions.actionPrintHead" (click)="stopClick($event)"   [init]="{plugins: 'link'}"></editor>
+                                        <editor #edh [(ngModel)]="this.selectedActions.actionPrintHead"
+                                                (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
                                         Millieu de page :<br>
-                                        <editor #edm [(ngModel)]="this.selectedActions.actionPrintMiddle"  (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
+                                        <editor #edm [(ngModel)]="this.selectedActions.actionPrintMiddle"
+                                                (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
                                         Bas de page :<br>
-                                        <editor #edf [(ngModel)]="this.selectedActions.actionPrintFooter"  (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
+                                        <editor #edf [(ngModel)]="this.selectedActions.actionPrintFooter"
+                                                (click)="stopClick($event)" [init]="{plugins: 'link'}"></editor>
 
 
                                         <br>
@@ -1618,9 +1716,10 @@
                                             <div><strong> Ordre: </strong>
                                                 <div *ngFor="let fld of selectedEntity.fields"><input
                                                         [ngModelOptions]="{standalone: true}"
-                                                        [(ngModel)]="fld.fieldOrder" inputOrdre><span>{{fld.fieldEntityName}}</span>   <i  #rmfield colorPrimary ActionIcone
-                                                                                                                                          (click)="RemoveField(fld,$event)"
-                                                                                                                                          class="fa fa-times"></i><br>
+                                                        [(ngModel)]="fld.fieldOrder" inputOrdre><span>{{fld.fieldEntityName}}</span>
+                                                    <i #rmfield colorPrimary ActionIcone
+                                                       (click)="RemoveField(fld,$event)"
+                                                       class="fa fa-times"></i><br>
                                                 </div>
                                             </div>
 
@@ -1637,10 +1736,12 @@
                                         <br>
 
                                         <div><strong> Ajouter : </strong>
-                                            <div  >
-                                                <input type="text" [(ngModel)]="newatribute.fieldName" inputNewField placeholder="Nom du champ"><br>
-                                                length <input type="text" [(ngModel)]="newatribute.length" inputOrdre placeholder=""><br>
-                                                Type <select  [(ngModel)]="newatribute.type" ><br>
+                                            <div>
+                                                <input type="text" [(ngModel)]="newatribute.fieldName" inputNewField
+                                                       placeholder="Nom du champ"><br>
+                                                length <input type="text" [(ngModel)]="newatribute.length" inputOrdre
+                                                              placeholder=""><br>
+                                                Type <select [(ngModel)]="newatribute.type"><br>
                                                 <option value="integer">integer</option>
                                                 <option value="string">string</option>
                                                 <option value="datetime">datetime</option>
@@ -1649,20 +1750,26 @@
 
                                                 <br>
                                                 <br>
-                                                Many-to-One  <input type="checkbox" [(ngModel)]="newatribute.oneToManys" > <br>
+                                                Many-to-One <input type="checkbox" [(ngModel)]="newatribute.oneToManys">
+                                                <br>
 
-                                                With association Field    <select [(ngModel)]="newatribute.fieldrelation" >  <option  *ngFor="let fldopt of allFieldOption" [value]="fldopt.variableId">{{fldopt.name}}</option> </select>
+                                                With association Field <select [(ngModel)]="newatribute.fieldrelation">
+                                                <option *ngFor="let fldopt of allFieldOption"
+                                                        [value]="fldopt.variableId">{{fldopt.name}}
+                                                </option>
+                                            </select>
 
-                                                Inversed <input  type="checkbox" [(ngModel)]="newatribute.inversed" >
+                                                Inversed <input type="checkbox" [(ngModel)]="newatribute.inversed">
 
                                                 <br>
                                                 <br>
 
 
-                                                Id <input type="checkbox" [(ngModel)]="newatribute.id" ><br>
-                                                Null <input type="checkbox" [(ngModel)]="newatribute.notnull" ><br>
+                                                Id <input type="checkbox" [(ngModel)]="newatribute.id"><br>
+                                                Null <input type="checkbox" [(ngModel)]="newatribute.notnull"><br>
 
-                                            </div><br>
+                                            </div>
+                                            <br>
                                             <button style="margin-right: 10px;" (click)="SaveField($event)"
                                                     nbButton
                                                     type="button" size="xsmall">
@@ -1746,10 +1853,78 @@
 
 </nb-reveal-card>
 
+
+<ngx-smart-modal #addConnectionModal identifier="addConnectionModal" customClass="medium-modal"
+                 (click)="stopClick($event)">
+
+    <h1>Ajouter une connection</h1>
+    <br>
+    <div>
+        <div labelFixedWidth> Nom de Connection :</div>
+        <input [(ngModel)]="conConfig.connectionName" nbInput><br>
+        <div labelFixedWidth> Driver :</div>
+        <input [(ngModel)]="conConfig.connectionDriver" nbInput><br>
+        <div labelFixedWidth> Db utilisateur :</div>
+        <input [(ngModel)]="conConfig.connectionDbuser" nbInput><br>
+        <div labelFixedWidth> Db mot de passe :</div>
+        <input [(ngModel)]="conConfig.connectionDbbpassword" nbInput><br>
+        <div labelFixedWidth> Db Nom :</div>
+        <input [(ngModel)]="conConfig.connectionDbname" nbInput><br>
+        <div labelFixedWidth> Host :</div>
+        <input [(ngModel)]="conConfig.connectionHost" nbInput><br>
+    </div>
+    <br>
+    <button type="button" nbButton size="xsmall" (click)="addConnectionConfig($event)">Save</button>
+
+    <button type="button" nbButton size="xsmall" (click)="stopClick($event);addConnectionModal.close()">Close</button>
+
+</ngx-smart-modal>
+
+
+<ngx-smart-modal #addQueryModal identifier="addQueryModal" customClass="medium-modal"
+                 (click)="stopClick($event)">
+
+    <h1>Ajouter une requette</h1>
+    <br>
+    <div>
+        <div labelFixedWidth> Nom de requette :</div>
+        <input [(ngModel)]="query.queryName" nbInput><br>
+        <div labelFixedWidth> Ennoncé de requette :</div>
+        <textarea [(ngModel)]="query.queryBody" nbInput></textarea><br>
+
+    </div>
+    <br>
+    <button type="button" nbButton size="xsmall" (click)="addQuery($event)">Save</button>
+
+    <button type="button" nbButton size="xsmall" (click)="stopClick($event);addQueryModal.close()">Close</button>
+
+</ngx-smart-modal>
+
 <ngx-smart-modal #messageModal identifier="messageModal" customClass="medium-modal" (click)="stopClick($event)">
     <h1>System AGL</h1>
     <div *ngIf="messageModal.hasData()">
         <pre>{{ messageModal.getData()}}</pre>
     </div>
-    <button  type="button" nbButton size="xsmall"  (click)="stopClick($event);messageModal.close()">Close</button>
+    <button type="button" nbButton size="xsmall" (click)="stopClick($event);messageModal.close()">Close</button>
 </ngx-smart-modal>
+
+
+<ngx-smart-modal #displayDataModal identifier="displayDataModal" customClass="medium-modal" (click)="stopClick($event)">
+    <h1>Affichage des données</h1>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th *ngFor="let head of displayDataHead"> {{head}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let content of displayDataContent">
+                <th *ngFor="let headcontent of displayDataHead"> {{content[headcontent]}}</th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" nbButton size="xsmall" (click)="stopClick($event);displayDataModal.close()">Close</button>
+</ngx-smart-modal>
+

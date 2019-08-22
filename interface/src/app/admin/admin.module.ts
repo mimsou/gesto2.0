@@ -8,6 +8,7 @@ import { AuthGuard } from '../auth.guard.service';
 import {AuthGuardAdmin} from "../@core/data/auth.guard.admin.service";
 import { CallbackdirDirective } from '../callbackdir.directive';
 import { ExpressionComponent } from './manager/expression/expression.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -27,6 +28,7 @@ const DIRECTIVE_DEC = [
     AdminRoutingModule,
     CommonModule,
     ThemeModule,
+      FormsModule
   ],
   declarations: [...ADMIN_COMPONENTS,...DIRECTIVE_DEC, ExpressionComponent],
   providers:[

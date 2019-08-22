@@ -5,10 +5,12 @@ namespace AppBundle\managerController;
 
 use AppBundle\Annotation\ActionName;
 use AppBundle\Entity\GestAccessPath;
+use AppBundle\Entity\GestConnectionConfig;
 use AppBundle\Entity\GestDataAccess;
 use AppBundle\Entity\GestJoinRoutes;
 use AppBundle\Entity\GestModule;
 use AppBundle\Entity\GestModuleEntity;
+use AppBundle\Entity\GestQuery;
 use AppBundle\Entity\GestRoleData;
 use AppBundle\Entity\GestActions;
 use AppBundle\Entity\GestActionsRegle;
@@ -24,6 +26,7 @@ use AppBundle\Entity\UpdateForm;
 use Doctrine\Common\Annotations\AnnotationReader;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use JMS\Serializer\Handler\StdClassHandler;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +43,10 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Debug\Debug;
+
+
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
 
 class managerController extends FOSRestController
@@ -104,11 +111,9 @@ class managerController extends FOSRestController
         $em->createQuery('update AppBundle:Gestfields a set a.checks = 0 where a.checks != 2')->execute();
         $em->createQuery('update AppBundle:GestRelations a set a.checks = 0 where a.checks != 2')->execute();
 
-         //return $metadata;
+        //return $metadata;
 
         foreach ($metadata as $classMeta) {
-
-
 
 
             if (strpos($classMeta->table["name"], 'gest_') === false && $classMeta->table["name"] !== 'user' && $classMeta->table["name"] !== 'group' && $classMeta->table["name"] !== 'update_form' && $classMeta->table["name"] !== 'view_form') {
@@ -155,8 +160,6 @@ class managerController extends FOSRestController
                 }
 
                 foreach ($classMeta->getAssociationMappings() as $mapping) {
-
-
 
 
                     $fieldf = $this->getDoctrine()
@@ -287,7 +290,6 @@ class managerController extends FOSRestController
                     } else if (empty($mapping["mappedBy"])) {
 
 
-
                         $relation = $this->getDoctrine()
                             ->getRepository('AppBundle:GestRelations')
                             ->findOneBy(
@@ -354,6 +356,30 @@ class managerController extends FOSRestController
             $em->flush();
         }
 
+        $entitys = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findBy(
+            array(
+                "checks" => 0
+            )
+        );
+
+        foreach ($entitys as $ent) {
+
+            $moduleEntity = $this->getDoctrine()->getRepository('AppBundle:GestModuleEntity')->findBy(
+                array(
+                    "entityModuleId" => $ent->getEntityId()
+                )
+            );
+
+
+            foreach ($moduleEntity as $modent) {
+                $em->remove($modent);
+                $em->flush();
+
+            }
+
+        }
+
+
         $em->createQuery('delete from AppBundle:GestRelations a  where a.checks = 0')->execute();
         $em->createQuery('delete from AppBundle:Gestfields a  where a.checks = 0')->execute();
         $em->createQuery('delete from AppBundle:GestEntity a  where a.checks = 0')->execute();
@@ -385,11 +411,11 @@ class managerController extends FOSRestController
 
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u', 'p','e')
+        $qb->select('u', 'p', 'e')
             ->from('AppBundle:GestEntity', 'u')
             ->leftJoin('u.fields', 'p')
             ->leftJoin('u.entityModule', 'e')
-            ->where("e.moduleEntityId = ".$id)
+            ->where("e.moduleEntityId = " . $id)
             ->orWhere($qb->expr()->isNull('e.moduleEntityId'))
             ->orderBy("p.fieldOrder");
 
@@ -423,7 +449,7 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
 
-        $restresult = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuTag" => "m","menuModule" => $id));
+        $restresult = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuTag" => "m", "menuModule" => $id));
 
 
         if ($restresult === null) {
@@ -629,6 +655,7 @@ class managerController extends FOSRestController
         }
 
         $data->setRoleModule($module);
+        $data->setRoleGroup(3);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
@@ -700,9 +727,11 @@ class managerController extends FOSRestController
         $sn = $this->getDoctrine()->getManager();
         $role = $this->getDoctrine()->getRepository('AppBundle:GestRole')->find($id);
 
-        if (empty($role)) {
-            return new View("role not found", Response::HTTP_NOT_FOUND);
-        } else {
+        if ($role->getRoleLibelle() != "ROLE_ADMIN") {
+
+            if (empty($role)) {
+                return new View("role not found", Response::HTTP_NOT_FOUND);
+            } else {
 
 //            $menuchilds = $this->getDoctrine()->getRepository('AppBundle:GestRole')->findBy(array("menuParent"=>$id));
 //
@@ -713,13 +742,17 @@ class managerController extends FOSRestController
 //                $em->flush();
 //            }
 
-            $sn->remove($role);
-            $sn->flush();
+                $sn->remove($role);
+                $sn->flush();
 
+            }
+
+
+            //return new View("role deleted successfully", Response::HTTP_OK);
+            return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Role supprimé avec success"), "Access-Control-Expose-Headers" => "message"));
+        } else {
+            return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Role Administrateur ne peut pas étre effacé"), "Access-Control-Expose-Headers" => "message"));
         }
-
-        //return new View("role deleted successfully", Response::HTTP_OK);
-        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Role supprimé avec success"), "Access-Control-Expose-Headers" => "message"));
 
     }
 
@@ -1161,10 +1194,10 @@ class managerController extends FOSRestController
         $restresultq = $qb->select('u', 't', 'i')
             ->from('AppBundle:Gestmenu', 'u')->leftJoin('u.menuParent', 't')->leftJoin('u.role', 'i');
 
-              if ($id) {
-                  $restresultq = $restresultq->where("u.menuModule = $id");
-              }
-            $restresultq->andWhere("u.menuTag like 'i' or u.menuTag like 'p'")->andWhere("u.menuParent is null")->andWhere("u.menuTag !='m'");
+        if ($id) {
+            $restresultq = $restresultq->where("u.menuModule = $id");
+        }
+        $restresultq->andWhere("u.menuTag like 'i' or u.menuTag like 'p'")->andWhere("u.menuParent is null")->andWhere("u.menuTag !='m'");
         $restresult = $restresultq->getQuery()->getArrayResult();
 
         return $restresult;
@@ -5271,14 +5304,73 @@ class managerController extends FOSRestController
     public function getAllModuleAction()
     {
 
+        $user = $this->getCurrentUser();
+
+        $iduser = $user->getId();
+
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->createQueryBuilder();
 
-        $restresult = $qb->select('u')->from('AppBundle:GestModule', 'u')->getQuery()->getArrayResult();
+        $restresult = $qb->select('u')->distinct()->from('AppBundle:GestModule', 'u')
+            //->join('u.role', 'a')
+            //->join('a.user', 'o')
+            //->where("o.id = $iduser")
+            ->getQuery()->getArrayResult();
 
         return $restresult;
     }
+
+
+    /**
+     * @Rest\Patch("/getqueryresult/")
+     */
+
+    public function getQueryResultAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $query = $this->getDoctrine()->getRepository('AppBundle:GestQuery')->find($param->queryId);
+
+        $connection = $query->getQueryConnection();
+
+        $dbconfig = new \stdClass();
+
+        $dbconfig->connectionName = $connection->getConnectionName();
+
+        $dbconfig->connectionDriver = $connection->getConnectionDriver();
+
+        $dbconfig->connectionDbname = $connection->getConnectionDbname();
+
+        $dbconfig->connectionDbuser = $connection->getConnectionDbuser();
+
+        $dbconfig->connectionDbbpassword = $connection->getConnectionDbbpassword();
+
+        $dbconfig->connectionHost = $connection->getConnectionHost();
+
+        $em = $this->getEntityManager($dbconfig);
+
+        $this->importDatabaseMapping($em, $param);
+
+        $dirpath = $this->getDirPath($dbconfig);
+
+        $this->requireAllFileClass($dirpath);
+
+        $query = $em->createQuery($query->getQueryBody());
+
+        $result = $query->getArrayResult();
+
+        $keys = array();
+
+        foreach ($result[0] as $key => $val) {
+            array_push($keys, $key);
+        }
+
+        return array("head" => $keys, "data" => $result);
+
+    }
+
 
     /**
      * @Rest\Patch("/addentitytomodule/")
@@ -5305,12 +5397,264 @@ class managerController extends FOSRestController
 
         $em->flush();
 
-        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'entity ".$entity->getEntityEntity()." a été ajouter au module ".$module->getModuleLibelle()), "Access-Control-Expose-Headers" => "message"));
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'entity " . $entity->getEntityEntity() . " a été ajouter au module " . $module->getModuleLibelle()), "Access-Control-Expose-Headers" => "message"));
 
 
     }
 
 
+    /**
+     * @Rest\Patch("/addconnectionconfig/")
+     */
+
+    public function patchAddconnectionconfigAction(Request $request)
+
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $conConfig = new GestConnectionConfig();
+
+        $conConfig->setConnectionName($param->connectionName);
+
+        $conConfig->setConnectionDriver($param->connectionDriver);
+
+        $conConfig->setConnectionDbname($param->connectionDbname);
+
+        $conConfig->setConnectionDbuser($param->connectionDbuser);
+
+        $conConfig->setConnectionDbbpassword($param->connectionDbbpassword);
+
+        $conConfig->setConnectionHost($param->connectionHost);
+
+        $module = $this->getDoctrine()->getRepository('AppBundle:GestModule')->find($param->module);
+
+        $conConfig->setConnectionModule($module);
+
+        $em->persist($conConfig);
+
+        $em->flush();
+
+        $em = $this->getEntityManager($param);
+
+        $this->importDatabaseMapping($em, $param);
+
+        $dirpath = $this->getDirPath($param);
+
+        $this->requireAllFileClass($dirpath);
+
+
+        return new View($users, Response::HTTP_OK, array("message" => utf8_decode("Connection ajouter avec succes"), "Access-Control-Expose-Headers" => "message"));
+
+
+    }
+
+    private function getDirPath($dbparam)
+    {
+
+        $rootapp = $this->get('kernel')->getRootDir();
+
+        $rootdir = str_replace("\app", "", $rootapp);
+
+        $dirname = "Entity" . ucfirst($dbparam->connectionDbname);
+
+        $dirpath = $rootdir . "/src/AppBundle/" . $dirname;
+
+        return $dirpath;
+    }
+
+
+    private function requireAllFileClass($paths)
+    {
+        foreach (scandir($paths) as $filename) {
+            $path = $paths . '/' . $filename;
+            if (is_file($path)) {
+                require_once $path;
+            }
+        }
+    }
+
+
+    private function importDatabaseMapping($em, $dbconfig)
+    {
+
+        $dirpath = $this->getDirPath($dbconfig);
+
+        $em->getConfiguration()->setMetadataDriverImpl(
+            new \Doctrine\ORM\Mapping\Driver\DatabaseDriver(
+                $em->getConnection()->getSchemaManager()
+            )
+        );
+
+        $cmf = new \Doctrine\ORM\Tools\DisconnectedClassMetadataFactory();
+
+        $cmf->setEntityManager($em);
+
+        $metadata = $cmf->getAllMetadata();
+
+        $cme = new \Doctrine\ORM\Tools\Export\ClassMetadataExporter();
+
+        $exporter = $cme->getExporter('annotation', $dirpath);
+
+        $generator = new \Doctrine\ORM\Tools\EntityGenerator();
+        $generator->setGenerateAnnotations(true);
+        $generator->setGenerateStubMethods(true);
+        $generator->setRegenerateEntityIfExists(false);
+        $generator->setUpdateEntityIfExists(true);
+
+        $exporter->setEntityGenerator($generator);
+
+        $exporter->setOverwriteExistingFiles(true);
+
+        $exporter->setMetadata($metadata);
+
+        $exporter->export();
+
+    }
+
+
+    /**
+     * @Rest\Patch("/addquery/")
+     */
+
+    public function patchAddqueryAction(Request $request)
+
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        if($param->queryId){
+
+            $query = $this->getDoctrine()->getRepository('AppBundle:GestQuery')->find($param->queryId);
+
+        }else{
+
+            $query = new GestQuery();
+
+            $connection = $this->getDoctrine()->getRepository('AppBundle:GestConnectionConfig')->find($param->connection->connectionId);
+
+            $query->setQueryConnection($connection);
+        }
+
+        $query->setQueryName($param->queryName);
+
+        $query->setQueryBody($param->queryBody);
+
+        $em->persist($query);
+
+        $em->flush();
+
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Requette sauvegarder avec succes"), "Access-Control-Expose-Headers" => "message"));
+
+    }
+
+
+    /**
+     * @Rest\Patch("/deleteconnectionconfig/")
+     */
+
+    public function patchDeleteconnectionconfigAction(Request $request)
+
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $connection = $this->getDoctrine()->getRepository('AppBundle:GestConnectionConfig')->find($param->connectionId);
+
+        $em->remove($connection);
+
+        $em->flush();
+
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Connection supprimer avec succes"), "Access-Control-Expose-Headers" => "message"));
+
+
+    }
+
+
+    /**
+     * @Rest\Patch("/deletequery/")
+     */
+
+    public function patchDeletequeryAction(Request $request)
+
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $this->getDoctrine()->getRepository('AppBundle:GestQuery')->find($param->queryId);
+
+        $em->remove($query);
+
+        $em->flush();
+
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Requette supprimer avec succes"), "Access-Control-Expose-Headers" => "message"));
+
+
+    }
+
+
+    /**
+     * @Rest\Get("/getallconnections/{id}")
+     */
+
+    public function getAllConnectionsAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $restresult = $qb->select('u', 'o')->distinct()->from('AppBundle:GestConnectionConfig', 'u')
+            ->leftJoin('u.query', 'o')
+            ->where("u.connectionModule = $id")
+            ->getQuery()->getArrayResult();
+
+        return $restresult;
+
+    }
+
+
+    private function getEntityManager($dbconfig)
+    {
+
+        $dirpath = $this->getDirPath($dbconfig);
+
+        if (!file_exists($dirpath) && !is_dir($dirpath)) {
+            mkdir($dirpath);
+        }
+
+        $isDevMode = false;
+
+        $dbParams = array(
+            'driver' => $dbconfig->connectionDriver,
+            'user' => $dbconfig->connectionDbuser,
+            'password' => $dbconfig->connectionDbpassword,
+            'dbname' => $dbconfig->connectionDbname,
+            'host' => $dbconfig->connectionHost
+
+        );
+
+        $config = Setup::createAnnotationMetadataConfiguration(array($dirpath), $isDevMode);
+
+        $entityManager = EntityManager::create($dbParams, $config);
+
+        return $entityManager;
+
+    }
+
+
+    public function displayVar($var)
+    {
+        return new View("ok", Response::HTTP_OK, array("message" => var_dump($var), "Access-Control-Expose-Headers" => "message"));
+    }
 
 
 }

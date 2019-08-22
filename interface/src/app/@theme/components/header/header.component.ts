@@ -49,8 +49,6 @@ export class HeaderComponent implements OnInit {
 
         this.getAllModule()
 
-
-
         let obsValue;
 
         this.authService.onTokenChange().pipe(take(1)).

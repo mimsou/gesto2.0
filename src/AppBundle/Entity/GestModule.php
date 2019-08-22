@@ -76,6 +76,24 @@ class GestModule
     private $moduleEntity;
 
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestRoleModule", mappedBy="moduleRoleId")
+     */
+    private $moduleRole;
+
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestMenu", mappedBy="connectionModule")
+     */
+    private $connection;
+
+
+
 
     public function __construct()
     {
@@ -84,6 +102,8 @@ class GestModule
         $this->process = new ArrayCollection();
         $this->entity = new ArrayCollection();
         $this->moduleEntity = new ArrayCollection();
+        $this->moduleRole = new ArrayCollection();
+        $this->connection = new ArrayCollection();
     }
 
     public function getModuleId(): ?int
@@ -252,6 +272,68 @@ class GestModule
             // set the owning side to null (unless already changed)
             if ($moduleEntity->getModuleEntityId() === $this) {
                 $moduleEntity->setModuleEntityId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestRoleModule[]
+     */
+    public function getModuleRole(): Collection
+    {
+        return $this->moduleRole;
+    }
+
+    public function addModuleRole(GestRoleModule $moduleRole): self
+    {
+        if (!$this->moduleRole->contains($moduleRole)) {
+            $this->moduleRole[] = $moduleRole;
+            $moduleRole->setModuleRoleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModuleRole(GestRoleModule $moduleRole): self
+    {
+        if ($this->moduleRole->contains($moduleRole)) {
+            $this->moduleRole->removeElement($moduleRole);
+            // set the owning side to null (unless already changed)
+            if ($moduleRole->getModuleRoleId() === $this) {
+                $moduleRole->setModuleRoleId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestMenu[]
+     */
+    public function getConnection(): Collection
+    {
+        return $this->connection;
+    }
+
+    public function addConnection(GestMenu $connection): self
+    {
+        if (!$this->connection->contains($connection)) {
+            $this->connection[] = $connection;
+            $connection->setConnectionModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConnection(GestMenu $connection): self
+    {
+        if ($this->connection->contains($connection)) {
+            $this->connection->removeElement($connection);
+            // set the owning side to null (unless already changed)
+            if ($connection->getConnectionModule() === $this) {
+                $connection->setConnectionModule(null);
             }
         }
 

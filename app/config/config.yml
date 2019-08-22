@@ -115,7 +115,7 @@ fos_rest:
 lexik_jwt_authentication:
     private_key_path: "%kernel.root_dir%/jwt/private.pem"
     public_key_path:  "%kernel.root_dir%/jwt/public.pem"
-    pass_phrase:      Ypu41db4896lVXF
+    pass_phrase:      azertyuiop
     token_ttl:        86400
     
 nelmio_cors:
@@ -137,7 +137,7 @@ nelmio_cors:
                 max_age: 3600
             '^/':
                 origin_regex: true
-                allow_origin: ['^http://localhost:[0-9]+']
+                allow_origin: ['^http://10.0.26.199:[0-9]+']
                 allow_headers: ['X-Custom-Auth']
                 allow_methods: ['POST', 'PATCH', 'GET', 'DELETE']
                 max_age: 3600

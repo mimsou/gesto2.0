@@ -381,6 +381,32 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addentitytomodule/`, JSON.stringify(param));
     }
 
+    saveConnectionConfig(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addconnectionconfig/`, JSON.stringify(param));
+    }
 
 
+    getAllConnections(id){
+        return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/getallconnections/${id}`);
+    }
+
+
+    deleteConnection(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/deleteconnectionconfig/`, JSON.stringify(param));
+    }
+
+    deleteQuery(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/deletequery/`, JSON.stringify(param));
+    }
+
+
+    saveQuery(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/addquery/`, JSON.stringify(param));
+    }
+
+
+
+    getQueryResult(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getqueryresult/`, JSON.stringify(param));
+    }
 }

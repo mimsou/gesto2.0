@@ -152,6 +152,14 @@ class GestRole
      */
     private $list;
 
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestRoleModule", mappedBy="roleModuleId")
+     */
+    private $roleModuleColl;
+
     /**
      * Constructor
      */
@@ -165,6 +173,7 @@ class GestRole
         $this->action = new ArrayCollection();
         $this->rda = new ArrayCollection();
         $this->dra = new ArrayCollection();
+        $this->roleModuleColl = new ArrayCollection();
     }
 
     public function getRoleId(): ?int
@@ -424,6 +433,37 @@ class GestRole
     public function setRoleModule(?GestModule $roleModule): self
     {
         $this->roleModule = $roleModule;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestRoleModule[]
+     */
+    public function getRoleModuleColl(): Collection
+    {
+        return $this->roleModuleColl;
+    }
+
+    public function addRoleModuleColl(GestRoleModule $roleModuleColl): self
+    {
+        if (!$this->roleModuleColl->contains($roleModuleColl)) {
+            $this->roleModuleColl[] = $roleModuleColl;
+            $roleModuleColl->setRoleModuleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoleModuleColl(GestRoleModule $roleModuleColl): self
+    {
+        if ($this->roleModuleColl->contains($roleModuleColl)) {
+            $this->roleModuleColl->removeElement($roleModuleColl);
+            // set the owning side to null (unless already changed)
+            if ($roleModuleColl->getRoleModuleId() === $this) {
+                $roleModuleColl->setRoleModuleId(null);
+            }
+        }
 
         return $this;
     }
