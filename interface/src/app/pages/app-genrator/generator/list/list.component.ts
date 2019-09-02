@@ -55,7 +55,6 @@ export class ListComponent implements OnInit {
         this.dimfilter=[];
         this.DimComponent.initDimention(process);
         this.refrechListData();
-
     }
 
     hasAccess(role) {
@@ -80,12 +79,15 @@ export class ListComponent implements OnInit {
 
     getStepAction(entityData) {
         var stepid = entityData[0][this.entity.entityStepperField];
+
         for (let stp of this.step) {
             if (stp.stepId == stepid) {
                 var acts = [];
                 for (let act of  stp.action) {
+
                     if(this.actionInProcess(act.actionId)){
                         if (act.actionType !== 1) {
+
                             if(this.hasAccess(act.role)){
                                 acts.push(act)
                             }
@@ -109,11 +111,14 @@ export class ListComponent implements OnInit {
 
 
     getStepActionCount(entityData) {
+
         var count = 0;
 
         if( typeof entityData[0] !== "undefined" ){
+
             var stepid = entityData[0][this.entity.entityStepperField];
         }else{
+
             var stepid = entityData[this.entity.entityStepperField];
         }
 
@@ -128,6 +133,8 @@ export class ListComponent implements OnInit {
                 }
             }
         }
+
+
 
         return count;
 

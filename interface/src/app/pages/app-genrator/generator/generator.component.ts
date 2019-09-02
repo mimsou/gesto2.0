@@ -78,7 +78,9 @@ export class GeneratorComponent implements OnInit {
         for (let act of this.process[0].actions) {
 
             if (typeof act.actionIsmainLevel != 'undefined') {
+
                 for (let ent of this.process[0].gestEntity) {
+
                     if (ent.entityId == act.actionEntity.entityId && act.actionType == 1) {
                         this.mainEntity = ent;
 
@@ -87,7 +89,9 @@ export class GeneratorComponent implements OnInit {
                         } else {
                             this.mainCreateAction = null;
                         }
+
                         for (let lst of this.process[0].list) {
+
                             if (lst.listEntityName == ent.entityId) {
                                 this.mainList = lst;
                             }

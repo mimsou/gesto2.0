@@ -45,6 +45,7 @@ export class FormComponent implements OnInit, DoCheck {
     dimFielter: any;
     FormMessage: string = "";
     genfield: any = [];
+    firstData:any;
     differ;
 
     @ViewChild('dimentionchoice') DimComponentChoice: any;
@@ -426,7 +427,7 @@ export class FormComponent implements OnInit, DoCheck {
 
 
         for (let fld of this.field) {
-            console.log("do", this.actionData[fld.fieldEntityName]);
+
             fld = this.validationRequireField(fld, this.actionData[fld.fieldEntityName]);
             if (fld.errormsg == "") {
                 fld.error = false;
@@ -453,6 +454,7 @@ export class FormComponent implements OnInit, DoCheck {
             param.data = this.actionData;
             param.entity = this.entity;
             param.dimfilter = this.dimFielter;
+            param.firstData = this.firstData;
 
             if (typeof this.action.actionSubEntity != 'undefined') {
                 param.subentity = this.subentity;
@@ -504,6 +506,8 @@ export class FormComponent implements OnInit, DoCheck {
                 }
             }
         }
+
+        this.firstData = this.copyObj(this.actionData);
 
         if (this.action.actionLevelDepth == 2 || this.action.actionIsmainLevel == 0) {
 
@@ -565,6 +569,10 @@ export class FormComponent implements OnInit, DoCheck {
             return data[0][fld.fieldEntityName][fld.fieldTargetEntityId.entityDisplayfield];
         }
         return "-";
+    }
+
+    copyObj(obj) {
+        return JSON.parse(JSON.stringify(obj));
     }
 
 }

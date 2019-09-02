@@ -35,7 +35,7 @@ use AppBundle\Entity\GestMenu;
 use AppBundle\Menu;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfony\Component\Console\Input\ArgvInput;
-
+use Symfony\Component\Filesystem\Filesystem;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -43,6 +43,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Debug\Debug;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 
 use Doctrine\ORM\Tools\Setup;
@@ -460,9 +461,11 @@ class managerController extends FOSRestController
         foreach ($restresult as $key => $item) {
             $itemmenu = new  Menu\Menu();
             $itemmenu->title = $item->getMenuLibelle();
-            $itemmenu->icone = "";
+            $itemmenu->icon = "layout-outline";
             $itemmenu->link = $item->getMenuInterface();
             $itemmenu->children = array();
+            $itemmenu->target = "_blank";
+            $itemmenu->pathMatch = true;
 
             $qb = $em->createQueryBuilder();
             $subrest = $qb->select('u', 'a', 'o')
@@ -473,20 +476,20 @@ class managerController extends FOSRestController
                 ->andWhere('u.menuParent = ' . $item->getMenuId())
                 ->getQuery()->getResult();
 
-            //die(var_dump($subrest));
-
-            // $subrest = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuParent" => $item->getMenuId()));
 
             foreach ($subrest as $keys => $itemchild) {
                 $itemmenuchild = new Menu\Menu();
                 $itemmenuchild->title = $itemchild->getMenuLibelle();
-                $itemmenuchild->icone = "";
+                $itemmenuchild->icon = "";
                 $itemmenuchild->link = $itemchild->getMenuInterface();
-                $itemmenu->children[] = $itemmenuchild;
+                $itemmenuchild->pathMatch = true;
+                $itemmenuchild->target = "_blank";
                 if ($itemchild->getMenuTag() == 'p') {
                     $itemmenuchild->queryParams = array("processId" => $itemchild->getMenuProcess());
                     $itemmenuchild->link = "/pages/app-generator/app";
                 }
+                $itemmenu->children[] = $itemmenuchild;
+
             }
 
             $menu[] = $itemmenu;
@@ -1270,7 +1273,7 @@ class managerController extends FOSRestController
 
         foreach ($param as $key => $prm) {
             $functionName = "set" . ucfirst($key);
-            if (method_exists($menu, $functionName)) {
+            if (method_exists($menu, $functionName) &&  $functionName != "setMenuParent") {
                 $menu->$functionName($prm);
             };
         }
@@ -2305,8 +2308,8 @@ class managerController extends FOSRestController
 
 
     /**
-     * @Rest\Post("/list/")
-     */
+ * @Rest\Post("/list/")
+ */
 
     public function postListAction(Request $request)
     {
@@ -2328,6 +2331,31 @@ class managerController extends FOSRestController
 
         //return new View("List Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Liste ajouter avec success"), "Access-Control-Expose-Headers" => "message"));
+
+    }
+
+
+    /**
+     * @Rest\Patch("/updatelist/")
+     */
+
+    public function postUpdateListAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $param = json_decode($request->getContent());
+
+        $list = $this->getDoctrine()->getRepository('AppBundle:GestList')->find($param->listId);
+
+        $list->setListName($param->listName);
+
+        $em->persist($list);
+
+        $em->flush();
+
+        //return new View("List Added Successfully", Response::HTTP_OK);
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Liste mise à jour avec success"), "Access-Control-Expose-Headers" => "message"));
 
     }
 
@@ -3413,8 +3441,13 @@ class managerController extends FOSRestController
         if ($param->action->actionType == 1) {
             $entityAction = new $class;
         } else {
+
             $arr = (array)$param->data;
-            $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arr[$param->entity->entityKey]);
+
+            $arrfirst = (array)$param->firstData;
+
+            $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arrfirst[$param->entity->entityKey]);
+
         }
 
         if ($param->action->actionIsmainLevel == 1) {
@@ -3428,10 +3461,12 @@ class managerController extends FOSRestController
                     $field = $this->_get_field_nature($param->action->viewField, $key);
 
                     if ($field->fieldNature !== 1) {
+
                         $params = $this->_field_update_param($param->action->updateField, $key);
                         if (!empty($prm) || $params->updateExpression !== "") {
 
                             if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
+
                                 if (isset($params->updateExpression)) {
                                     if ($params->updateExpression !== "") {
                                         $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
@@ -3480,7 +3515,9 @@ class managerController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
+
         $em->persist($entityAction);
+
 
         $subentity = $param->subentity->entityEntity;
 
@@ -4728,7 +4765,7 @@ class managerController extends FOSRestController
 
             $qbr = $em->createQueryBuilder();
 
-            $qbr->select('u', 'a.roleId')->from('AppBundle:GestRoleData', 'u')->join('u.role', 'a')->where("u.rdEntity = $entityId")->andWhere("u.rdData = $content");
+            $qbr->select('u', 'a.roleId')->from('AppBundle:GestRoleData', 'u')->join('u.role', 'a')->where("u.rdEntity =:entityId")->andWhere("u.rdData =:content")->setParameter('content', $content)->setParameter('entityId', $entityId);
 
             $datarole = $qbr->getQuery()->getArrayResult();
 
@@ -5046,8 +5083,24 @@ class managerController extends FOSRestController
 
 
     /**
-     * @Rest\Patch("/regenerateentity/")
+     * @Rest\Patch("/regenerateentitys/")
      */
+
+    public function patchRegenerateEntitysAction(Request $request)
+    {
+        $param = json_decode($request->getContent());
+
+        $this->patchRegenerateEntityAction($param->entityId);
+
+        $ret = $this->clearCache();
+
+        $ret .= $this->generateSetterGetter();
+
+        return new View($ret, Response::HTTP_OK);
+
+    }
+
+
 
     public function patchRegenerateEntityAction($entity)
     {
@@ -5063,7 +5116,7 @@ class managerController extends FOSRestController
         $class = $namespace->addClass(ucfirst($ent->getEntityEntity()));
 
         $class->addComment(ucfirst($ent->getEntityEntity()));
-        $class->addComment('@ORM\Table(name="' . ucfirst($ent->getEntityEntity()) . '")');
+        $class->addComment('@ORM\Table(name="' .  $ent->getEntityTable() . '")');
         $class->addComment('@ORM\Entity');
 
 
@@ -5163,11 +5216,16 @@ class managerController extends FOSRestController
     public function clearCache()
     {
 
+
+
         set_time_limit(0);
+
+
 
         try {
 
-            $application = new Application($this->container->get('kernel'));
+
+           $application = new Application($this->container->get('kernel'));
 
 
             $application->setAutoExit(false);
@@ -5188,9 +5246,11 @@ class managerController extends FOSRestController
             }
 
 
+
         } catch (\Exception $exception) {
 
             return $output->fetch();
+
 
         }
 
@@ -5313,9 +5373,9 @@ class managerController extends FOSRestController
         $qb = $em->createQueryBuilder();
 
         $restresult = $qb->select('u')->distinct()->from('AppBundle:GestModule', 'u')
-            //->join('u.role', 'a')
-            //->join('a.user', 'o')
-            //->where("o.id = $iduser")
+            ->join('u.role', 'a')
+            ->join('a.user', 'o')
+            ->where("o.id = $iduser")
             ->getQuery()->getArrayResult();
 
         return $restresult;

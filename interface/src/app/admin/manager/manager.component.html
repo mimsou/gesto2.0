@@ -620,6 +620,9 @@
                                         <div *ngIf="entitie.entityModule.length == 0" linkToModule
                                              (click)="addentityToModule(entitie,$event)"><i class="fa fa-link"></i>
                                         </div>
+                                        <div linkToModule
+                                             (click)="regenerateEntity(entitie,$event)"><i class="fa fa-refresh"></i>
+                                        </div>
                                         <div entityHead><strong>{{entitie.entityEntity}}</strong></div>
 
                                         <div entityField>
@@ -971,7 +974,7 @@
                                             <input type="text" [(ngModel)]="actionform.actionName" nbInput fullWidth
                                                    fieldSize="xsmall" placeholder="Designation"
                                                    formControlName="actionName">
-                                            <div *ngIf="!hideActionType" class="panelFormGroup">
+                                            <div *ngIf="!hideActionType && actionform.actionType != 1" class="panelFormGroup">
 
                                                 Type <select type="text"
                                                              [(ngModel)]="actionform.actionType"
@@ -1550,7 +1553,18 @@
                                 <nb-accordion-item-body>
                                     <div style="height: 500px;">
 
-                                        to Do
+                                        <br>
+
+                                        Nom de la liste <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                                               type="text" [(ngModel)]="selectedList.listName"> <br>
+
+                                        <br>
+                                        <button style="margin-right: 10px;"
+
+                                                nbButton
+                                                (click)="saveListe()" size="xsmall">
+                                            Sauvegarder
+                                        </button>
 
                                     </div>
                                 </nb-accordion-item-body>

@@ -28,7 +28,7 @@ import { BootmenuComponent } from './bootmenu/bootmenu.component'
 import {ModulestateService} from "./@core/data/modulestate.service";
 
 
-@NgModule({
+@NgModule({ 
   declarations: [AppComponent,StopClickDirective,NbLoginComponent, DialogTemplateComponent, BootmenuComponent],
   imports: [
     BrowserModule,

@@ -189,7 +189,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         this.jsPlumbInstance = jsPlumb.getInstance(this.userService);
-        this.loadSchema();
+
     }
 
     ngOnInit() {
@@ -257,7 +257,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
             useremail: ['', Validators.required],
             secandpass: ['', Validators.compose([Validators.required, this.isSame])],
         });
-
+        this.loadSchema();
 
     }
 
@@ -1950,6 +1950,18 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         $event.stopPropagation();
         this.paramPanel = "query"
         this.selectedQuery = query;
+    }
+
+    regenerateEntity(ent,$event){
+        $event.stopPropagation();
+        this.menuService.regenerateEntity(ent).subscribe(resp =>  this.getRespAndReloadSchema(resp));
+    }
+
+    saveListe(){
+
+        if ( this.selectedList.listeName !== "") {
+            this.menuService.upsateList( this.selectedList).subscribe(list => this.loadProcess());
+        }
     }
 
 
