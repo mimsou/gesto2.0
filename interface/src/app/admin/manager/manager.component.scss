@@ -10,6 +10,10 @@ nb-card-header{
   flex-wrap: wrap;
 }
 
+[ViewDesignArea]{
+  background-color: #ffffff;
+}
+
 [smallbtn-padding]{
   padding: 2px 8px !important;
 }
@@ -227,7 +231,7 @@ nb-card-header{
 /*Stepper CSS */
 
 
-.stepper { clear: left; float: left; margin: 20px; }
+.stepper { clear: left; float: left; margin: 20px; width: max-content; }
 
 .step { float: left; font-size: 15px; margin: 0 12px; }
 
@@ -302,4 +306,38 @@ nb-card-header{
   top: 0px;
   right: 0px;
   margin: 2px;
+}
+
+[requestWarper]{
+  padding: 5px;
+  /*margin: 5px;*/
+}
+
+.firstviewtab{
+  border-bottom: 1px #1598ff solid;
+  border-top: 1px #1598ff solid;
+  border-left: 1px #1598ff solid;
+}
+.middleviewtab{
+  border-bottom: 1px #1598ff solid;
+  border-top: 1px #1598ff solid;
+
+}
+
+.lasttviewtab{
+  border-bottom: 1px #1598ff solid;
+  border-top: 1px #1598ff solid;
+  border-right: 1px #1598ff solid;
+}
+
+.viewcontourhighliter {
+
+  border: 1px #7e8998 solid !important;
+  min-height: 10px;
+  min-width: 10px;
+}
+
+
+[auto-overflow-child] > div {
+  overflow: auto !important;
 }

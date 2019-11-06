@@ -40,6 +40,12 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('edh') edh: any;
     @ViewChild('edm') edm: any;
     @ViewChild('edf') edf: any;
+    @ViewChild('viewTab') viewTab: any;
+    @ViewChild('dataTab') dataTab: any;
+    @ViewChild('entityTab') entityTab: any;
+    @ViewChild('renderView') renderView: any;
+    @ViewChild('#edfs') edfs: any;
+    @ViewChild('#edfsv') edfsv: any;
 
 
     jsPlumbInstance;
@@ -108,11 +114,16 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     conConfig: any = {};
     connections: any = [];
     query: any = {};
-    selectedCon:any = {}
-    displayDataHead:any = {}
-    displayDataContent:any = {}
-
-
+    selectedCon: any = {}
+    displayDataHead: any = {}
+    displayDataContent: any = {}
+    displayVarContent: any;
+    viewReportConfig: any = [];
+    selectedViewSection: any = [];
+    valhtml = "eeeeeeeee";
+    htmlval = '';
+    containeSelectorWidth: any = 1;
+    editViewInit = {};
     menuplaceholder: string = "Ajouter un menu";
     utilisateurplaceholder: string = "Chercher un utilisateur";
     roleplaceholder: string = "Ajouter un role";
@@ -128,7 +139,10 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     enteteEditor: any;
     millieuEditor: any;
     basdepageEditor: any;
-    selectedQuery:any = {};
+    selectedQuery: any = {};
+    htmlvalv:any = '';
+    TableViewFieldType:any = '';
+    selectedViewSectionExpression = "";
 
 
     tokerolen: any;
@@ -140,7 +154,10 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    @HostListener('document:click', ['$event']) clickedOutside($event) {
+    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+
+        console.log("codes");
+
         this.loadMenu(true);
         this.loadLink(true);
         this.loadRole(true);
@@ -150,6 +167,9 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.resetParam();
         this.paramPanel = "";
         this.connectEntity();
+        this.loadSchema();
+
+
     }
 
     resetParam() {
@@ -176,6 +196,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.editable = true;
         this.paramPanel = "";
         this.selectFrom = [];
+        this.selectedViewSection = [];
         //this.selectedrole = "";
     }
 
@@ -192,6 +213,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }
 
+
     ngOnInit() {
 
 
@@ -199,7 +221,6 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.millieuEditor = ClassicEditor;
         this.basdepageEditor = ClassicEditor;
 
-        console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName))
 
         this.selectedProcess = new Process();
         this.selectedSteps = new Step();
@@ -240,7 +261,10 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
             actionEntityName: [''],
             actionSubProcess: [''],
             actionNextStep: [''],
-            actionFromStep: ['']
+            actionFromStep: [''],
+            actionDissociateSubEntity: [''],
+            actionDissociateSubbtnName: [''],
+            actionSubentityNextStepOndissociation: ['']
         });
 
         this.listformcontrole = this.fb.group({
@@ -257,7 +281,42 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
             useremail: ['', Validators.required],
             secandpass: ['', Validators.compose([Validators.required, this.isSame])],
         });
+
         this.loadSchema();
+
+        this.editViewInit = {
+            plugins: 'table image imagetools link fullscreen autoresize',
+            init_instance_callback: function (editor) {
+
+                editor.on('change', function (e) {
+
+                    var quoterx = /\[([^\]]+)]/g;
+
+                    var resqt = new Array();
+
+                    var ranword = "&°-*¤-@731955^";
+
+                    var m;
+
+                    var i = 0;
+
+                    var tt = editor.getContent()
+                    var ttt = tt
+                    do {
+                        i++;
+                        m = quoterx.exec(tt);
+
+                        if (m) {
+                            ttt = ttt.replace(m[0], this.buidTableFromTagName(m[1]));
+                        }
+                    } while (m && i < 5000);
+
+                    this.viewReportConfig[this.selectedList.listId].htmlvalv = ttt;
+
+                }.bind(this))
+            }.bind(this)
+
+        };
 
     }
 
@@ -305,9 +364,17 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.menuService.refrechRelationalEntity().subscribe(field => this.loadSchema());
     }
 
-    stopClick($event) {
+    stopClick($event, elm) {
+        console.log("editor", elm)
         $event.stopPropagation();
     }
+
+
+    stopClickEditor($event, elm) {
+        console.log("editor", $event)
+        $event.stopPropagation();
+    }
+
 
     isSame(input: FormControl) {
 
@@ -496,6 +563,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     saveRole(role) {
         this.menuService.RoleUpdate(role).subscribe(role => this.loadRole(true));
+
     }
 
     onAddUser($event) {
@@ -885,24 +953,22 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    onSelectEntity(entity, $event) {
+    onSelectEntity(entity) {
 
-
-        if ($event) {
-            $event.stopPropagation();
-        }
 
         if (this.paramPanel != "action") {
             this.paramPanel = 'entity';
         }
 
-        if (this.selectedProcess.length == 0 || !$event) {
+        if (Object.entries(this.selectedProcess).length === 0) {
+
             this.selectedEntity = null;
             this.selectedArborecence = Array();
             if (this.selectedArborecence.length == 0) {
                 this.selectedEntity = entity;
                 this.setArborcence(entity);
             }
+
         } else {
 
 
@@ -1216,7 +1282,10 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     selectList(list, $event) {
 
         $event.stopPropagation();
+
         this.paramPanel = 'view';
+
+
         if (this.selectedSteps.length == 0) {
 
             this.EntityList = [];
@@ -1229,12 +1298,20 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
 
+            if (list.listType == 2) {
+                this.entityTab.active = false;
+                this.dataTab.active = false;
+                this.viewTab.active = true;
+                this.intiViewConfig();
+            }
+
 
         } else {
 
             var listExist = false
+
             for (let lst of this.selectedSteps.list) {
-                if (lst.actionId == list.actionId) {
+                if (lst.listId == list.listId) {
                     listExist = true;
                 }
             }
@@ -1351,6 +1428,8 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
         }
+
+        console.log(this.selectedActions);
 
 
     }
@@ -1908,19 +1987,19 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.menuService.getAllConnections(id).subscribe(connections => this.connections = connections);
     }
 
-    deleteConnections(connection,$event){
-         $event.stopPropagation();
+    deleteConnections(connection, $event) {
+        $event.stopPropagation();
 
         this.menuService.deleteConnection(connection).subscribe(resp => this.getAllconnection(true));
     }
 
 
-    deleteQuery(query,$event){
+    deleteQuery(query, $event) {
         $event.stopPropagation();
         this.menuService.deleteQuery(query).subscribe(resp => this.getAllconnection(true));
     }
 
-    addQueryDialog(connection,$event){
+    addQueryDialog(connection, $event) {
         $event.stopPropagation();
         this.selectedCon = connection;
         this.NgxSmartModalServices.open('addQueryModal');
@@ -1935,35 +2014,331 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.menuService.saveQuery(this.selectedQuery).subscribe(resp => this.getAllconnection(false));
     }
 
-    getQueryResult(query,$event){
+    getQueryResult(query, $event) {
         $event.stopPropagation();
         this.menuService.getQueryResult(query).subscribe(resp => this.displayQueryResult(resp));
     }
 
-    displayQueryResult(resp){
+    displayQueryResult(resp) {
         this.displayDataHead = resp.head;
         this.displayDataContent = resp.data;
         this.NgxSmartModalServices.open('displayDataModal');
     }
 
-    selectQuery(query,$event){
+
+
+    dvar(vars, vars1, vars2, vars3, vars4, vars5, vars6, vars7, vars8, vars9, vars10, vars11) {
+
+        this.displayVarContent = "";
+        this.displayVarContent += JSON.stringify(vars, undefined, 4);
+        this.displayVarContent += '\n';
+        this.displayVarContent += '\n';
+        this.displayVarContent += '\n';
+
+        if (vars1) {
+            this.displayVarContent += JSON.stringify(vars1, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars2) {
+            this.displayVarContent += JSON.stringify(vars2, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars3) {
+            this.displayVarContent += JSON.stringify(vars3, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars4) {
+            this.displayVarContent += JSON.stringify(vars4, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars5) {
+            this.displayVarContent += JSON.stringify(vars5, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars6) {
+            this.displayVarContent += JSON.stringify(vars6, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars7) {
+            this.displayVarContent += JSON.stringify(vars7, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars8) {
+            this.displayVarContent += JSON.stringify(vars8, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars9) {
+            this.displayVarContent += JSON.stringify(vars9, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars5) {
+            this.displayVarContent += JSON.stringify(vars4, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars10) {
+            this.displayVarContent += JSON.stringify(vars10, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+
+        if (vars11) {
+            this.displayVarContent += JSON.stringify(vars11, undefined, 4);
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+            this.displayVarContent += '\n';
+        }
+
+        this.NgxSmartModalServices.open('displayVarsModal');
+    }
+
+
+    selectQuery(query, $event) {
         $event.stopPropagation();
         this.paramPanel = "query"
         this.selectedQuery = query;
     }
 
-    regenerateEntity(ent,$event){
+    regenerateEntity(ent, $event) {
         $event.stopPropagation();
-        this.menuService.regenerateEntity(ent).subscribe(resp =>  this.getRespAndReloadSchema(resp));
+        this.menuService.regenerateEntity(ent).subscribe(resp => this.getRespAndReloadSchema(resp));
     }
 
-    saveListe(){
+    saveListe() {
 
-        if ( this.selectedList.listeName !== "") {
-            this.menuService.upsateList( this.selectedList).subscribe(list => this.loadProcess());
+        if (this.selectedList.listeName !== "") {
+            this.selectedList.listReportConfig = JSON.stringify(this.viewReportConfig[this.selectedList.listId]);
+            this.menuService.upsateList(this.selectedList).subscribe(list => this.loadProcess());
+        }
+
+    }
+
+    intiViewConfig() {
+
+        if (this.selectedList.listReportConfig) {
+            this.viewReportConfig[this.selectedList.listId] = JSON.parse(this.selectedList.listReportConfig)
+        } else if (this.viewReportConfig[this.selectedList.listId] == null) {
+            this.viewReportConfig[this.selectedList.listId] = {};
+            this.viewReportConfig[this.selectedList.listId].sections = [];
+        }
+
+        $(".containerselector").click(function () {
+            console.log("ddddfff");
+        })
+
+
+    }
+
+
+    refrechViewField() {
+
+        var param = {};
+        param.viewConfig = this.selectedViewSection;
+        param.onResult = true;
+        this.menuService.refrechViewField(param).subscribe(viewHeadData => this.loadViewTableHead(viewHeadData));
+
+    }
+
+    onAddSection(val) {
+
+        var section = {}
+        section.title = val;
+        this.viewReportConfig[this.selectedList.listId].sections.push(section);
+
+    }
+
+    selectSection(section) {
+        this.paramPanel = "viewsection";
+        this.selectedViewSection = section;
+    }
+
+    loadViewTableHead(viewHeadData) {
+
+        var viewHeads = [];
+
+        for (let vh of viewHeadData.head) {
+            var viewHead = {};
+            viewHead.fieldName = vh;
+            viewHead.fieldInterfaceName = ""
+            viewHeads.push(viewHead)
+        }
+
+        this.selectedViewSection.viewHead = viewHeads;
+
+    }
+
+    saveViewConfig() {
+
+        this.selectedViewSection.tag = this.selectedViewSection.title.replace(" ", "_");
+        console.log("expp",this.selectedViewSectionExpression);
+        this.selectedViewSection.Expression = this.selectedViewSectionExpression;
+        this.selectedList.listReportConfig = JSON.stringify(this.viewReportConfig[this.selectedList.listId]);
+        this.dvar(this.selectedList);
+        this.menuService.upsateList(this.selectedList).subscribe(list => this.loadProcess());
+
+    }
+
+    addViewConfigCustomField(){
+        console.log(this.selectedViewSection)
+    }
+
+
+    buidTableFromTagName(tagName) {
+
+
+        var section = {};
+
+        let i = 0;
+
+        for (let confSection of this.viewReportConfig[this.selectedList.listId].sections) {
+            if (confSection.tag == tagName) {
+                i++;
+                section = confSection;
+            }
+        }
+
+          var headLength = 0
+
+        if (i > 0) {
+
+            var viewHead = section.viewHead;
+
+            if(viewHead.length > 1){
+
+
+            var sainitisequery  = section.query.replace(/(\r\n|\n|\r)/gm, "");
+            console.log("saint",sainitisequery)
+            var jsonvar = new Array(sainitisequery,section.title);
+            var html = '<table   id='+"'"+ JSON.stringify(jsonvar) +"'"+' name="'+section.title+'"   class="table table-bordered">';
+            html += '<thead>';
+            html += '<tr>';
+            for (let vh of viewHead) {
+                headLength++
+                html += '<td>' + vh.fieldInterfaceName + '</td>';
+            }
+            html += '</tr>';
+            html += '</thead>';
+            html += '<body>';
+            html += '</body>';
+            html += '<tr>';
+            html += '<td colspan="' + viewHead.length + '">'
+            html += section.query
+            html += '</td>'
+            html += '</tr>';
+            html += '</table>';
+
+            var DomTable = new DOMParser().parseFromString(html, "text/html").firstChild;
+
+            $(DomTable).find("tbody").replaceWith('<tbody><tr><td colspan="'+headLength+'">'+section.query+'</td></tr></tbody>');
+
+            return $(DomTable).html();
+
+            }else{
+
+              var sainitisequery  = section.query.replace(/(\r\n|\n|\r)/gm, "");
+                var jsonvar = new Array(sainitisequery,section.title);
+                return   '<span id='+"'"+ JSON.stringify(jsonvar)+ "'"+' name="'+section.title+'" class="queryspan" >'+viewHead[0].fieldInterfaceName+'</span>'
+
+            }
+
+
+
+        } else {
+            return "[" + tagName + "]";
         }
     }
 
+    setSelectorContainerwidth(num) {
+        this.containeSelectorWidth = num;
+    }
+
+    addContainerView() {
+        this.viewReportConfig[this.selectedList.listId].htmlval += '<div class="col-md-' + this.containeSelectorWidth + ' viewcontourhighliter"   >+</div>'
+    }
+
+    trygerDeselecttion(elm) {
+
+        this[elm] = [];
+
+        if (elm == "selectedProcess") {
+            this.allAction = [];
+            this.allList = [];
+            this.selectedList = []
+            this.EntityList = [];
+            this.selectedActions = [];
+            this.EntityAction = [];
+            this.selectedViewSection = []
+            this.paramPanel = ""
+            this.resetParam()
+        }
+
+        if (elm == "selectedList") {
+            this.EntityList = [];
+        }
+
+        if (elm == "selectedActions") {
+            this.EntityAction = [];
+        }
+
+    }
+
+    getSubentityStep(){
+
+        var stps = [];
+        for(let prs of this.process){
+
+             if(prs.gestEntity[0].entityId ==  this.actionform.actionSubEntity){
+                 for(let stp of prs.steps){
+                     stps.push(this.copyObj(stp))
+                 }
+             }
+
+        }
+
+      return stps;
+
+    }
 
 
 }

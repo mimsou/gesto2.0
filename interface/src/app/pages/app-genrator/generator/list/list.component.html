@@ -36,7 +36,10 @@
                 </td>
                 <td *ngIf="getStepActionCount(data) > 0">
                     <button style="margin-right: 3px;" *ngFor="let act of getStepAction(data)" class="pull-right" (click)="doAction(act,data)"
-                            nbButton size="xsmall">{{act.actionName}}
+                            status="info"   nbButton size="xsmall"><i style="font-size: 14px;" class="fa fa-paper-plane" ></i> {{act.actionName}}
+                    </button>
+                    <button style="margin-right: 3px;" *ngFor="let lst of getStepList(data)" class="pull-right" (click)="doRepport(lst,data)"
+                            nbButton status="success"  size="xsmall"> <i style="font-size: 14px;" class="fa fa-list" ></i> {{lst.listName}}
                     </button>
                 </td>
             </tr>

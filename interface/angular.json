@@ -26,9 +26,21 @@
                 "input": "node_modules/leaflet/dist/images",
                 "output": "/assets/img/markers"
               },
-              { "glob": "**/*", "input": "node_modules/tinymce/skins", "output": "/skins/" },
-              { "glob": "**/*", "input": "node_modules/tinymce/themes", "output": "/themes/" },
-              { "glob": "**/*", "input": "node_modules/tinymce/plugins", "output": "/plugins/" }
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/skins",
+                "output": "/skins/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/themes",
+                "output": "/themes/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/plugins",
+                "output": "/plugins/"
+              }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
@@ -42,8 +54,9 @@
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "node_modules/leaflet/dist/leaflet.css",
               "src/app/@theme/styles/styles.scss",
-            "src/assets/css/select2.min.css",
-              "node_modules/ngx-smart-modal/ngx-smart-modal.css"
+              "src/assets/css/select2.min.css",
+              "node_modules/ngx-smart-modal/ngx-smart-modal.css",
+              "node_modules/jquery-ui-dist/jquery-ui.css"
             ],
             "scripts": [
               "node_modules/jsplumb/dist/js/jsplumb.js",
@@ -59,7 +72,8 @@
               "src/assets/js/select2.min.js",
               "src/assets/js/ckeditor.js",
               "node_modules/tinymce/tinymce.min.js",
-              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js"
+              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js",
+
             ]
           },
           "configurations": {
@@ -108,7 +122,6 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
               "node_modules/jsplumb/dist/js/jsplumb.js",
-
               "node_modules/pace-js/pace.min.js",
               "node_modules/tinymce/tinymce.min.js",
               "node_modules/tinymce/themes/modern/theme.min.js",
@@ -120,7 +133,8 @@
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/ng2-select2/select2.min.js",
               "node_modules/tinymce/tinymce.min.js",
-              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js"
+              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js",
+
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
@@ -133,7 +147,8 @@
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss",
               "node_modules/ng2-select2/select2.min.css",
-              "node_modules/ngx-smart-modal/ngx-smart-modal.css"
+              "node_modules/ngx-smart-modal/ngx-smart-modal.css",
+              "node_modules/jquery-ui-dist/jquery-ui.css"
             ],
             "assets": [
               "src/assets",
@@ -144,9 +159,21 @@
                 "input": "node_modules/leaflet/dist/images",
                 "output": "/assets/img/markers"
               },
-              { "glob": "**/*", "input": "node_modules/tinymce/skins", "output": "/skins/" },
-              { "glob": "**/*", "input": "node_modules/tinymce/themes", "output": "/themes/" },
-              { "glob": "**/*", "input": "node_modules/tinymce/plugins", "output": "/plugins/" }
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/skins",
+                "output": "/skins/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/themes",
+                "output": "/themes/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/plugins",
+                "output": "/plugins/"
+              }
             ]
           }
         },

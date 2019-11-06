@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild,OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NbAuthJWTToken, NbAuthService} from '@nebular/auth';
 import {
@@ -14,19 +14,24 @@ import {
 } from "../../../@core/data/user.model";
 import {Entitie, Field} from "../../../@core/data/data.model";
 import {ManagerService} from "../../../@core/data/manager.service";
+import {MessageService} from '../../../message.service'
+import {takeUntil} from "rxjs/internal/operators";
+import {NgxSmartModalService} from 'ngx-smart-modal';
+import {Subject} from "rxjs/Rx";
 
 @Component({
     selector: 'ngx-generator',
     templateUrl: './generator.component.html',
     styleUrls: ['./generator.component.scss']
 })
-export class GeneratorComponent implements OnInit {
+export class GeneratorComponent implements OnInit,OnDestroy {
 
     @ViewChild('list') listCompenent: any;
     @ViewChild('form') formComponent: any;
     @ViewChild('print') printComponent: any;
 
     process: any;
+    ngUnsubscribe = new Subject();
     mainEntity: any;
     mainCreateAction: Action = new Action();
     mainList: any;
@@ -34,13 +39,35 @@ export class GeneratorComponent implements OnInit {
     varti: any;
     displaymode:string;
 
-    constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService, private authService: NbAuthService) {
+    constructor(private router: Router, private _activatedRoute: ActivatedRoute, private manager: ManagerService, private authService: NbAuthService,private msgService: MessageService, private NgxSmartModalServices: NgxSmartModalService) {
         this.authService.onTokenChange()
             .subscribe((token: NbAuthJWTToken) => {
                 if (token.isValid()) {
                     this.user = token.getPayload();
                 }
             });
+        this.initializeMessgae();
+    }
+
+    ngOnDestroy() {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+    }
+
+    initializeMessgae() {
+        this
+            .msgService
+            .getMessages()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((message) => {
+                this.getResp(message);
+            });
+    }
+
+    getResp(resp) {
+        this.NgxSmartModalServices.resetModalData('messageModal');
+        this.NgxSmartModalServices.setModalData(resp, 'messageModal');
+        this.NgxSmartModalServices.open('messageModal');
     }
 
     ngOnInit() {
@@ -147,7 +174,7 @@ export class GeneratorComponent implements OnInit {
         $(".formWarp").removeClass("col-md-12");
         $(".listWarp").switchClass("hideElement", "showElement", 1000);
 
-        }else if(this.displaymode == "p"){
+        }else if(this.displaymode == "p" || this.displaymode == "r"){
 
 
             $(".printWarp").switchClass("showElement", "hideElement", 50);
@@ -156,7 +183,6 @@ export class GeneratorComponent implements OnInit {
             $(".printWarp").addClass("col-md-0");
             $(".printWarp").removeClass("col-md-12");
             $(".listWarp").switchClass("hideElement", "showElement", 1000);
-
 
 
 
@@ -170,7 +196,10 @@ export class GeneratorComponent implements OnInit {
 
     doAction(actionData) {
 
+        if( actionData[3] != "r"){
+
         var acts: any;
+
         for (let act of this.process[0].actions) {
             if (act.actionId == actionData[0].actionId) {
                 acts = act;
@@ -178,6 +207,7 @@ export class GeneratorComponent implements OnInit {
         }
 
         if (acts.actionType == 5) {
+
             this.displaymode = "p";
 
             $(".listWarp").switchClass("showElement", "hideElement", 50);
@@ -187,7 +217,7 @@ export class GeneratorComponent implements OnInit {
             $(".printWarp").removeClass("col-md-0");
             $(".printWarp").switchClass("hideElement", "showElement", 1000);
 
-            this.printComponent.initAction(acts, this.process.steps, actionData[1],actionData[2]);
+            this.printComponent.initAction(acts, this.process.steps, actionData[1],actionData[2],"p");
 
         }else{
 
@@ -196,7 +226,7 @@ export class GeneratorComponent implements OnInit {
             $(".listWarp").addClass("col-md-0");
             $(".listWarp").removeClass("col-md-12");
             $(".formWarp").addClass("col-md-12");
-            $(".formWarp").removeClass("col-md-0");
+            $(".formWarp").removeClass("col-md-0"); 
             $(".formWarp").switchClass("hideElement", "showElement", 1000);
 
 
@@ -205,12 +235,35 @@ export class GeneratorComponent implements OnInit {
             } else if (acts.actionType == 4) {
                 var param = {};
                 param.data = actionData[1];
-                param.action = act;
+                param.action = acts;
                 this.manager.deleteEntityData(param).subscribe(result => this.refrechView());
             }
         }
 
+        }else   if( actionData[3] != "a"){
+
+            var lsts: any;
+
+            for (let lst of this.process[0].list) {
+                if (lst.listId == actionData[0].listId) {
+                    lsts = lst;
+                }
+            }
+
+            this.displaymode = "r";
+            $(".listWarp").switchClass("showElement", "hideElement", 50);
+            $(".listWarp").addClass("col-md-0");
+            $(".listWarp").removeClass("col-md-12");
+            $(".printWarp").addClass("col-md-12");
+            $(".printWarp").removeClass("col-md-0");
+            $(".printWarp").switchClass("hideElement", "showElement", 1000);
+
+            this.printComponent.initAction(lsts, this.process.steps, actionData[1],actionData[2],"r");
+
+        }
+
 
     }
+
 
 }

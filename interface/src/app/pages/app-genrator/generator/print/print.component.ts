@@ -13,8 +13,9 @@ import {
     Step,
     List,
     Dim
-} from "../../../../@core/data/user.model";
-import {forEach} from "@angular/router/src/utils/collection";
+} from '../../../../@core/data/user.model';
+import {forEach} from '@angular/router/src/utils/collection';
+
 
 @Component({
     selector: 'ngx-print',
@@ -48,10 +49,19 @@ export class PrintComponent implements OnInit, DoCheck {
     FormMessage: string = "";
     genfield: any = [];
     differ;
+    listReportconfig: any = {};
+    type: any = "";
+    reportContent: any = "";
+    tableData: any = [];
+    list:any = {}
+    datas:any = {}
+
 
     @ViewChild('dimentionchoice') DimComponentChoice: any;
 
     @ViewChild('content') content: any;
+
+    @ViewChild('ReportContent') ReportContent: any;
 
     @Output() refrechMainView: EventEmitter<any> = new EventEmitter();
 
@@ -133,51 +143,165 @@ export class PrintComponent implements OnInit, DoCheck {
 
     }
 
-    initAction(action, steps, data, dim) {
-
-        this.dimFielter = dim;
-
-        this.choiceData = [];
-
-        this.choiceDataValidate = [];
+    initAction(action, steps, data, dim, type) {
 
 
-        if (typeof data !== 'undefined' && data !== null) {
-            var param = {};
-            param.action = action;
-            param.id = data[0][action.actionEntity.entityKey];
-            this.manager.getDatalistAction(param).subscribe(data => this.populateform(data));
-        }
 
-        this.subforMode = 'add';
-        this.field = [];
-        this.subfield = [];
-        this.genfield = [];
+        this.type = type;
 
-        this.actionsubdatacollection = [];
-        this.action = action;
-        this.steps = steps;
-        if (this.action.actionIsmainLevel == 1) {
-            this.setActionfield();
-            this.listMainentityform = this.action.actionEntity.entityInterfaceName;
-            this.entity = this.action.actionEntity;
-        } else {
-            this.entity = this.action.actionEntity;
-            this.setActionSubField();
-            this.subentity = this.action.actionSubEntity;
-        }
 
-        if (this.action.actionLevelDepth == 2) {
-            if (typeof this.action.actionSubEntity == 'undefined') {
-                this.manager.getSingleProcess(this.action.actionSubProcess.processId).subscribe(process => this.setActionSubFieldSearch(process));
+        if (type == "p") {
 
+            this.dimFielter = dim;
+
+            this.choiceData = [];
+
+            this.choiceDataValidate = [];
+
+
+            if (typeof data !== 'undefined' && data !== null) {
+                var param = {};
+                param.action = action;
+                param.id = data[0][action.actionEntity.entityKey];
+                this.manager.getDatalistAction(param).subscribe(data => this.populateform(data));
+            }
+
+            this.subforMode = 'add';
+            this.field = [];
+            this.subfield = [];
+            this.genfield = [];
+
+            this.actionsubdatacollection = [];
+            this.action = action;
+            this.steps = steps;
+            if (this.action.actionIsmainLevel == 1) {
+                this.setActionfield();
+                this.listMainentityform = this.action.actionEntity.entityInterfaceName;
+                this.entity = this.action.actionEntity;
             } else {
+                this.entity = this.action.actionEntity;
                 this.setActionSubField();
                 this.subentity = this.action.actionSubEntity;
             }
+
+            if (this.action.actionLevelDepth == 2) {
+                if (typeof this.action.actionSubEntity == 'undefined') {
+                    this.manager.getSingleProcess(this.action.actionSubProcess.processId).subscribe(process => this.setActionSubFieldSearch(process));
+
+                } else {
+                    this.setActionSubField();
+                    this.subentity = this.action.actionSubEntity;
+                }
+            }
+
+        } else if (type == "r") {
+
+            this.list = action
+
+            this.listReportconfig = JSON.parse(action.listReportConfig);
+
+            var sections = this.listReportconfig.sections;
+
+            var DomTable = new DOMParser().parseFromString(this.listReportconfig.htmlvalv, "text/html").firstChild;
+
+            var main = this;
+
+            $(DomTable).find("table").each(function () {
+
+
+              if(typeof $(this).attr("id") != "undefined"){
+                var param = {}
+                param.query = JSON.parse($(this).attr("id"))[0];
+                for(let sect of sections){
+                 if(sect.title == JSON.parse($(this).attr("id"))[1]){
+                    param.expression = sect.expression;
+                  }
+                }
+                param.data =  data
+                main.manager.getQueryData(param).subscribe(tbdata => main.buildTableResult(tbdata, DomTable, this));
+              }
+
+
+            })
+
+            $(DomTable).find(".queryspan").each(function () {
+              if(typeof $(this).attr("id") != "undefined"){
+                var param = {}
+                param.query =  JSON.parse($(this).attr("id"))[0];
+                for(let sect of sections){
+                  console.log(sect.title,JSON.parse($(this).attr("id"))[1])
+                  if(sect.title == JSON.parse($(this).attr("id"))[1]){
+                    param.expression = sect.expression;
+                  }
+                }
+                param.data =  data
+                main.manager.getQueryData(param).subscribe(tbdata => main.buildSpanResult(tbdata, DomTable, this));
+              }
+            })
+
+
         }
 
     }
+
+    buildSpanResult(tableData, DomTable, elm){
+
+
+
+        var html = ""
+
+        for (let data of tableData) {
+            var datas = Object.keys(data).map(function (key) {
+                return data[key];
+            });
+            for (let fieldVal of datas) {
+
+                html += '<span>' + fieldVal + '</span>'
+            }
+        }
+
+
+
+        $(elm).replaceWith(html);
+
+        this.reportContent = $(DomTable).html();
+
+        return html;
+
+    }
+
+    buildTableResult(tableData, DomTable, elm) {
+
+
+
+        var html = "<tbody>"
+
+        for (let data of tableData) {
+
+            html += "<tr>"
+
+            var datas = Object.keys(data).map(function (key) {
+                return data[key];
+            });
+
+            for (let fieldVal of datas) {
+                html += '<td>' + fieldVal + '</td>'
+            }
+
+            html += "</tr>"
+
+        }
+
+        html += "</tbody>"
+
+        $(elm).find("tbody").replaceWith(html);
+
+        this.reportContent = $(DomTable).html();
+
+        return html;
+
+    };
+
 
     ChoiceMode() {
         this.subforModeChoix = 'validate'
@@ -425,31 +549,50 @@ export class PrintComponent implements OnInit, DoCheck {
     }
 
 
-
-    logs(dat){
+    logs(dat) {
         console.log(dat);
     }
 
-    doPrint() {
+    doPrint(mode) {
 
-        let content = this.content.nativeElement;
 
-        //this.saveToPdf(content,2);
 
-        console.log("r",this.listMainentityform)
 
-         html2canvas(content,{
-           scale:1
-        }).then(function(canvas) {
-            var img = canvas.toDataURL("image/png");
-            var doc = new JsPdf();
+        if (mode == "r") {
+
+            let content = this.ReportContent.nativeElement;
+
+            var titleRepport = this.list.listName
+
+            html2canvas(content, {
+                scale: 1
+            }).then(function (canvas) {
+                var img = canvas.toDataURL("image/png");
+                var doc = new JsPdf();
+                var title = titleRepport
+                doc.addImage(img, 'JPEG', 5, 5);
+                doc.save(titleRepport  + '.pdf');
+            })
+
+        } else if (mode == "p") {
+
+            let content = this.content.nativeElement;
+
             var title = $(content).find("#htitle").html();
-            doc.addImage(img,'JPEG',5,5);
-            doc.save(title+'.pdf');
-        })
+
+            html2canvas(content, {
+                scale: 1
+            }).then(function (canvas) {
+                var img = canvas.toDataURL("image/png");
+                var doc = new JsPdf();
+                var title = title
+                doc.addImage(img, 'JPEG', 5, 5);
+                doc.save(title + '.pdf');
+            })
+
+        }
 
     }
-
 
 
     callbackAction(action) {
@@ -551,3 +694,5 @@ export class PrintComponent implements OnInit, DoCheck {
     }
 
 }
+
+

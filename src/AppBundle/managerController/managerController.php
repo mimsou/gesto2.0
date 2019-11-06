@@ -46,6 +46,8 @@ use Symfony\Component\Debug\Debug;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 
+
+
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
@@ -84,7 +86,6 @@ class managerController extends FOSRestController
         }
 
         return $restresult;
-
     }
 
 
@@ -101,11 +102,11 @@ class managerController extends FOSRestController
 
         $manytomany = array();
 
-//        foreach ($metadata as $classMeta) {
-//            if (str_replace($classMeta->namespace . "\\", "", $classMeta->name) == "ArticleBcn") {
-//                die(json_encode($classMeta->getAssociationMappings()));
-//            }
-//        }
+        //        foreach ($metadata as $classMeta) {
+        //            if (str_replace($classMeta->namespace . "\\", "", $classMeta->name) == "ArticleBcn") {
+        //                die(json_encode($classMeta->getAssociationMappings()));
+        //            }
+        //        }
 
 
         $em->createQuery('update AppBundle:GestEntity a set a.checks = 0 where a.checks != 2')->execute();
@@ -157,7 +158,6 @@ class managerController extends FOSRestController
                     $field->setChecks('1');
                     //$field->setFieldLength($fieldMapping["length"]);
                     $entity->addField($field);
-
                 }
 
                 foreach ($classMeta->getAssociationMappings() as $mapping) {
@@ -208,7 +208,6 @@ class managerController extends FOSRestController
                                         $entitysub = new GestEntity();
                                         $entitysub->setEntityPos('264,570');
                                     }
-
                                 }
 
 
@@ -283,11 +282,8 @@ class managerController extends FOSRestController
                                     $relation->setRelationInverseKey($mapping["inversedBy"]);
                                 }
                                 $entity->addRelation($relation);
-
                             }
-
                         }
-
                     } else if (empty($mapping["mappedBy"])) {
 
 
@@ -312,14 +308,10 @@ class managerController extends FOSRestController
                         }
                         $entity->addRelation($relation);
                     }
-
-
                 }
 
                 $em->persist($entity);
-
             }
-
         }
 
         $em->flush();
@@ -350,7 +342,6 @@ class managerController extends FOSRestController
                 );
 
                 $field->setFieldType($fields->getFieldType());
-
             }
 
             $em->persist($field);
@@ -375,9 +366,7 @@ class managerController extends FOSRestController
             foreach ($moduleEntity as $modent) {
                 $em->remove($modent);
                 $em->flush();
-
             }
-
         }
 
 
@@ -432,7 +421,6 @@ class managerController extends FOSRestController
         $schema["relation"] = $qbr->getQuery()->getArrayResult();
 
         return $schema;
-
     }
 
 
@@ -489,11 +477,9 @@ class managerController extends FOSRestController
                     $itemmenuchild->link = "/pages/app-generator/app";
                 }
                 $itemmenu->children[] = $itemmenuchild;
-
             }
 
             $menu[] = $itemmenu;
-
         }
 
         $finalemenu = array();
@@ -505,7 +491,6 @@ class managerController extends FOSRestController
         }
 
         return $finalemenu;
-
     }
 
 
@@ -546,8 +531,6 @@ class managerController extends FOSRestController
                 if (!isset($controllers[$controller]) && class_exists($controller)) {
                     $controllers[$controller] = $controller;
                 }
-
-
             }
         }
 
@@ -576,18 +559,13 @@ class managerController extends FOSRestController
                         $action->setApLibelle($actionName->nameOfAction);
                         $em->persist($action);
                         $em->flush();
-
-
                     } else {
                         $singleresult[0]->setApLibelle($actionName->nameOfAction);
                         $em->persist($singleresult[0]);
                         $em->flush();
                     }
                 }
-
-
             }
-
         }
 
         $allcont = $this->getDoctrine()->getRepository('AppBundle:GestAccessPath')->findAll();
@@ -619,7 +597,6 @@ class managerController extends FOSRestController
 
 
         return $restresult;
-
     }
 
 
@@ -654,7 +631,6 @@ class managerController extends FOSRestController
             if (method_exists($data, $functionName)) {
                 $data->$functionName($prm);
             }
-
         }
 
         $data->setRoleModule($module);
@@ -686,8 +662,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("Entity pos update Successfully", Response::HTTP_OK);
-
-
     }
 
 
@@ -716,7 +690,6 @@ class managerController extends FOSRestController
 
         //return new View("role update Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Role mise à jour avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -736,18 +709,17 @@ class managerController extends FOSRestController
                 return new View("role not found", Response::HTTP_NOT_FOUND);
             } else {
 
-//            $menuchilds = $this->getDoctrine()->getRepository('AppBundle:GestRole')->findBy(array("menuParent"=>$id));
-//
-//            foreach ($menuchilds as $menuchild){
-//                $menuchild->setMenuParent(null);
-//                $em = $this->getDoctrine()->getManager();
-//                $em->persist($menuchild);
-//                $em->flush();
-//            }
+                //            $menuchilds = $this->getDoctrine()->getRepository('AppBundle:GestRole')->findBy(array("menuParent"=>$id));
+                //
+                //            foreach ($menuchilds as $menuchild){
+                //                $menuchild->setMenuParent(null);
+                //                $em = $this->getDoctrine()->getManager();
+                //                $em->persist($menuchild);
+                //                $em->flush();
+                //            }
 
                 $sn->remove($role);
                 $sn->flush();
-
             }
 
 
@@ -756,7 +728,6 @@ class managerController extends FOSRestController
         } else {
             return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Role Administrateur ne peut pas étre effacé"), "Access-Control-Expose-Headers" => "message"));
         }
-
     }
 
 
@@ -795,7 +766,6 @@ class managerController extends FOSRestController
 
         //return new View("user Added from role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été affecté a l'utilisateur " . $usr->getUsername()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -830,7 +800,6 @@ class managerController extends FOSRestController
 
         //return new View("user removed from role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été supprimé pour l'utilisateur " . $usr->getUsername()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -861,7 +830,6 @@ class managerController extends FOSRestController
 
         //return new View("Controller Added to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été affecté a l'action selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -892,7 +860,6 @@ class managerController extends FOSRestController
 
         //return new View("Controller removed from role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été supprimé pour l'action selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -923,7 +890,6 @@ class managerController extends FOSRestController
 
         //return new View("Link Added to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été affecté pour le menu selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -954,7 +920,6 @@ class managerController extends FOSRestController
 
         //return new View("Link removed to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été supprimer pour le menu selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -985,7 +950,6 @@ class managerController extends FOSRestController
 
         //return new View("Step Added to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été affecté pour l'etat selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1016,7 +980,6 @@ class managerController extends FOSRestController
 
         //return new View("Step removed to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été suprrimé pour l'etat selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1047,7 +1010,6 @@ class managerController extends FOSRestController
 
         //return new View("Action Added to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été affecté pour l'action selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1078,7 +1040,6 @@ class managerController extends FOSRestController
 
         //return new View("Action removed to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été supprimé pour l'action selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1109,7 +1070,6 @@ class managerController extends FOSRestController
 
         //return new View("List Added to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été affécté pour la liste selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1140,7 +1100,6 @@ class managerController extends FOSRestController
 
         //return new View("List removed to role Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le role " . $rolname . " a été supprimé pour la liste selectioné"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1177,7 +1136,6 @@ class managerController extends FOSRestController
            } */
 
         return $restresult;
-
     }
 
     /**
@@ -1186,10 +1144,10 @@ class managerController extends FOSRestController
 
     public function getLnikAction($id)
     {
-//        $restresult = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuTag" => "i","menuTag" => "p", "menuParent" => null));
-//        if ($restresult === null) {
-//            return new View("there are no link exist", Response::HTTP_NOT_FOUND);
-//        }
+        //        $restresult = $this->getDoctrine()->getRepository('AppBundle:Gestmenu')->findBy(array("menuTag" => "i","menuTag" => "p", "menuParent" => null));
+        //        if ($restresult === null) {
+        //            return new View("there are no link exist", Response::HTTP_NOT_FOUND);
+        //        }
 
         $em = $this->getDoctrine()->getManager();
 
@@ -1273,7 +1231,7 @@ class managerController extends FOSRestController
 
         foreach ($param as $key => $prm) {
             $functionName = "set" . ucfirst($key);
-            if (method_exists($menu, $functionName) &&  $functionName != "setMenuParent") {
+            if (method_exists($menu, $functionName) && $functionName != "setMenuParent") {
                 $menu->$functionName($prm);
             };
         }
@@ -1284,7 +1242,6 @@ class managerController extends FOSRestController
 
         //return new View("Menu update Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Menu mise à jour avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1312,7 +1269,6 @@ class managerController extends FOSRestController
 
         //return new View("Link saved under menu Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("lien " . $menu->getMenuLibelle() . " ajouter sous le menu " . $menuparent->getMenuLibelle()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1337,8 +1293,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("Link saved under menu Successfully", Response::HTTP_OK);
-
-
     }
 
 
@@ -1395,11 +1349,9 @@ class managerController extends FOSRestController
                     $em->flush();
                 }
             }
-
         }
 
         return new View("menu deleted successfully", Response::HTTP_OK);
-
     }
 
 
@@ -1475,7 +1427,6 @@ class managerController extends FOSRestController
 
         //return new View("Process Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Process " . $param->processName . " ajouté avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
     /**
@@ -1527,7 +1478,6 @@ class managerController extends FOSRestController
 
         //return new View("Process deleted Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Process " . $process->getProcessDesignation() . " suprrimer avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
     /**
@@ -1560,55 +1510,53 @@ class managerController extends FOSRestController
             $pr = $this->getSignleProcessAction($proc["processId"], false);
 
             array_push($process, $pr[0]);
-
         }
 
-//        $em = $this->getDoctrine()->getManager();
-//
-//        $qb = $em->createQueryBuilder();
-//        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 's', 'l', 'y', 'z', 'ha', 'yu', 'ra', 'rb', 'oa', 'ao', 'al', 'yp', 'it', 'pi', 'oai', 'ri', 'mi')
-//            ->from('AppBundle:GestProcess', 'u')
-//
-//            ->leftJoin('u.gestEntity', 'p')
-//
-//            ->leftJoin('u.gestEntityDimention', 't')
-//
-//            ->leftJoin('u.gestFieldDimention', 's')
-//
-//            ->leftJoin('u.steps', 'o')
-//            ->leftJoin('o.role', 'oa')
-//            ->leftJoin('o.action', 'r')
-//            ->leftJoin('o.list', 'm')
-//
-//            ->leftJoin('u.fromsteps', 'pi')
-//            ->leftJoin('pi.role', 'oai')
-//            ->leftJoin('pi.action', 'ri')
-//            ->leftJoin('pi.list', 'mi')
-//
-//            ->leftJoin('u.list', 'g')
-//            ->leftJoin('g.listReg', 'it')
-//            ->leftJoin('g.role', 'al')
-//            ->leftJoin('g.field', 'f')
-//
-//            ->leftJoin('u.actions', 'k')
-//            ->leftJoin('k.role', 'ao')
-//            ->leftJoin('k.actionAcreg', 'yp')
-//            ->leftJoin('k.actionNextStep', 'ra')
-//            ->leftJoin('k.actionFromStep', 'rb')
-//            ->leftJoin('k.actionEntity', 'l')
-//            ->leftJoin('k.actionSubEntity', 'y')
-//            ->leftJoin('k.actionSubProcess', 'z')
-//            ->leftJoin('z.steps', 'yu')
-//            ->leftJoin('k.viewField', 'j')
-//            ->leftJoin('k.updateField', 'h')
-//            ->leftJoin('h.updateFieldId', 'ha');
-//
-//
-//        $process = $qb->getQuery()->getArrayResult();
+        //        $em = $this->getDoctrine()->getManager();
+        //
+        //        $qb = $em->createQueryBuilder();
+        //        $qb->select('u', 'p', 'o', 'r', 'h', 'j', 'k', 'm', 'g', 'f', 't', 's', 'l', 'y', 'z', 'ha', 'yu', 'ra', 'rb', 'oa', 'ao', 'al', 'yp', 'it', 'pi', 'oai', 'ri', 'mi')
+        //            ->from('AppBundle:GestProcess', 'u')
+        //
+        //            ->leftJoin('u.gestEntity', 'p')
+        //
+        //            ->leftJoin('u.gestEntityDimention', 't')
+        //
+        //            ->leftJoin('u.gestFieldDimention', 's')
+        //
+        //            ->leftJoin('u.steps', 'o')
+        //            ->leftJoin('o.role', 'oa')
+        //            ->leftJoin('o.action', 'r')
+        //            ->leftJoin('o.list', 'm')
+        //
+        //            ->leftJoin('u.fromsteps', 'pi')
+        //            ->leftJoin('pi.role', 'oai')
+        //            ->leftJoin('pi.action', 'ri')
+        //            ->leftJoin('pi.list', 'mi')
+        //
+        //            ->leftJoin('u.list', 'g')
+        //            ->leftJoin('g.listReg', 'it')
+        //            ->leftJoin('g.role', 'al')
+        //            ->leftJoin('g.field', 'f')
+        //
+        //            ->leftJoin('u.actions', 'k')
+        //            ->leftJoin('k.role', 'ao')
+        //            ->leftJoin('k.actionAcreg', 'yp')
+        //            ->leftJoin('k.actionNextStep', 'ra')
+        //            ->leftJoin('k.actionFromStep', 'rb')
+        //            ->leftJoin('k.actionEntity', 'l')
+        //            ->leftJoin('k.actionSubEntity', 'y')
+        //            ->leftJoin('k.actionSubProcess', 'z')
+        //            ->leftJoin('z.steps', 'yu')
+        //            ->leftJoin('k.viewField', 'j')
+        //            ->leftJoin('k.updateField', 'h')
+        //            ->leftJoin('h.updateFieldId', 'ha');
+        //
+        //
+        //        $process = $qb->getQuery()->getArrayResult();
 
 
         return $process;
-
     }
 
 
@@ -1632,11 +1580,12 @@ class managerController extends FOSRestController
 
 
         $qb = $em->createQueryBuilder();
-        $stp = $qb->select('o', 'r', 'xi', 'ra', 'm', 'rt', 'na', 'ta', 'xe')->from('AppBundle:GestSteps', 'o')
+        $stp = $qb->select('o', 'r', 'xi', 'ra', 'ro', 'm', 'rt', 'na', 'ta', 'xe')->from('AppBundle:GestSteps', 'o')
             ->leftJoin('o.role', 'xe')
             ->leftJoin('o.action', 'r')
             ->leftJoin('r.role', 'xi')
             ->leftJoin('r.actionNextStep', 'ra')
+            ->leftJoin('r.actionSubentityNextStepOndissociation', 'ro')
             ->leftJoin('o.list', 'm')
             ->leftJoin('m.role', 'rt')
             ->leftJoin('m.field', 'na')
@@ -1647,11 +1596,12 @@ class managerController extends FOSRestController
 
         if ($exrastep) {
 
-            $stpfrom = $qb->select('o', 'r', 'xi', 'ra', 'm', 'rt', 'na', 'ta', 'xe')->from('AppBundle:GestSteps', 'o')
+            $stpfrom = $qb->select('o', 'r', 'xi', 'ra', 'ro', 'm', 'rt', 'na', 'ta', 'xe')->from('AppBundle:GestSteps', 'o')
                 ->leftJoin('o.role', 'xe')
                 ->leftJoin('o.action', 'r')
                 ->leftJoin('r.role', 'xi')
                 ->leftJoin('r.actionNextStep', 'ra')
+                ->leftJoin('r.actionSubentityNextStepOndissociation', 'ro')
                 ->leftJoin('o.list', 'm')
                 ->leftJoin('m.role', 'rt')
                 ->leftJoin('m.field', 'na')
@@ -1660,11 +1610,9 @@ class managerController extends FOSRestController
 
 
             $process[0]["steps"] = array_merge($stp, $stpfrom);
-
         } else {
 
             $process[0]["steps"] = $stp;
-
         }
 
         $qb = $em->createQueryBuilder();
@@ -1675,9 +1623,10 @@ class managerController extends FOSRestController
             ->andWhere('x.stepFromProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
 
         $qb = $em->createQueryBuilder();
-        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba', 'ri')->from('AppBundle:GestActions', 'k')
+        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'ro', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba', 'ri')->from('AppBundle:GestActions', 'k')
             ->leftJoin('k.actionAcreg', 'yp')
             ->leftJoin('k.role', 'xa')
+            ->leftJoin('k.actionSubentityNextStepOndissociation', 'ro')
             ->leftJoin('k.actionNextStep', 'ri')
             ->leftJoin('k.actionFromStep', 'ry')
             ->leftJoin('k.actionEntity', 'l')
@@ -1701,7 +1650,6 @@ class managerController extends FOSRestController
             ->andWhere('g.listProcess =:proc')->setParameter('proc', $id)->orderBy("f.fieldOrder")->getQuery()->getArrayResult();
 
         return $process;
-
     }
 
 
@@ -1719,7 +1667,6 @@ class managerController extends FOSRestController
             ->where('u.stepId =:stpid')->setParameter('stpid', $id);
         $step = $qb->getQuery()->getArrayResult();
         return $step;
-
     }
 
 
@@ -1752,7 +1699,6 @@ class managerController extends FOSRestController
 
         //return new View("step Added from process Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Etat du Process a été mise à jour"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
     /**
@@ -1780,7 +1726,7 @@ class managerController extends FOSRestController
             ->getQuery()->getArrayResult();
 
 
-        $step->setStepSequence((int)$max[0]["max_step"] + 1);
+        $step->setStepSequence((int) $max[0]["max_step"] + 1);
 
         $process->addStep($step);
 
@@ -1789,7 +1735,6 @@ class managerController extends FOSRestController
 
         //return new View("Process Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Etat ajouté avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1825,7 +1770,6 @@ class managerController extends FOSRestController
 
         //return new View("Steps removed Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Etat supprimé avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1852,7 +1796,6 @@ class managerController extends FOSRestController
 
         //return new View("Action saved under step Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'action " . $action->getActionName() . " a été ajouté sous l'etat " . $step->getStepName()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1879,7 +1822,6 @@ class managerController extends FOSRestController
 
         //return new View("action removed from step Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'action " . $action->getActionName() . " a été supprimé de l'etat " . $step->getStepName()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -1935,8 +1877,16 @@ class managerController extends FOSRestController
         }
 
         if ($param->action->actionLevelDepth == 2 || $param->action->actionIsmainLevel == 0) {
+
             $action->setActionAddSubEntity($param->action->actionAddSubEntity);
             $action->setActionExistingSubEntity($param->action->actionExistingSubEntity);
+
+            $action->setActionDissociateSubEntity($param->action->actionDissociateSubEntity);
+            $action->setActionDissociateSubbtnName($param->action->actionDissociateSubbtnName);
+            if ($param->action->actionSubentityNextStepOndissociation) {
+                $stpondiss = $this->getDoctrine()->getRepository('AppBundle:GestSteps')->find($param->action->actionSubentityNextStepOndissociation);
+                $action->setActionSubentityNextStepOndissociation($stpondiss);
+            }
         }
 
         if ($param->action->actionExistingSubEntity == 1) {
@@ -1951,7 +1901,6 @@ class managerController extends FOSRestController
 
         //return new View("Action Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'action " . $action->getActionName() . " a été ajouté avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
     /**
@@ -1971,8 +1920,6 @@ class managerController extends FOSRestController
 
         //return new View("List removed Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'action " . $action->getActionName() . " a été supprimé avec success"), "Access-Control-Expose-Headers" => "message"));
-
-
     }
 
 
@@ -2012,7 +1959,6 @@ class managerController extends FOSRestController
 
         //return new View("update Field expression succefuly", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'expression a été sauvegarder"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2048,7 +1994,6 @@ class managerController extends FOSRestController
 
         //return new View("Action Regle expression update succefuly ", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'expression de l'action a été sauvegarder"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2084,7 +2029,6 @@ class managerController extends FOSRestController
 
         //return new View("List regle expression update succefuly ", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'expression de la liste a été sauvegarder"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
     /**
@@ -2124,7 +2068,6 @@ class managerController extends FOSRestController
             $em->persist($upform);
 
             $em->flush();
-
         } else {
 
             if ($param->mode == "exp") {
@@ -2142,7 +2085,6 @@ class managerController extends FOSRestController
                 $em->persist($upform);
 
                 $em->flush();
-
             } else {
 
                 $upform = $this->getDoctrine()->getRepository('AppBundle:UpdateForm')->findBy(array(
@@ -2158,12 +2100,10 @@ class managerController extends FOSRestController
 
                 $em->flush();
             }
-
         }
 
 
         return new View("update Field association updated under action Successfully", Response::HTTP_OK);
-
     }
 
     /**
@@ -2201,7 +2141,6 @@ class managerController extends FOSRestController
 
 
         return new View("update Field association updated under action Successfully", Response::HTTP_OK);
-
     }
 
 
@@ -2235,7 +2174,6 @@ class managerController extends FOSRestController
             }
 
             $em->flush();
-
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -2245,7 +2183,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("update Field association updated under action Successfully", Response::HTTP_OK);
-
     }
 
 
@@ -2276,7 +2213,6 @@ class managerController extends FOSRestController
 
         //return new View("List saved under step Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("La liste " . $list->getListName() . " a été sauvegardé sous l'etat " . $step->getStepName()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2303,13 +2239,12 @@ class managerController extends FOSRestController
 
         //return new View("List removed from step Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("La liste " . $list->getListName() . " a été supprimé sous l'etat " . $step->getStepName()), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
     /**
- * @Rest\Post("/list/")
- */
+     * @Rest\Post("/list/")
+     */
 
     public function postListAction(Request $request)
     {
@@ -2324,6 +2259,7 @@ class managerController extends FOSRestController
         $list = new GestList();
         $list->setListName($param->list->listName);
         $list->setListEntityName($param->list->listEntityName);
+        $list->setListType($param->list->listType);
         $process->addList($list);
 
         $em->persist($process);
@@ -2331,7 +2267,6 @@ class managerController extends FOSRestController
 
         //return new View("List Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Liste ajouter avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2350,13 +2285,21 @@ class managerController extends FOSRestController
 
         $list->setListName($param->listName);
 
+        if (isset($param->listIsLinked)) {
+            $list->setListIsLinked($param->listIsLinked);
+        }
+
+
+        if (isset($param->listReportConfig)) {
+            $list->setListReportConfig($param->listReportConfig);
+        }
+
         $em->persist($list);
 
         $em->flush();
 
         //return new View("List Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Liste mise à jour avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
     /**
@@ -2376,7 +2319,6 @@ class managerController extends FOSRestController
 
         //return new View("List removed Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Liste supprimé avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2406,7 +2348,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("field association updated under list Successfully", Response::HTTP_OK);
-
     }
 
 
@@ -2423,19 +2364,16 @@ class managerController extends FOSRestController
 
         $process = $this->getDoctrine()->getRepository('AppBundle:GestProcess')->find($param->process->processId);
 
-        if ((int)$param->dim->type == 1) {
+        if ((int) $param->dim->type == 1) {
 
             $code = $param->dim->type . "." . $param->dim->entityId;
             $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->dim->entityId);
             $entity->addGestProcessDimention($process);
-
-
-        } else if ((int)$param->dim->type == 2) {
+        } else if ((int) $param->dim->type == 2) {
 
             $code = $param->dim->type . "." . $param->dim->fieldId;
             $field = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($param->dim->fieldId);
             $field->addGestProcessDimention($process);
-
         }
 
 
@@ -2458,11 +2396,9 @@ class managerController extends FOSRestController
                     if (!$exist) {
                         array_push($dimjson, $code);
                     }
-
                 }
 
                 $process->setProcessRequiredim(json_encode($dimjson));
-
             } else {
                 $dimjson = array();
                 array_push($dimjson, $code);
@@ -2477,7 +2413,6 @@ class managerController extends FOSRestController
 
         //return new View("Dimention Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Dimention ajouter avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2506,7 +2441,6 @@ class managerController extends FOSRestController
             $em->persist($ent);
 
             $em->flush();
-
         } else if ($param->type == 'fld') {
 
             $code = "2" . "." . $param->id;
@@ -2520,7 +2454,6 @@ class managerController extends FOSRestController
             $em->persist($fld);
 
             $em->flush();
-
         };
 
         $dim = $Process->getProcessRequiredim();
@@ -2544,7 +2477,6 @@ class managerController extends FOSRestController
             } else {
                 $Process->setProcessRequiredim(NULL);
             }
-
         }
 
         $em->persist($Process);
@@ -2553,7 +2485,6 @@ class managerController extends FOSRestController
 
         //return new View("Dimention removed Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Dimention supprimé avec success"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -2613,7 +2544,6 @@ class managerController extends FOSRestController
                 );
 
             $qb = $qb->addSelect("IDENTITY(a." . $relation->getRelationKey() . ")");
-
         }
 
 
@@ -2648,9 +2578,7 @@ class managerController extends FOSRestController
                 $fld = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($matchfld[1][0]);
 
                 array_push($nofilterArray, $fld->getFieldEntityName());
-
             }
-
         }
 
         $whereArray = array();
@@ -2690,7 +2618,6 @@ class managerController extends FOSRestController
                         array_push($whereArray, array($prevalias . "." . $entdim->param->entityKey . " = :val" . $prevalias, 'val' . $prevalias, $entdim->data, "interger", "1." . $dimentity->getEntityId()));
 
                         array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
-
                     }
                 }
             }
@@ -2719,16 +2646,13 @@ class managerController extends FOSRestController
                                     $qb = $qb->addSelect($relroute["al"]);
                                     if ($key != 1) {
                                         $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
-
                                     } else {
                                         $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
-
                                     }
 
                                     $prevalias = $relroute["al"];
                                 }
                             }
-
                         }
                         if (!in_array($field->getFieldEntityName(), $nofilterArray)) {
                             array_push($rel, array($dimentity->getEntityEntity(), $relconfig));
@@ -2746,13 +2670,10 @@ class managerController extends FOSRestController
                     }
                 }
             }
-
         }
 
 
-        if (empty($whereArray)) {
-
-        }
+        if (empty($whereArray)) { }
 
 
         foreach ($whereArray as $warr) {
@@ -2804,7 +2725,6 @@ class managerController extends FOSRestController
                 if ($default) {
                     $qb = $qb->andWhere($warr[0])->setParameter($warr[1], new \DateTime($warr[2]));
                 }
-
             }
         }
 
@@ -2855,7 +2775,6 @@ class managerController extends FOSRestController
                     $qb = $qb->andWhere("a." . $stepper . " = :step")->setParameter("step", $param->step->stepId);
                 }
             }
-
         }
 
         if ($param->mode == "form") {
@@ -2913,15 +2832,11 @@ class managerController extends FOSRestController
                         $result[$key][0][$fld->getFieldEntityName()] = $rs;
                         $result[$key][$fld->getFieldEntityName()] = $rs;
                     }
-
                 }
-
             }
-
         }
 
         return $result;
-
     }
 
     private function field_is_required_in_process($proccess, $code)
@@ -2938,7 +2853,6 @@ class managerController extends FOSRestController
             }
         }
         return $exist;
-
     }
 
     private function uniq_char()
@@ -2989,7 +2903,6 @@ class managerController extends FOSRestController
 
         unset($this->foundedRoute[0]);
         return $this->foundedRoute;
-
     }
 
 
@@ -3022,8 +2935,6 @@ class managerController extends FOSRestController
                     $this->foundedRoute = $relconfig;
                     break;
                 }
-
-
             } else if (($rel["relationEntitie"]["entityId"] == $searchent) && ($rel["relationsTable"]["entityId"] == $mainent)) {
 
                 array_push($relconfig, array(
@@ -3046,9 +2957,7 @@ class managerController extends FOSRestController
 
                     $this->foundedRoute = $relconfig;
                     break;
-
                 }
-
             } else if (($rel["relationEntitie"]["entityId"] == $mainent) && !$this->entity_in_array($relconfig, $rel["relationsTable"])) {
 
                 $relok = $relconfig;
@@ -3060,7 +2969,6 @@ class managerController extends FOSRestController
                 ));
 
                 $this->traceRoute($relok, $rel["relationsTable"]["entityId"], $searchent, $rels);
-
             } else if (($rel["relationsTable"]["entityId"] == $mainent) && !$this->entity_in_array($relconfig, $rel["relationEntitie"])) {
 
                 $relok = $relconfig;
@@ -3072,11 +2980,8 @@ class managerController extends FOSRestController
                 ));
 
                 $this->traceRoute($relok, $rel["relationEntitie"]["entityId"], $searchent, $rels);
-
             }
         }
-
-
     }
 
 
@@ -3110,7 +3015,6 @@ class managerController extends FOSRestController
         } else {
             return false;
         }
-
     }
 
 
@@ -3127,8 +3031,6 @@ class managerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $em->persist($route);
         $em->flush();
-
-
     }
 
 
@@ -3174,7 +3076,6 @@ class managerController extends FOSRestController
         }
 
         return $result;
-
     }
 
     /**
@@ -3195,8 +3096,6 @@ class managerController extends FOSRestController
             $join->setRouteState(0);
             $em->persist($join);
             $em->flush();
-
-
         }
 
         $join = $this->getDoctrine()->getRepository('AppBundle:GestJoinRoutes')->find($param->join->routeId);
@@ -3207,7 +3106,6 @@ class managerController extends FOSRestController
 
         $res = json_encode(array("error" => false, "message" => "join updated Successfully"));
         return new View($res, Response::HTTP_OK);
-
     }
 
 
@@ -3280,9 +3178,7 @@ class managerController extends FOSRestController
                     $result[$key][0][$fld->getFieldEntityName()] = $rs;
                     $result[$key][$fld->getFieldEntityName()] = $rs;
                 }
-
             }
-
         }
 
         if (isset($param->action->actionSubEntity)) {
@@ -3345,11 +3241,8 @@ class managerController extends FOSRestController
                         $resultsub[$key][0][$fld->getFieldEntityName()] = $rss;
                         $resultsub[$key][$fld->getFieldEntityName()] = $rss;
                     }
-
                 }
-
             }
-
         } else {
             $resultsub = array();
         }
@@ -3358,7 +3251,6 @@ class managerController extends FOSRestController
         $res = array("entityData" => $result, "subEntityData" => $resultsub);
 
         return $res;
-
     }
 
 
@@ -3393,7 +3285,6 @@ class managerController extends FOSRestController
         } else {
             return $rs->format("d-m-Y");
         }
-
     }
 
     /**
@@ -3434,7 +3325,6 @@ class managerController extends FOSRestController
                 $res = json_encode(array("error" => true, "message" => $message));
                 return new View($res, Response::HTTP_OK);
             }
-
         }
 
 
@@ -3442,12 +3332,11 @@ class managerController extends FOSRestController
             $entityAction = new $class;
         } else {
 
-            $arr = (array)$param->data;
+            $arr = (array) $param->data;
 
-            $arrfirst = (array)$param->firstData;
+            $arrfirst = (array) $param->firstData;
 
             $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arrfirst[$param->entity->entityKey]);
-
         }
 
         if ($param->action->actionIsmainLevel == 1) {
@@ -3477,7 +3366,6 @@ class managerController extends FOSRestController
                                 } else {
                                     $entityAction->$functionName($prm);
                                 }
-
                             } else if (($this->_get_field_type($param->action->viewField, $key) == "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
 
                                 if ($params->updateExpression !== null) {
@@ -3486,10 +3374,8 @@ class managerController extends FOSRestController
                                 } else {
                                     $entityAction->$functionName(new \DateTime($prm));
                                 }
-
                             }
                         }
-
                     } else {
 
                         if (!empty($prm->value)) {
@@ -3500,7 +3386,6 @@ class managerController extends FOSRestController
                     }
                 }
             }
-
         }
 
         if ($param->action->actionNextStep->stepId !== null) {
@@ -3509,7 +3394,6 @@ class managerController extends FOSRestController
                 if (method_exists($entityAction, $functionName)) {
                     $entityAction->$functionName($param->action->actionNextStep->stepId);
                 }
-
             }
         }
 
@@ -3544,7 +3428,7 @@ class managerController extends FOSRestController
                 if ($param->action->actionType == 1) {
                     $subEentityAction = new $subclass;
                 } else {
-                    $arrsub = (array)$subdatas;
+                    $arrsub = (array) $subdatas;
 
                     if ($arrsub[$param->subentity->entityKey] !== null && $arrsub[$param->subentity->entityKey] !== "") {
                         $subEentityAction = $this->getDoctrine()->getRepository('AppBundle:' . $subentity)->find($arrsub[$param->subentity->entityKey]);
@@ -3585,11 +3469,9 @@ class managerController extends FOSRestController
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($subEentityAction);
-
             }
 
             $em->flush();
-
         } else if ($subentityprocess !== null) {
 
             $em->flush();
@@ -3610,8 +3492,8 @@ class managerController extends FOSRestController
 
             foreach ($param->subdata as $subdatas) {
 
-                $subdataarray = (array)$subdatas;
-                $subdataarray_a = (array)$subdataarray[0];
+                $subdataarray = (array) $subdatas;
+                $subdataarray_a = (array) $subdataarray[0];
                 $id = $subdataarray_a[$entKey];
 
                 $subentdat = $this->getDoctrine()->getRepository('AppBundle:' . $ent->getEntityEntity())->find($id);
@@ -3620,18 +3502,15 @@ class managerController extends FOSRestController
                 if (method_exists($subentdat, $functionName)) {
                     $subentdat->$functionName($entityAction);
                 }
-
             }
 
             $em->flush();
-
         } else {
             $em->flush();
         }
 
         $res = json_encode(array("error" => false, "message" => "entity updated Successfully"));
         return new View($res, Response::HTTP_OK);
-
     }
 
     private function _getExpressionRestult($param, $req, $dim, $id = null)
@@ -3674,7 +3553,7 @@ class managerController extends FOSRestController
                 eval("\$streval =" . $str . ";");
                 $rs .= ($streval);
             }
-            $rs = (float)$rs;
+            $rs = (float) $rs;
         }
         if ($type == "integer") {
 
@@ -3687,8 +3566,7 @@ class managerController extends FOSRestController
                 $rs .= $streval;
             }
 
-            $rs = (integer)$rs;
-
+            $rs = (int) $rs;
         } else if ($type == "string") {
 
             $arrstr = explode(".", $expression->expression);
@@ -3699,7 +3577,6 @@ class managerController extends FOSRestController
                 eval("\$streval =" . $str . ";");
                 $rs .= $streval;
             }
-
         } else if ($type == "datetime") {
 
             $arrstr = explode(".", $expression->expression);
@@ -3716,7 +3593,6 @@ class managerController extends FOSRestController
             $date = new \DateTime();
             $date->setTimestamp($timestamp);
             $rs = $date;
-
         } else if ($type == "boolean") {
 
             $arrstr = explode(".", $expression->expression);
@@ -3733,13 +3609,11 @@ class managerController extends FOSRestController
                 $rs .= $streval;
             }
 
-            $rs = (boolean)$rs;
-
+            $rs = (bool) $rs;
         }
 
 
         return $rs;
-
     }
 
 
@@ -3763,7 +3637,6 @@ class managerController extends FOSRestController
             } else {
                 $expr = str_replace($inprs["patern"], null, $expr);
             }
-
         }
 
         return $expr;
@@ -3790,7 +3663,6 @@ class managerController extends FOSRestController
             } else {
                 $expr = str_replace($inprs["patern"], null, $expr);
             }
-
         }
 
         return $expr;
@@ -3807,7 +3679,6 @@ class managerController extends FOSRestController
         $datestring = $date->getTimestamp();
 
         return $datestring;
-
     }
 
     private function _get_inp_result($conf, $rq)
@@ -3817,7 +3688,7 @@ class managerController extends FOSRestController
 
         $fld = $this->getDoctrine()->getRepository('AppBundle:GestFields')->find($matchfld[1][0]);
 
-        $data = (array)$rq->data;
+        $data = (array) $rq->data;
 
         if (isset($data[$fld->getFieldEntityName()])) {
             if ($fld->getFieldType() == 'datetime') {
@@ -3828,8 +3699,6 @@ class managerController extends FOSRestController
                 } else {
                     return $data[$fld->getFieldEntityName()];
                 }
-
-
             }
         }
         return null;
@@ -3854,7 +3723,6 @@ class managerController extends FOSRestController
             } else {
                 $expr = str_replace($dimrs["patern"], null, $expr);
             }
-
         }
 
         return $expr;
@@ -3905,7 +3773,6 @@ class managerController extends FOSRestController
         }
 
         return $expr;
-
     }
 
 
@@ -3934,7 +3801,6 @@ class managerController extends FOSRestController
         }
 
         return $expr;
-
     }
 
 
@@ -4009,7 +3875,6 @@ class managerController extends FOSRestController
         }
 
         return eval($rsex);
-
     }
 
 
@@ -4024,7 +3889,6 @@ class managerController extends FOSRestController
         $query = $this->getDoctrine()->getManager()->createQuery($ex)->getArrayResult();
 
         return $query[0][1];
-
     }
 
 
@@ -4105,16 +3969,12 @@ class managerController extends FOSRestController
 
                         if ($key != 1) {
                             $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
-
                         } else {
                             $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
-
                         }
 
                         $prevalias = $relroute["al"];
-
                     }
-
                 }
 
                 if ($fld->getFieldNature() == 1) {
@@ -4122,14 +3982,11 @@ class managerController extends FOSRestController
                 } else {
                     $fieldconf["fieldName"] = $prevalias . "." . $fld->getFieldEntityName();
                 }
-
-
             } else {
                 $fieldconf["fieldJoinConf"] = "same";
             }
 
             array_push($fldlist, $fieldconf);
-
         }
 
         //die(var_dump($debug));
@@ -4195,7 +4052,6 @@ class managerController extends FOSRestController
                             }
 
                             $prevalias = $relroute["al"];
-
                         }
 
 
@@ -4204,15 +4060,12 @@ class managerController extends FOSRestController
                     } else {
                         $wfieldconf["wfieldalias"] = $relconffiltred[0];
                     }
-
                 } else {
                     $wfieldconf["wfieldalias"] = $relconffiltred[0];
                 }
             }
 
             array_push($wherarray, $wfieldconf);
-
-
         }
 
 
@@ -4242,7 +4095,6 @@ class managerController extends FOSRestController
             $qb = $qb->andWhere($where);
         } else {
             $qb = $qb->where($where);
-
         }
 
         $rs = $qb->getQuery()->getSql();
@@ -4251,7 +4103,6 @@ class managerController extends FOSRestController
         $rs = $qb->getQuery()->getArrayResult();
 
         return $rs[0]["rs"];
-
     }
 
 
@@ -4320,13 +4171,10 @@ class managerController extends FOSRestController
                             $qb = $qb->leftJoin($prevalias . "." . $relroute["key"], $relroute["al"]);
                         } else {
                             $qb = $qb->leftJoin("a." . $relroute["key"], $relroute["al"]);
-
                         }
 
                         $prevalias = $relroute["al"];
-
                     }
-
                 }
 
                 if ($fld->getFieldNature() == 1) {
@@ -4334,8 +4182,6 @@ class managerController extends FOSRestController
                 } else {
                     $fieldconf["fieldName"] = $prevalias . "." . $fld->getFieldEntityName();
                 }
-
-
             } else {
                 $fieldconf["fieldJoinConf"] = "same";
                 if ($fld->getFieldNature() == 1) {
@@ -4346,7 +4192,6 @@ class managerController extends FOSRestController
             }
 
             array_push($fldlist, $fieldconf);
-
         }
 
 
@@ -4365,7 +4210,6 @@ class managerController extends FOSRestController
         $rs = $qb->getQuery()->getArrayResult();
 
         return $rs[0]["rs"];
-
     }
 
     private function _route_conf_exist($routearray, $route)
@@ -4389,7 +4233,6 @@ class managerController extends FOSRestController
             }
 
             return $exist;
-
         } else {
             return false;
         }
@@ -4409,23 +4252,18 @@ class managerController extends FOSRestController
 
                 foreach ($route as $key => $relroute) {
                     if (isset($reoutref[$key])) {
-                        if (!($reoutref[$key]["rel"] == $relroute["rel"] && $reoutref[$key]["key"] == $relroute["key"] && $reoutref[$key]["ent"] == $relroute["ent"])) {
-
-                        } else {
+                        if (!($reoutref[$key]["rel"] == $relroute["rel"] && $reoutref[$key]["key"] == $relroute["key"] && $reoutref[$key]["ent"] == $relroute["ent"])) { } else {
                             $lastAlias = $reoutref[$key]["al"];
                             unset($route[$key]);
                         }
                     }
                 }
-
             }
 
             return array($lastAlias, $route);
-
         } else {
 
             return array($lastAlias, $route);
-
         }
     }
 
@@ -4494,7 +4332,6 @@ class managerController extends FOSRestController
 
         //return new View("field updated Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("le champ a été mise à jour"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -4527,7 +4364,6 @@ class managerController extends FOSRestController
 
         //return new View("Entity  updated Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'entité a été mise à jour"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -4551,8 +4387,9 @@ class managerController extends FOSRestController
         $qb = $em->createQueryBuilder();
 
         $qb->select(
-            array('u.' . $entity[0]->getEntityKey() . '  id'
-            , 'u.' . $entity[0]->getEntityDisplayField() . '  text')
+            array(
+                'u.' . $entity[0]->getEntityKey() . '  id', 'u.' . $entity[0]->getEntityDisplayField() . '  text'
+            )
         )
             ->from('AppBundle:' . $param->entity, 'u');
 
@@ -4585,6 +4422,7 @@ class managerController extends FOSRestController
 
 
         if ($mode == 1) {
+
             $data = $qb->where(
 
                 $qb->expr()->in(
@@ -4595,11 +4433,13 @@ class managerController extends FOSRestController
                         ->from('AppBundle:GestRoleData', 'e')->join('e.role', 't')
                         ->where('t.roleLibelle IN (:rolelibs)')
                         ->andWhere("e.rdEntity = $entityId")->setParameter('rolelibs', $datauser[0]["roles"])
-                        ->getDQL())
+                        ->getDQL()
+                )
 
 
             )->getQuery()->setParameter('rolelibs', $datauser[0]["roles"])->getArrayResult();
         } else if ($mode == 2) {
+
             $data = $qb->where(
 
                 $qb->expr()->notin(
@@ -4610,7 +4450,8 @@ class managerController extends FOSRestController
                         ->from('AppBundle:GestRoleData', 'e')->join('e.role', 't')
                         ->where('t.roleLibelle IN (:rolelibs)')
                         ->andWhere("e.rdEntity = $entityId")->setParameter('rolelibs', $datauser[0]["roles"])
-                        ->getDQL())
+                        ->getDQL()
+                )
 
 
             )->getQuery()->setParameter('rolelibs', $datauser[0]["roles"])->getArrayResult();
@@ -4626,8 +4467,6 @@ class managerController extends FOSRestController
 
 
         return array("data" => $data);
-
-
     }
 
     private function _getMode($acc)
@@ -4645,7 +4484,7 @@ class managerController extends FOSRestController
             }
         }
 
-        return (integer)0;
+        return (int) 0;
     }
 
     /**
@@ -4662,7 +4501,7 @@ class managerController extends FOSRestController
 
         $class = "\AppBundle\Entity\\" . $entity;
 
-        $arr = (array)$param->data;
+        $arr = (array) $param->data;
 
         $stepperField = $param->action->actionEntity->entityStepperField;
 
@@ -4679,7 +4518,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("Entity Data Deleted Successfully", Response::HTTP_OK);
-
     }
 
 
@@ -4770,12 +4608,10 @@ class managerController extends FOSRestController
             $datarole = $qbr->getQuery()->getArrayResult();
 
             $data[$key]["role"] = $datarole;
-
         }
 
 
         return $data;
-
     }
 
     /**
@@ -4815,7 +4651,6 @@ class managerController extends FOSRestController
 
         //return new View("l'access a été mise à jour", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'access au données a été mise à jour"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -4858,7 +4693,6 @@ class managerController extends FOSRestController
 
         //return new View("l'access a été mise à jour", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'access au données a été mise à jour"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -4911,8 +4745,6 @@ class managerController extends FOSRestController
 
 
         return new View($ret, Response::HTTP_OK);
-
-
     }
 
 
@@ -4947,7 +4779,6 @@ class managerController extends FOSRestController
             }
 
             $em->remove($ManyToOneRelation);
-
         } else {
             $entityIdM = false;
         }
@@ -4991,8 +4822,6 @@ class managerController extends FOSRestController
         $ret .= $this->updateDatabase();
 
         return new View($ret, Response::HTTP_OK);
-
-
     }
 
 
@@ -5038,11 +4867,9 @@ class managerController extends FOSRestController
             $relation->setChecks(1);
 
             $em->persist($relation);
-
         } else {
 
             $field->setFieldNature(0);
-
         }
 
         if ($param->field->id) {
@@ -5078,7 +4905,6 @@ class managerController extends FOSRestController
 
 
         return new View($ret, Response::HTTP_OK);
-
     }
 
 
@@ -5097,9 +4923,7 @@ class managerController extends FOSRestController
         $ret .= $this->generateSetterGetter();
 
         return new View($ret, Response::HTTP_OK);
-
     }
-
 
 
     public function patchRegenerateEntityAction($entity)
@@ -5116,7 +4940,7 @@ class managerController extends FOSRestController
         $class = $namespace->addClass(ucfirst($ent->getEntityEntity()));
 
         $class->addComment(ucfirst($ent->getEntityEntity()));
-        $class->addComment('@ORM\Table(name="' .  $ent->getEntityTable() . '")');
+        $class->addComment('@ORM\Table(name="' . $ent->getEntityTable() . '")');
         $class->addComment('@ORM\Entity');
 
 
@@ -5143,8 +4967,6 @@ class managerController extends FOSRestController
                     ->setBody('$this->' . $fieldName . " = $" . $fieldName . '; return $this;');
 
                 $method->addParameter($fieldName);
-
-
             } else {
 
                 if ($ManyToOneRelation) {
@@ -5162,7 +4984,6 @@ class managerController extends FOSRestController
                         ->addComment('@ORM\JoinColumns({')
                         ->addComment('@ORM\JoinColumn(name="' . $this->camelToUnderscore($clmnname) . '", referencedColumnName="' . $this->camelToUnderscore($ManyToOneRelation->getRelationsTable()->getEntityKey()) . '")')
                         ->addComment('})');
-
                 } else {
 
                     $prop = $class->addProperty($fieldName);
@@ -5170,7 +4991,6 @@ class managerController extends FOSRestController
                     $prop->setVisibility('private')
                         ->addComment('@var ' . $clmnType . "|null")
                         ->addComment('@ORM\Column(name="' . $this->camelToUnderscore($fieldName) . '", type="' . $clmnType . '", length=100, nullable=true)');
-
                 }
             }
         }
@@ -5202,30 +5022,29 @@ class managerController extends FOSRestController
 
 
         return new View(Response::HTTP_OK);
-
-
     }
 
 
     private function camelToUnderscore($string, $us = "_")
     {
         return strtolower(preg_replace(
-            '/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', $us, $string));
+            '/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/',
+            $us,
+            $string
+        ));
     }
 
     public function clearCache()
     {
 
 
-
         set_time_limit(0);
-
 
 
         try {
 
 
-           $application = new Application($this->container->get('kernel'));
+            $application = new Application($this->container->get('kernel'));
 
 
             $application->setAutoExit(false);
@@ -5244,17 +5063,10 @@ class managerController extends FOSRestController
             } else {
                 return "Command was not successful.\n";
             }
-
-
-
         } catch (\Exception $exception) {
 
             return $output->fetch();
-
-
         }
-
-
     }
 
 
@@ -5296,8 +5108,6 @@ class managerController extends FOSRestController
         } else {
             return "Command was not successful.\n";
         }
-
-
     }
 
 
@@ -5326,8 +5136,6 @@ class managerController extends FOSRestController
         } else {
             return "Command was not successful.\n";
         }
-
-
     }
 
 
@@ -5353,8 +5161,6 @@ class managerController extends FOSRestController
         $em->flush($mod);
 
         return new View(Response::HTTP_OK);
-
-
     }
 
     /**
@@ -5362,6 +5168,35 @@ class managerController extends FOSRestController
      */
 
     public function getAllModuleAction()
+    {
+
+        $user = $this->getCurrentUser();
+
+        $iduser = $user->getId();
+
+        $rs = $user->get;
+
+        die(var_dump($rs));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $qb = $em->createQueryBuilder();
+
+        $restresult = $qb->select('u')->distinct()->from('AppBundle:GestModule', 'u')
+            ->join('u.role', 'a')
+            ->join('a.user', 'o')
+            ->where("o.id = $iduser")
+            ->getQuery()->getArrayResult();
+
+        return $restresult;
+    }
+
+
+    /**
+     * @Rest\Get("/getallmodulefront")
+     */
+
+    public function getAllModulefrontAction()
     {
 
         $user = $this->getCurrentUser();
@@ -5382,6 +5217,7 @@ class managerController extends FOSRestController
     }
 
 
+
     /**
      * @Rest\Patch("/getqueryresult/")
      */
@@ -5391,35 +5227,64 @@ class managerController extends FOSRestController
 
         $param = json_decode($request->getContent());
 
-        $query = $this->getDoctrine()->getRepository('AppBundle:GestQuery')->find($param->queryId);
+        if (isset($param->queryId)) {
 
-        $connection = $query->getQueryConnection();
 
-        $dbconfig = new \stdClass();
+            $query = $this->getDoctrine()->getRepository('AppBundle:GestQuery')->find($param->queryId);
 
-        $dbconfig->connectionName = $connection->getConnectionName();
+            $connection = $query->getQueryConnection();
 
-        $dbconfig->connectionDriver = $connection->getConnectionDriver();
+            $dbconfig = new \stdClass();
 
-        $dbconfig->connectionDbname = $connection->getConnectionDbname();
+            $dbconfig->connectionName = $connection->getConnectionName();
 
-        $dbconfig->connectionDbuser = $connection->getConnectionDbuser();
+            $dbconfig->connectionDriver = $connection->getConnectionDriver();
 
-        $dbconfig->connectionDbbpassword = $connection->getConnectionDbbpassword();
+            $dbconfig->connectionDbname = $connection->getConnectionDbname();
 
-        $dbconfig->connectionHost = $connection->getConnectionHost();
+            $dbconfig->connectionDbuser = $connection->getConnectionDbuser();
 
-        $em = $this->getEntityManager($dbconfig);
+            $dbconfig->connectionDbbpassword = $connection->getConnectionDbbpassword();
 
-        $this->importDatabaseMapping($em, $param);
+            $dbconfig->connectionHost = $connection->getConnectionHost();
 
-        $dirpath = $this->getDirPath($dbconfig);
+            $em = $this->getEntityManager($dbconfig);
 
-        $this->requireAllFileClass($dirpath);
+            $this->importDatabaseMapping($em, $param);
 
-        $query = $em->createQuery($query->getQueryBody());
+            $dirpath = $this->getDirPath($dbconfig);
 
-        $result = $query->getArrayResult();
+            $this->requireAllFileClass($dirpath);
+
+            $queryR = getQueryVal($query->getQueryBody());
+
+            $query = $em->createQuery($queryR);
+
+            $result = $query->getArrayResult();
+        } else {
+
+            $rootapp = $this->get('kernel')->getRootDir();
+
+            $rootdir = str_replace("\app", "", $rootapp);
+
+            $dirpath = $rootdir . "/src/AppBundle/Entity";
+
+
+            $this->requireAllFileClass($dirpath);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $queryF = $this->filterQuery($param->viewConfig->query);
+
+            $query = $em->createQuery($queryF);
+
+            if (isset($param->onResult)) {
+                $query = $query->setMaxResults(1);
+            }
+
+            $result = $query->getArrayResult();
+        }
+
 
         $keys = array();
 
@@ -5428,7 +5293,139 @@ class managerController extends FOSRestController
         }
 
         return array("head" => $keys, "data" => $result);
+    }
 
+
+    private function filterQuery($qry)
+    {
+
+        preg_match_all("/main(\(((?>[^()]+|(?1))*)\))/", $qry, $matchs);
+
+        foreach ($matchs[2] as $key => $conf) {
+
+            $get = array();
+
+            $patern = $matchs[0][$key];
+
+            $qry = str_replace($patern, " 1 OR 1 = 1  ", $qry);
+        }
+
+
+        preg_match_all("/user(\(((?>[^()]+|(?1))*)\))/", $qry, $matchs);
+
+        foreach ($matchs[2] as $key => $conf) {
+
+            $get = array();
+
+            $patern = $matchs[0][$key];
+
+            $qry = str_replace($patern, " 1 OR 1 = 1  ", $qry);
+        }
+
+        return $qry;
+    }
+
+
+    private function getQueryVal($qry, $data, $entity)
+    {
+
+        preg_match_all("/main(\(((?>[^()]+|(?1))*)\))/", $qry, $matchs);
+
+        $data = (array) $data;
+
+        $subdata = (array) $data[0];
+
+
+
+        foreach ($matchs[2] as $key => $conf) {
+
+            $get = array();
+
+            $patern = $matchs[0][$key];
+
+            $qry = str_replace($patern,  " " . $subdata[$matchs[2][0]] . " ", $qry);
+        }
+
+        return $qry;
+    }
+
+    private function getQueryUserVal($qry, $data, $entity)
+    {
+
+
+        preg_match_all("/user(\(((?>[^()]+|(?1))*)\))/", $qry, $matchs);
+
+
+        if (!empty($matchs[0][0])) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $this->getCurrentUser();
+
+            $qbu = $em->createQueryBuilder();
+
+            $userid = $user->getId();
+
+            $qbu->select('u')
+                ->from('AppBundle:User', 'u')->where("u.id = $userid");
+
+            $datauser = $qbu->getQuery()->getArrayResult();
+
+            $qba = $em->createQueryBuilder();
+
+            $qba->select('u', 'a')
+                ->from('AppBundle:GestDataAccess', 'u')->join('u.role', 'a')->where("a.roleLibelle IN (:rolelib)")->andWhere("u.daEntity = " . $entity->getEntityId())->setParameter('rolelib', $datauser[0]["roles"]);
+
+            $access = $qba->getQuery()->getArrayResult();
+
+            $mode = $this->_getMode($access);
+
+            if ($mode == 2) {
+
+                $qry = str_replace("IN", " NOT IN ", $qry);
+                $qry = str_replace("in", " NOT IN ", $qry);
+            }
+
+
+            foreach ($matchs[2] as $key => $conf) {
+
+                $get = array();
+
+                $patern = $matchs[0][$key];
+
+                $role = "";
+                foreach ($datauser[0]["roles"]  as $key => $rl) {
+                    if ($key == 0) {
+                        $role .= " '" . $rl . "' ";
+                    } else {
+                        $role .= " , " . " '" . $rl . "' ";
+                    }
+                }
+
+                $qry = str_replace($patern, "(" . $em->createQueryBuilder()
+                    ->select('e.rdData')
+                    ->from('AppBundle:GestRoleData', 'e')->join('e.role', 't')
+                    ->where("t.roleLibelle IN ($role)")
+                    ->andWhere("e.rdEntity = " . $entity->getEntityId())->setParameter('rolelibs', $datauser[0]["roles"])
+                    ->getDQL() . ")", $qry);
+            }
+
+            $qb = $this->getDoctrine()->getManager()->createQuery($qry);
+
+            $rsst = $qb->getArrayResult();
+
+
+
+            $res = array();
+
+            $res["hasuserval"] = true;
+
+            $res["rs"] = $rsst;
+
+            return $res;
+        }
+
+        return $qry;
     }
 
 
@@ -5458,8 +5455,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'entity " . $entity->getEntityEntity() . " a été ajouter au module " . $module->getModuleLibelle()), "Access-Control-Expose-Headers" => "message"));
-
-
     }
 
 
@@ -5506,9 +5501,7 @@ class managerController extends FOSRestController
         $this->requireAllFileClass($dirpath);
 
 
-        return new View($users, Response::HTTP_OK, array("message" => utf8_decode("Connection ajouter avec succes"), "Access-Control-Expose-Headers" => "message"));
-
-
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Connection ajouter avec succes"), "Access-Control-Expose-Headers" => "message"));
     }
 
     private function getDirPath($dbparam)
@@ -5571,7 +5564,6 @@ class managerController extends FOSRestController
         $exporter->setMetadata($metadata);
 
         $exporter->export();
-
     }
 
 
@@ -5587,11 +5579,10 @@ class managerController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-        if($param->queryId){
+        if ($param->queryId) {
 
             $query = $this->getDoctrine()->getRepository('AppBundle:GestQuery')->find($param->queryId);
-
-        }else{
+        } else {
 
             $query = new GestQuery();
 
@@ -5609,7 +5600,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Requette sauvegarder avec succes"), "Access-Control-Expose-Headers" => "message"));
-
     }
 
 
@@ -5632,8 +5622,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Connection supprimer avec succes"), "Access-Control-Expose-Headers" => "message"));
-
-
     }
 
 
@@ -5656,8 +5644,6 @@ class managerController extends FOSRestController
         $em->flush();
 
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Requette supprimer avec succes"), "Access-Control-Expose-Headers" => "message"));
-
-
     }
 
 
@@ -5678,7 +5664,6 @@ class managerController extends FOSRestController
             ->getQuery()->getArrayResult();
 
         return $restresult;
-
     }
 
 
@@ -5707,7 +5692,142 @@ class managerController extends FOSRestController
         $entityManager = EntityManager::create($dbParams, $config);
 
         return $entityManager;
+    }
 
+
+    /**
+     * @Rest\Patch("/getquerydata/")
+     */
+
+    public function patchGetquerydataAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+
+        $querya = $this->filterQuery($param->query, $param->data);
+
+        $expression = $param->expression;
+
+        $matchs = "";
+
+        preg_match_all("/(?<=from)(\s+\S+)/", $querya, $matchs);
+
+        $fullentity = (trim($matchs[1][0]));
+
+        $entityname = str_replace("AppBundle\Entity" . "\\", "", $fullentity);
+
+        $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->findOneBy(array("entityEntity" => $entityname));
+
+        $query = $this->getQueryVal($param->query, $param->data, $entity);
+
+        $query = $this->getQueryUserVal($query, $param->data, $entity);
+
+        if (isset($query["hasuserval"])) {
+            $rs =  $query["rs"];
+        } else {
+            $rs = $this->getDoctrine()->getManager()->createQuery($query)->getArrayResult();
+        }
+
+        $rs = $this->getQueryExpressionVal($rs, $expression);
+
+        return $rs;
+
+    }
+
+    private function getQueryExpressionVal($rs, $exp)
+    {
+        $count = count($rs[0]);
+        if ($count == 1) {
+            foreach ($rs[0] as $key => $val) {
+                $rss = $val;
+            }
+        }
+ 
+        $exp = str_replace("&this",'$rss',$exp);
+ 
+        if($exp!=""){
+          return eval($exp);
+        }else{
+          return $rs;
+        }
+     
+    }
+
+
+    /**
+     * @Rest\Patch("/dissociateentity/")
+     */
+
+    public function patchDissociateentityAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+
+
+
+        $dataarray = (array) $param->data;
+
+        $mainid = $dataarray[$param->action->actionEntity->entityKey];
+
+        $subentitystepperfield =  $param->action->actionSubEntity->entityStepperField;
+
+        $entity = $this->getDoctrine()
+            ->getRepository('AppBundle:GestEntity')
+            ->findOneBy(
+                array(
+                    "entityEntity" => $param->action->actionEntity->entityEntity
+                )
+            );
+
+        $subentity = $this->getDoctrine()
+            ->getRepository('AppBundle:GestEntity')
+            ->findOneBy(
+                array(
+                    "entityEntity" => $param->action->actionSubEntity->entityEntity
+                )
+            );
+
+        $subentityData = $this->getDoctrine()
+            ->getRepository('AppBundle:' . $param->action->actionSubEntity->entityEntity)
+            ->find(
+                $param->id
+            );
+
+        $functStep = "set" . ucfirst($subentitystepperfield);
+
+        $subentityData->$functStep($param->action->actionSubentityNextStepOndissociation->stepId);
+
+        $em->persist($subentityData);
+
+        $entityData = $this->getDoctrine()
+            ->getRepository('AppBundle:' . $param->action->actionEntity->entityEntity)
+            ->find(
+                $mainid
+            );
+
+
+        $relation = $this->getDoctrine()
+            ->getRepository('AppBundle:GestRelations')
+            ->findOneBy(
+                array(
+                    "relationsTable" => $entity->getEntityId(),
+                    "relationEntitie" => $subentity->getEntityId(),
+                )
+            );
+
+        $remfunct = "remove" . ucfirst($relation->getRelationInverseKey());
+
+        $entityData->$remfunct($subentityData);
+
+        $em->persist($entityData);
+
+        $em->flush();
+
+
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Operation reussite"), "Access-Control-Expose-Headers" => "message"));
     }
 
 
@@ -5715,6 +5835,4 @@ class managerController extends FOSRestController
     {
         return new View("ok", Response::HTTP_OK, array("message" => var_dump($var), "Access-Control-Expose-Headers" => "message"));
     }
-
-
 }

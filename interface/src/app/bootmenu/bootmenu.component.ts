@@ -72,7 +72,7 @@ export class BootmenuComponent implements OnInit,OnDestroy {
     }
 
      ngOnInit(){
-         this.managerservice.getAllModule().subscribe(modules => this.modules = modules)
+         this.managerservice.getAllModuleFront().subscribe(modules => this.modules = modules)
      }
 
     GotoModule(module){

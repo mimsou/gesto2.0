@@ -25,7 +25,7 @@
 
     <div inlineelement *ngIf="fldDimData.param.fieldEntityName == steppedField"  >
      <select (change)="goToSearch($event)" nbInput    fieldSize="xsmall"  [(ngModel)]="fldDimData.data" >
-          <option [value]="" >-</option>
+          <option  value ="" >-</option>
           <option *ngFor="let stp of steps" [value]="stp.stepId" >{{stp.stepName}}</option>
      </select>
     </div>

@@ -1,6 +1,7 @@
 ﻿import {Component, EventEmitter, OnInit, Output, Input, ViewChild, KeyValueDiffers, DoCheck} from '@angular/core';
 import {ManagerService} from "../../../../@core/data/manager.service";
 import {DatePipe} from '@angular/common';
+import {NgxSmartModalService} from 'ngx-smart-modal';
 import {
     GestAccessPath,
     GestMenu,
@@ -40,19 +41,20 @@ export class FormComponent implements OnInit, DoCheck {
     subforMode: string = 'add';
     dimfilter: any;
     subforModeChoix: string = "";
-    choiceData: any;
+    choiceData: any = [];
     choiceDataValidate: any = [];
     dimFielter: any;
     FormMessage: string = "";
     genfield: any = [];
     firstData:any;
     differ;
+    dissciationId:any = "";
 
     @ViewChild('dimentionchoice') DimComponentChoice: any;
 
     @Output() refrechMainView: EventEmitter<any> = new EventEmitter();
 
-    constructor(private manager: ManagerService, private datePipe: DatePipe, differs: KeyValueDiffers) {
+    constructor(private manager: ManagerService, private datePipe: DatePipe, differs: KeyValueDiffers, private NgxSmartModalServices: NgxSmartModalService) {
         this.differ = differs.find({}).create(null);
     }
 
@@ -162,17 +164,20 @@ export class FormComponent implements OnInit, DoCheck {
             this.entity = this.action.actionEntity;
             this.setActionSubField();
             this.subentity = this.action.actionSubEntity;
+
         }
 
         if (this.action.actionLevelDepth == 2) {
+            console.log("act",this.action)
             if (typeof this.action.actionSubEntity == 'undefined') {
                 this.manager.getSingleProcess(this.action.actionSubProcess.processId).subscribe(process => this.setActionSubFieldSearch(process));
-
             } else {
                 this.setActionSubField();
                 this.subentity = this.action.actionSubEntity;
             }
         }
+
+        console.log("sub",this.subentity)
 
     }
 
@@ -219,8 +224,17 @@ export class FormComponent implements OnInit, DoCheck {
         param.step = this.action.actionFromStep;
         param.mode = "form";
         param.entity = this.entity;
-        this.manager.getDatalist(param).subscribe(list => this.choiceData = list);
+        this.manager.getDatalist(param).subscribe(list => this.populateDataChoice(list));
 
+    }
+
+    populateDataChoice(list){
+
+        var result = Object.keys(list).map(function(key) {
+            return list[key];
+        });
+        console.log(result)
+        this.choiceData = result;
     }
 
     setActionfield() {
@@ -540,6 +554,24 @@ export class FormComponent implements OnInit, DoCheck {
         }
 
 
+    }
+
+    openDissciationModal(id){
+        this.dissciationId = id;
+        this.NgxSmartModalServices.open('confirmDissociateModal');
+    }
+
+
+    confirmDissociation(){
+        var param = {}
+        param.id =   this.dissciationId
+        param.action =   this.action
+        param.data =   this.actionData
+        param.subData =   this.actionsubData
+        console.log(param);
+        this.manager.disscoiateEntity(param).subscribe((res: Response) => {
+
+        });
     }
 
     GetEntityUpdateFieldCount() {

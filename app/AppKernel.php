@@ -3,6 +3,7 @@
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+ 
 
 class AppKernel extends Kernel {
 
@@ -35,7 +36,6 @@ class AppKernel extends Kernel {
 
 
             if ('dev' === $this->getEnvironment()) {
-
                 $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
             }
         }

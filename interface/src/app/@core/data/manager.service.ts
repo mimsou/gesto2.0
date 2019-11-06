@@ -348,7 +348,7 @@ export class ManagerService {
 
 
     setJoin(param){
-        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/setjoin/`, JSON.stringify(param)); 
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/setjoin/`, JSON.stringify(param));
     }
 
     getGenField(param){
@@ -375,6 +375,10 @@ export class ManagerService {
     getAllModule(){
         return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/getallmodule`);
     }
+
+    getAllModuleFront(){
+      return this.http.get(`${this.apiLink.MANAGER_BASE_URL}/getallmodulefront`);
+  }
 
 
     addEntityToModule(param){
@@ -417,4 +421,18 @@ export class ManagerService {
     upsateList(param){
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/updatelist/`, JSON.stringify(param));
     }
+
+    refrechViewField(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getqueryresult/`, JSON.stringify(param));
+    }
+
+
+    getQueryData(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getquerydata/`, JSON.stringify(param));
+    }
+
+    disscoiateEntity(param){
+        return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/dissociateentity/`, JSON.stringify(param));
+    }
+
 }

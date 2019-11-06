@@ -111,6 +111,21 @@ class GestActions
     /**
      * @var int|null
      *
+     * @ORM\Column(name="action_dissociate_sub_entity", type="integer", nullable=true)
+     */
+    private $actionDissociateSubEntity;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_dissociate_subbtn_name", type="string", length=500, nullable=true)
+     */
+    private $actionDissociateSubbtnName;
+
+
+    /**
+     * @var int|null
+     *
      * @ORM\Column(name="action_level_depth", type="integer", nullable=true)
      */
     private $actionLevelDepth;
@@ -144,6 +159,17 @@ class GestActions
      * })
      */
     private $actionNextStep;
+
+
+    /**
+     * @var \GestSteps
+     *
+     * @ORM\ManyToOne(targetEntity="GestSteps"  )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="action_subentity_next_step_ondissociation", referencedColumnName="step_id")
+     * })
+     */
+    private $actionSubentityNextStepOndissociation;
 
 
     /**
@@ -606,6 +632,42 @@ class GestActions
     public function setActionPrintPageTitle(?string $actionPrintPageTitle): self
     {
         $this->actionPrintPageTitle = $actionPrintPageTitle;
+
+        return $this;
+    }
+
+    public function getActionDissociateSubEntity(): ?int
+    {
+        return $this->actionDissociateSubEntity;
+    }
+
+    public function setActionDissociateSubEntity(?int $actionDissociateSubEntity): self
+    {
+        $this->actionDissociateSubEntity = $actionDissociateSubEntity;
+
+        return $this;
+    }
+
+    public function getActionDissociateSubbtnName(): ?string
+    {
+        return $this->actionDissociateSubbtnName;
+    }
+
+    public function setActionDissociateSubbtnName(?string $actionDissociateSubbtnName): self
+    {
+        $this->actionDissociateSubbtnName = $actionDissociateSubbtnName;
+
+        return $this;
+    }
+
+    public function getActionSubentityNextStepOndissociation(): ?GestSteps
+    {
+        return $this->actionSubentityNextStepOndissociation;
+    }
+
+    public function setActionSubentityNextStepOndissociation(?GestSteps $actionSubentityNextStepOndissociation): self
+    {
+        $this->actionSubentityNextStepOndissociation = $actionSubentityNextStepOndissociation;
 
         return $this;
     }

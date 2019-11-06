@@ -76,6 +76,7 @@ ligne Details :
             <tbody>
             <tr *ngFor="let datasub of actionsubdatacollection"  (click)="onUpdateSubEntiy(datasub)">
                 <td *ngFor="let flds of subfield"><span *ngIf="flds.fieldNature !== 1">{{datasub[flds.fieldEntityName]}}</span> <span *ngIf="flds.fieldNature == 1">{{datasub[flds.fieldEntityName].data[0].text}}</span></td>
+                <td *ngIf="action.actionDissociateSubEntity == 1"><button type="button" nbButton size="xsmall" (click)="openDissciationModal(datasub[subentity.entityKey])" >{{action.actionDissociateSubbtnName}}</button></td>
             </tr>
             </tbody>
 
@@ -137,6 +138,8 @@ ligne Details :
                     <span *ngIf="fld.fieldNature == 1">{{cleanData(data,fld)}}</span>
                 </td>
 
+
+
             </tr>
 
             </tbody>
@@ -145,3 +148,9 @@ ligne Details :
     </nb-card-body>
 
 </nb-card>
+
+<ngx-smart-modal #confirmDissociateModal identifier="confirmDissociateModal" customClass="medium-modal" ><br><br>
+<h3> Confirmer l'action  sur le code : {{dissciationId}} </h3><br><br>
+<button type="button" nbButton size="xsmall" (click)="confirmDissociation();confirmDissociateModal.close()"> Je confirme </button>
+    <button type="button" nbButton size="xsmall" (click)="confirmDissociateModal.close()">Annuler</button>
+</ngx-smart-modal>

@@ -18,7 +18,7 @@ import {delay} from "rxjs/internal/operators";
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit { 
+export class ListComponent implements OnInit {
 
     @ViewChild('dimention') DimComponent: any;
     listTtile: string = "Loading...";
@@ -29,8 +29,8 @@ export class ListComponent implements OnInit {
     listData: any;
     dimfilter: any;
     field: any = Array();
-    process:any;
-    user:any;
+    process: any;
+    user: any;
     @Output() fireAction: EventEmitter<any> = new EventEmitter();
     @Output() fireCretateAction: EventEmitter<any> = new EventEmitter();
     @Output() firePrint: EventEmitter<any> = new EventEmitter();
@@ -42,8 +42,8 @@ export class ListComponent implements OnInit {
 
     }
 
-    initList(list, entity, step, createAct, process,user) {
-         this.user = user;
+    initList(list, entity, step, createAct, process, user) {
+        this.user = user;
         this.createAction = createAct;
         this.field = [];
         this.step = step;
@@ -52,9 +52,10 @@ export class ListComponent implements OnInit {
         this.listTtile = list.listName;
         this.process = process;
         this.getListfield();
-        this.dimfilter=[];
+        this.dimfilter = [];
         this.DimComponent.initDimention(process);
         this.refrechListData();
+        console.log("prss", this.process);
     }
 
     hasAccess(role) {
@@ -70,25 +71,66 @@ export class ListComponent implements OnInit {
     }
 
     getListfield() {
+        console.log("yeaho",this.list)
         for (let fld of this.list.field) {
+            console.log(fld)
             if (fld.fieldEntity.entityId == this.entity.entityId) {
+                console.log("yes")
                 this.field.push(fld);
             }
         }
     }
 
+    getStepList(entityData) {
+
+        if( typeof entityData[0] != 'undefined'){
+            var stepid = entityData[0][this.entity.entityStepperField];
+        }else{
+            var stepid = entityData[this.entity.entityStepperField];
+        }
+
+        for (let stp of this.step) {
+            if (stp.stepId == stepid) {
+                var lists = [];
+                for (let lst of  stp.list) {
+                    if (this.listInProcess(lst.listId)) {
+                        if (this.hasAccess(lst.role)) {
+                            if(lst.listType == 2){
+                            lists.push(lst)
+                            }
+                        }
+                    }
+                    ;
+                }
+
+            }
+        }
+
+        return lists;
+
+    }
+
+
+
     getStepAction(entityData) {
+
+
+      if( typeof entityData[0] != 'undefined'){
         var stepid = entityData[0][this.entity.entityStepperField];
+      }else{
+          var stepid = entityData[this.entity.entityStepperField];
+      }
+
 
         for (let stp of this.step) {
             if (stp.stepId == stepid) {
                 var acts = [];
                 for (let act of  stp.action) {
 
-                    if(this.actionInProcess(act.actionId)){
+                    if (this.actionInProcess(act.actionId)) {
                         if (act.actionType !== 1) {
 
-                            if(this.hasAccess(act.role)){
+                            if (this.hasAccess(act.role)) {
                                 acts.push(act)
                             }
                         }
@@ -101,10 +143,22 @@ export class ListComponent implements OnInit {
         return acts;
     }
 
-    actionInProcess(actId){
+    actionInProcess(actId) {
         var exist = false;
-        for(let act of this.process[0].actions){
-            if(act.actionId == actId){exist = true;}
+        for (let act of this.process[0].actions) {
+            if (act.actionId == actId) {
+                exist = true;
+            }
+        }
+        return exist;
+    }
+
+    listInProcess(lstId) {
+        var exist = false;
+        for (let lst of this.process[0].list) {
+            if (lst.listId == lstId) {
+                exist = true;
+            }
         }
         return exist;
     }
@@ -114,11 +168,9 @@ export class ListComponent implements OnInit {
 
         var count = 0;
 
-        if( typeof entityData[0] !== "undefined" ){
-
+        if (typeof entityData[0] !== "undefined") {
             var stepid = entityData[0][this.entity.entityStepperField];
-        }else{
-
+        } else {
             var stepid = entityData[this.entity.entityStepperField];
         }
 
@@ -135,7 +187,6 @@ export class ListComponent implements OnInit {
         }
 
 
-
         return count;
 
     }
@@ -144,25 +195,25 @@ export class ListComponent implements OnInit {
 
         var param = new Object();
         param.id = this.list.listId;
-        param.dimfilter =  this.dimfilter;
+        param.dimfilter = this.dimfilter;
 
-        this.manager.getDatalist(param).subscribe(list =>this.setData(list) );
+        this.manager.getDatalist(param).subscribe(list => this.setData(list));
 
     }
 
-    setData(list){
-        for(let lst of list){
+    setData(list) {
+        for (let lst of list) {
             var arr = new Array();
-            for(let fls of this.field){
-                if(fls.fieldNature == 0){
-                    if(typeof lst[fls.fieldEntityName] == 'undefined' ||  lst[fls.fieldEntityName] == "" ){
+            for (let fls of this.field) {
+                if (fls.fieldNature == 0) {
+                    if (typeof lst[fls.fieldEntityName] == 'undefined' || lst[fls.fieldEntityName] == "") {
                         lst[fls.fieldEntityName] = "-";
                     }
-                }else if(fls.fieldNature == 1){
-                    if(typeof  lst[0][fls.fieldEntityName] == 'undefined'){
+                } else if (fls.fieldNature == 1) {
+                    if (typeof  lst[0][fls.fieldEntityName] == 'undefined') {
                         lst[fls.fieldEntityName] = "-";
-                    }else{
-                        lst[fls.fieldEntityName] =  lst[0][fls.fieldEntityName][fls.fieldTargetEntityId.entityDisplayfield];
+                    } else {
+                        lst[fls.fieldEntityName] = lst[0][fls.fieldEntityName][fls.fieldTargetEntityId.entityDisplayfield];
                     }
                 }
             }
@@ -174,12 +225,18 @@ export class ListComponent implements OnInit {
 
     setDemFilter($event) {
         this.dimfilter = $event;
-        setTimeout( () => {  this.refrechListData() }, 100 );
+        setTimeout(() => {
+            this.refrechListData()
+        }, 100);
 
     }
 
     doAction(action, data) {
-            this.fireAction.emit([action, data, this.dimfilter]);
+        this.fireAction.emit([action, data, this.dimfilter,"a"]);
+    }
+
+    doRepport(list,data){
+        this.fireAction.emit([list, data, this.dimfilter,"r"]);
     }
 
     doCreateAction($event) {
@@ -187,11 +244,10 @@ export class ListComponent implements OnInit {
     }
 
 
-
-    isStepperField(fld){
-        if( this.entity.entityStepperField == fld.fieldEntityName ){
+    isStepperField(fld) {
+        if (this.entity.entityStepperField == fld.fieldEntityName) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

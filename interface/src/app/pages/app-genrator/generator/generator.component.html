@@ -12,5 +12,14 @@
         <ngx-print (refrechMainView)="refrechView()" #print></ngx-print>
     </div>
 
+    <ngx-smart-modal #messageModal identifier="messageModal" customClass="medium-modal" (click)="stopClick($event)">
+        <h1>System AGL</h1>
+        <div *ngIf="messageModal.hasData()">
+            <pre>{{ messageModal.getData()}}</pre>
+        </div>
+        <button type="button" nbButton size="xsmall" (click)="messageModal.close()">Close</button>
+    </ngx-smart-modal>
+
+
 
 </div>

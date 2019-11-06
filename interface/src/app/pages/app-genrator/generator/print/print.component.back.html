@@ -1,0 +1,147 @@
+<nb-card style="margin-bottom: 2px;">
+
+    <nb-card-header>
+     <div style="font-size: 18px;"> <i (click)="switchView()" class="fa fa-list"></i> Impression de {{listMainentityform}} <div msg>{{FormMessage}}</div></div>
+    </nb-card-header>
+
+
+    <nb-card-body    style="overflow: visible" *ngIf="action.actionIsmainLevel == 1">
+        <div class="row">
+            <div class="col-md-3" *ngFor="let flds of field" containerFlex InputFormGroup>
+                <div inlineelement style="font-size: 1.125rem;font-weight: 600;">{{flds.fieldInterfaceName}}</div>
+                <div inlineelement *ngIf="flds.fieldType !== 'datetime' && flds.fieldNature != 1"><input nbPopover="{{flds.errormsg}}" [ngClass]="{'inputError':flds.error}" [value]="flds.val"
+                        [readonly]="flds.isEditeble" [(ngModel)]="actionData[flds.fieldEntityName]" nbInput
+                        fieldSize="medium" type="text"></div>
+                <div inlineelement *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 && flds.isEditeble!=true"><input nbPopover="{{flds.errormsg}}" [ngClass]="{'inputError':flds.error}" [value]="flds.val"
+                        [readonly]="flds.isEditeble" [(ngModel)]="actionData[flds.fieldEntityName]"
+                        [dpDayPicker]="datePickerConfig" nbInput fieldSize="medium" type="text"></div>
+                <div inlineelement *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 && flds.isEditeble==true"><input nbPopover="{{flds.errormsg}}" [ngClass]="{'inputError':flds.error}" [value]="flds.val"
+                        [readonly]="flds.isEditeble" [(ngModel)]="actionData[flds.fieldEntityName]"
+                        nbInput fieldSize="medium" type="text"></div>
+                <div inlineelement *ngIf="flds.fieldNature == 1">
+                    <ngx-autocombo nbPopover="{{flds.errormsg}}" [entity]="flds.fieldTargetEntity" [ngClass]="{'inputError':flds.error}"   [value]="actionData[flds.fieldEntityName].value" [(valueObject)]="actionData[flds.fieldEntityName]"
+                                   [readonly]="flds.isEditeble"></ngx-autocombo>
+                </div>
+
+            </div>
+        </div>
+        <button *ngIf="action.actionLevelDepth == 1 &&  GetEntityUpdateFieldCount() > 0" class="pull-right" (click)="doAction()" nbButton size="small">{{action.actionName}}</button>
+    </nb-card-body>
+
+</nb-card>
+
+<nb-card *ngIf="(action.actionLevelDepth == 2 &&   action.actionSubEntity != null )  || (action.actionIsmainLevel == 0  && action.actionSubEntity != null ) ">
+
+    <nb-card-header>
+ligne Details :
+    </nb-card-header>
+
+
+
+    <nb-card-body>
+
+        <div class="row" *ngIf="GetSubEntityUpdateFieldCount() > 0">
+            <div class="col-md-3" *ngFor="let flds of subfield" containerFlex InputFormGroup>
+
+                <div inlineelement style="font-size: 1rem;" >
+                    {{flds.fieldInterfaceName}}
+                </div>
+                <div inlineelement
+                     *ngIf="flds.fieldType !== 'datetime' && flds.fieldNature != 1 "><input nbPopover="{{flds.errormsg}}" [ngClass]="{'inputError':flds.error}"
+                                                                                            [readonly]="flds.isEditeble" [(ngModel)]="actionsubData[flds.fieldEntityName]" nbInput
+                        fieldSize="small" type="text"></div>
+                <div inlineelement
+                     *ngIf="flds.fieldType == 'datetime' && flds.fieldNature != 1 "><input nbPopover="{{flds.errormsg}}" [ngClass]="{'inputError':flds.error}"
+                                                                                           [readonly]="flds.isEditeble" [(ngModel)]="actionsubData[flds.fieldEntityName]"
+                        [dpDayPicker]="datePickerConfig" nbInput fieldSize="small" type="text"></div>
+                <div inlineelement *ngIf="flds.fieldNature == 1">
+                    <ngx-autocombo [entity]="flds.fieldTargetEntity" nbPopover="{{flds.errormsg}}" [ngClass]="{'inputError':flds.error}"  [value]="actionsubData[flds.fieldEntityName].value" [(valueObject)]="actionsubData[flds.fieldEntityName]"
+                                   [readonly]="flds.isEditeble"></ngx-autocombo>
+                </div>
+
+
+            </div>
+            <div class="col-md-3 pull-right" >
+                <button *ngIf="(subforMode == 'add' && action.actionAddSubEntity == 1) || subforMode == 'add' &&  action.actionType == 1"  style="margin-top: 15px;" (click)="addSubEntityData()" nbButton size="xsmall" >Ajouter au {{subentity.entityEntity}}s</button>
+                <button *ngIf="subforMode == 'update'"  style="margin-top: 15px;" (click)="updateSubEntityData()" nbButton size="xsmall">Valider le {{subentity.entityEntity}}s</button>
+            </div>
+        </div>
+
+        <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+                <th *ngFor="let flds of subfield">{{flds.fieldInterfaceName}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let datasub of actionsubdatacollection"  (click)="onUpdateSubEntiy(datasub)">
+                <td *ngFor="let flds of subfield"><span *ngIf="flds.fieldNature !== 1">{{datasub[flds.fieldEntityName]}}</span> <span *ngIf="flds.fieldNature == 1">{{datasub[flds.fieldEntityName].data[0].text}}</span></td>
+            </tr>
+            </tbody>
+
+        </table>
+
+        <button *ngIf="GetEntityUpdateFieldCount() > 0 || GetSubEntityUpdateFieldCount() > 0" class="pull-right" (click)="doAction()" nbButton size="small">{{action.actionName}}</button>
+
+    </nb-card-body>
+
+</nb-card>
+
+
+
+<nb-card *ngIf="(action.actionLevelDepth == 2 &&   action.actionSubProcess != null )  || (action.actionIsmainLevel == 0 &&  action.actionSubProcess != null)">
+
+    <nb-card-header>
+        Choix Details :
+    </nb-card-header>
+
+    <nb-card-body>
+    <div class="row"  >
+        <div class="col-md-9">
+            <ngx-dimention  [ngClass]="{'DimVisible':subforModeChoix == 'validate'} "  class="DimInvisible" (filterChange)="setDemFilter($event)"  #dimentionchoice ></ngx-dimention>
+        </div>
+        <div class="col-md-3 pull-right" >
+            <button *ngIf="subforModeChoix == 'choice' " style="margin-top: 15px;" (click)="ChoiceMode()" nbButton size="xsmall" >Choix des {{subprocess[0].gestEntity[0].entityEntity}}s</button>
+            <button *ngIf="subforModeChoix == 'validate'"  style="margin-top: 15px;" (click)="getDatachoice()" nbButton size="xsmall">Actualiser</button>
+            <button *ngIf="subforModeChoix == 'validate'"  style="margin-top: 15px;" (click)="validateChoice()" nbButton size="xsmall">Valides les {{subprocess[0].gestEntity[0].entityEntity}}s Choisie</button>
+        </div>
+    </div>
+
+        <table style="margin-top: 10px;" class="table table-striped table-condensed">
+            <thead>
+            <tr>
+                <th *ngFor="let fld of subfield">{{fld.fieldInterfaceName}}</th>
+                <th *ngIf="subforModeChoix == 'validate'" >Choix</th>
+            </tr>
+            </thead>
+            <tbody *ngIf="subforModeChoix == 'validate'"  >
+            <tr *ngFor="let data of choiceData" >
+                <td *ngFor="let fld of subfield" >
+                    <span *ngIf="fld.fieldNature == 0">{{data[fld.fieldEntityName]}}</span>
+                    <span *ngIf="fld.fieldNature == 1">{{cleanData(data,fld)}}</span>
+                </td>
+                <td  >
+                    <span ><input  [(ngModel)]="data['choix']" type="checkbox"   ></span>
+
+                </td>
+            </tr>
+
+            </tbody>
+
+            <tbody *ngIf="subforModeChoix == 'choice'"  >
+
+            <tr *ngFor="let data of choiceDataValidate" >
+
+                <td *ngFor="let fld of subfield" >
+                    <span *ngIf="fld.fieldNature == 0">{{data[fld.fieldEntityName]}}</span>
+                    <span *ngIf="fld.fieldNature == 1">{{cleanData(data,fld)}}</span>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+        <button *ngIf="GetDataChoiceCount() > 0" class="pull-right" (click)="doAction()" nbButton size="small">{{action.actionName}}</button>
+    </nb-card-body>
+
+</nb-card>

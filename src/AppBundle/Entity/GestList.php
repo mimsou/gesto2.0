@@ -101,6 +101,28 @@ class GestList
      private $listReg;
 
     /**
+     * @var integer|null
+     *
+     * @ORM\Column(name="list_type", type="integer" , nullable=true)
+     */
+    private $listType;
+
+    /**
+     * @var boolean|null
+     *
+     * @ORM\Column(name="list_is_linked", type="boolean" , nullable=true  )
+     */
+    private $listIsLinked;
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="list_report_config", type="string", nullable=true , length=50000)
+     */
+    private $listReportConfig;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -285,6 +307,42 @@ class GestList
                 $listReg->setRegList(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getListType(): ?int
+    {
+        return $this->listType;
+    }
+
+    public function setListType(?int $listType): self
+    {
+        $this->listType = $listType;
+
+        return $this;
+    }
+
+    public function getListReportConfig(): ?string
+    {
+        return $this->listReportConfig;
+    }
+
+    public function setListReportConfig(?string $listReportConfig): self
+    {
+        $this->listReportConfig = $listReportConfig;
+
+        return $this;
+    }
+
+    public function getListIsLinked(): ?bool
+    {
+        return $this->listIsLinked;
+    }
+
+    public function setListIsLinked(bool $listIsLinked): self
+    {
+        $this->listIsLinked = $listIsLinked;
 
         return $this;
     }

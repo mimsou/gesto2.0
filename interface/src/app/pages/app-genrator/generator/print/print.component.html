@@ -1,4 +1,6 @@
-<nb-card style="margin-bottom: 2px;">
+<nb-card style="margin-bottom: 2px;" *ngIf="type=='p'">
+
+
 
     <nb-card-header>
         <div style="font-size: 18px;"><i (click)="switchView()" class="fa fa-list"></i> Impression
@@ -50,8 +52,25 @@
 
             </div>
         </div>
-        <button   class="pull-right" (click)="doPrint()" nbButton size="small" >{{action.actionName}}</button>
+        <button   class="pull-right" (click)="doPrint('p')" nbButton size="small" >{{action.actionName}}</button>
 
     </nb-card-body>
 
+</nb-card>
+
+
+<nb-card style="margin-bottom: 2px;" *ngIf="type=='r'" >
+
+
+
+    <nb-card-header>
+        <div style="font-size: 18px;"><i (click)="switchView()" class="fa fa-list"></i> Impression
+            Repport head
+
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <button   class="pull-right" (click)="doPrint('r')" nbButton size="small" >{{list.listName}}</button>
+       <div style="width: 20cm;margin: auto;"  #ReportContent [innerHtml]="reportContent | keepHtml"></div>
+    </nb-card-body>
 </nb-card>

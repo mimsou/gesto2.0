@@ -1,3 +1,5 @@
+import index from "@angular/cli/lib/cli";
+
 export class User {
     id: string;
     UserLogin: string;
@@ -139,7 +141,9 @@ export class Process {
 export class List {
     listId: string;
     listName: string;
+    listType:any
     steps: Step;
+    listReportConfig:any;
     listProcess:Process;
     field:any;
 }

@@ -1,4 +1,4 @@
-<script src="../../@core/data/modulestate.service.spec.ts"></script>
+<script src="../../@core/data/modulestate.service.spec.ts" xmlns="http://www.w3.org/1999/html"></script>
 <nb-reveal-card #revealpage full-heigth full-heigth-all-child>
     <nb-card-front full-heigth full-heigth-all-child>
         <nb-card nostylecard full-heigth full-heigth-all-child>
@@ -19,6 +19,13 @@
 
                                 <ngx-one-input-form [placeholder]="roleplaceholder"
                                                     (newItem)="onAddRole($event)"></ngx-one-input-form>
+                                                    <br>
+                                                    <div style="width:100%" >
+                                                      <input type="checkbox" nbInput > Asscoier à un l'adiminstration d'un module :<br>
+                                                      <select  >
+                                                        <option></option>
+                                                      </select>
+                                                    </div>
 
                             </nb-card-header>
 
@@ -411,7 +418,7 @@
                     <div class="col-md-2" row style="height: 70%">
 
 
-                        <nb-card half-heigth full-heigth-all-child>
+                        <nb-card half-heigth full-heigth-all-child (click)="trygerDeselecttion('selectedProcess')">
 
 
                             <nb-card-header>
@@ -455,7 +462,7 @@
                             <nb-card-front full-heigth full-heigth-all-child>
 
 
-                                <nb-card full-heigth full-heigth-all-child>
+                                <nb-card full-heigth full-heigth-all-child (click)="trygerDeselecttion('selectedEntityDimention')">
 
                                     <nb-card-header noborder style="text-align: center !important">
                                         <div title>Dimention</div>
@@ -573,7 +580,7 @@
                     </div>
 
 
-                    <div class="col-md-10" style="height: 75%" (click)="stopClick($event)">
+                    <div class="col-md-10" style="height: 62%" (click)="stopClick($event)">
                         <div roleoption>
                             <i (click)="refrechRelationalEntity($event)"
                                style="font-size: 16px; margin-top: 10px;" class="fa fa-lock"></i>
@@ -588,9 +595,9 @@
                         <br>
 
                         <nb-tabset full-heigth full-heigth-all-child>
-                            <nb-tab tabTitle="Gestion des entitées" full-heigth full-heigth-all-child>
+                            <nb-tab tabTitle="Gestion des entitées" #entityTab full-heigth full-heigth-all-child>
 
-                                <div id="plumbcontainer" style="height: 75%">
+                                <div id="plumbcontainer" style="height: 50%">
 
                                     <div entityoption>
                                         Rafréchir
@@ -611,7 +618,7 @@
                                     </div>
 
 
-                                    <div (click)="onSelectEntity(entitie,$event )" entitiContainer
+                                    <div (click)="onSelectEntity(entitie)" entitiContainer
                                          *ngFor="let entitie of entities"
                                          id="ent_{{entitie.entityId}}" [id]='"ent_"+entitie.entityId'
                                          [style.top]="entitie.entityPos.split(',')[0]+'px'"
@@ -696,7 +703,7 @@
                                 </div>
 
                             </nb-tab>
-                            <nb-tab tabTitle="Gestion des Données ">
+                            <nb-tab tabTitle="Gestion des Données" #dataTab>
                                 <i _ngcontent-c7="" (click)="addConnectionDialog($event)" class="fa fa-plus-circle"
                                    style="font-size: 16px; margin-top: 10px;"> Ajouter une connection </i><br><br>
 
@@ -712,9 +719,129 @@
 
                                     <br> <br>
 
-                                    <div queryContainer *ngFor="let qry of con.query" (click)="selectQuery(qry,$event)"> {{qry.queryName}} &nbsp; <i
+                                    <div queryContainer *ngFor="let qry of con.query" (click)="selectQuery(qry,$event)">
+                                        {{qry.queryName}} &nbsp; <i
                                             class="fa fa-flash" (click)="getQueryResult(qry,$event)"> </i> &nbsp; <i
                                             class="fa fa-times" (click)="deleteQuery(qry,$event)"> </i></div>
+                                </div>
+
+
+                            </nb-tab>
+
+
+                            <nb-tab #viewTab tabTitle="Gestion des rapports" full-heigth full-heigth-all-child>
+
+                                <div class="row" full-heigth full-heigth-all-child *ngIf="selectedList.listType == 2">
+                                    <div class="col-md-3">
+                                        <nb-card full-heigth full-heigth-all-child>
+
+                                            <nb-card-header noborder style="text-align: center !important">
+                                                <div title>Section</div>
+                                                <ngx-one-input-form [placeholder]="'Titre de section'"
+                                                                    (newItem)="onAddSection($event)"></ngx-one-input-form>
+                                            </nb-card-header>
+                                            <nb-card-body>
+
+                                                <nb-list>
+                                                    <nb-list-item
+                                                            *ngFor="let section of viewReportConfig[selectedList.listId].sections"
+                                                            (click)="selectSection(section)"> {{section.tag}} / {{section.title}}
+                                                    </nb-list-item>
+                                                </nb-list>
+                                                <button nbButton size="xsmall" (click)="saveListe()" >Sauvegarder le rapport</button>
+
+                                            </nb-card-body>
+                                        </nb-card>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nb-card full-heigth full-heigth-all-child>
+
+                                            <nb-card-header noborder style="text-align: center !important">
+                                                <div title>Rendu</div>
+                                            </nb-card-header>
+                                            <nb-card-body full-heigth full-heigth-all-child>
+
+                                                <div style="height:9% !important;" class="row">
+                                                    <div class="col-md-10" style="margin-bottom: 10px;">
+                                                        <table class="table containerselector">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td [ngClass]="{  'lasttviewtab' : containeSelectorWidth == 1 }"
+                                                                    (click)="setSelectorContainerwidth(1)"
+                                                                    class="firstviewtab">1
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 2 , 'lasttviewtab' : containeSelectorWidth == 2 }"
+                                                                    (click)="setSelectorContainerwidth(2)"> 2
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 3 , 'lasttviewtab' : containeSelectorWidth == 3}"
+                                                                    (click)="setSelectorContainerwidth(3)"> 3
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 4 , 'lasttviewtab' : containeSelectorWidth == 4}"
+                                                                    (click)="setSelectorContainerwidth(4)"> 4
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 5 , 'lasttviewtab' : containeSelectorWidth == 5}"
+                                                                    (click)="setSelectorContainerwidth(5)"> 5
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 6 , 'lasttviewtab' : containeSelectorWidth == 6}"
+                                                                    (click)="setSelectorContainerwidth(6)"> 6
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 7 , 'lasttviewtab' : containeSelectorWidth == 7}"
+                                                                    (click)="setSelectorContainerwidth(7)"> 7
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 8 , 'lasttviewtab' : containeSelectorWidth == 8}"
+                                                                    (click)="setSelectorContainerwidth(8)"> 8
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 9 , 'lasttviewtab' : containeSelectorWidth == 9}"
+                                                                    (click)="setSelectorContainerwidth(9)"> 9
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 10 , 'lasttviewtab' : containeSelectorWidth == 10}"
+                                                                    (click)="setSelectorContainerwidth(10)"> 10
+                                                                </td>
+                                                                <td [ngClass]="{'middleviewtab' : containeSelectorWidth >= 11 , 'lasttviewtab' : containeSelectorWidth == 11}"
+                                                                    (click)="setSelectorContainerwidth(11)"> 11
+                                                                </td>
+                                                                <td [ngClass]="{'lasttviewtab' : containeSelectorWidth >= 12 , 'lasttviewtab' : containeSelectorWidth == 12}"
+                                                                    (click)="setSelectorContainerwidth(12)"> 12
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <button (click)="addContainerView()" nbButton size="xsmall">
+                                                            Ajouter contenaire
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <!--  <div contentEditable="true" style="height:89% !important;" #renderView class="row"
+                                                       [(innerHtml)]="htmlval">
+
+                                                  </div> -->
+
+                                                <nb-tabset full-heigth full-heigth-all-child>
+                                                    <nb-tab tabTitle="Edition" #editionTab full-heigth  lazyLoad >
+                                                        <editor   #edfs
+                                                                [(ngModel)]="this.viewReportConfig[this.selectedList.listId].htmlval"
+                                                                (click)="stopClickEditor($event)"
+                                                                [init]="editViewInit"  ></editor>
+
+
+
+                                                    </nb-tab>
+                                                    <nb-tab tabTitle="Visualisation" #visualisationTab full-heigth lazyLoad>
+
+                                                        <editor   #edfsv
+                                                                  [(ngModel)]="this.viewReportConfig[this.selectedList.listId].htmlvalv"
+                                                                  (click)="stopClickEditor($event)"
+                                                                  [init]="{plugins: 'table image imagetools link fullscreen autoresize'}" ></editor>
+                                                    </nb-tab>
+                                                </nb-tabset>
+
+                                            </nb-card-body>
+                                        </nb-card>
+                                    </div>
                                 </div>
 
 
@@ -733,7 +860,7 @@
                             <nb-card-front full-heigth full-heigth-all-child>
 
 
-                                <nb-card full-heigth full-heigth-all-child>
+                                <nb-card full-heigth full-heigth-all-child  (click)="trygerDeselecttion('selectedList')" >
 
                                     <nb-card-header noborder style="text-align: center !important">
                                         <div title>View</div>
@@ -794,8 +921,15 @@
                                             <input type="text" [ngModelOptions]="{standalone: true}"
                                                    [(ngModel)]="listform.listEntityName" nbInput fullWidth
                                                    fieldSize="xsmall" placeholder="Entity"
-                                            ><br><br>
+                                            ><br>
 
+
+                                            <select [(ngModel)]="listform.listType"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                <option value="1">liste simple</option>
+                                                <option value="2">Rapport personalisé</option>
+                                            </select>
+                                            <br><br>
                                             <button style="margin-right: 10px;"
                                                     [disabled]="!listformcontrole.valid"
                                                     nbButton
@@ -820,7 +954,7 @@
 
                     <div class="col-md-8" style="height: 25%;">
 
-                        <nb-card full-heigth full-heigth-all-child>
+                        <nb-card full-heigth full-heigth-all-child (click)="trygerDeselecttion('selectedSteps')" >
 
                             <nb-card-header noborder style="text-align: left !important">
 
@@ -913,10 +1047,10 @@
 
                     <div class="col-md-2" style="height: 25%;">
                         <nb-flip-card #flipaction full-heigth full-heigth-all-child>
-                            <nb-card-front full-heigth full-heigth-all-child>
+                            <nb-card-front full-heigth full-heigth-all-child >
 
 
-                                <nb-card full-heigth full-heigth-all-child>
+                                <nb-card full-heigth full-heigth-all-child  (click)="trygerDeselecttion('selectedActions')">
 
                                     <nb-card-header noborder style="text-align: center !important">
                                         <div title>Action</div>
@@ -974,7 +1108,8 @@
                                             <input type="text" [(ngModel)]="actionform.actionName" nbInput fullWidth
                                                    fieldSize="xsmall" placeholder="Designation"
                                                    formControlName="actionName">
-                                            <div *ngIf="!hideActionType && actionform.actionType != 1" class="panelFormGroup">
+                                            <div *ngIf="!hideActionType && actionform.actionType != 1"
+                                                 class="panelFormGroup">
 
                                                 Type <select type="text"
                                                              [(ngModel)]="actionform.actionType"
@@ -1152,6 +1287,66 @@
                             </div>
                         </nb-card-header>
 
+                        <nb-accordion #fieldparam *ngIf="paramPanel=='viewsection'" (click)="onSettingClick($event)"
+                                      full-heigth full-heigth-all-child>
+                            <nb-accordion-item [expanded]="true" full-heigth full-heigth-all-child   >
+
+                                <nb-accordion-item-header>
+                                    View Section
+                                </nb-accordion-item-header>
+                                <nb-accordion-item-body full-heigth full-heigth-all-child auto-overflow-child >
+
+                                    Nom de section :<br>
+                                    <input type="text" [(ngModel)]="selectedViewSection.title"
+                                           nbInput fullWidth
+                                           fieldSize="xsmall" placeholder="Nom de section "><br>
+
+
+                                    <br>
+
+
+
+                                    Requette :<br>
+                                    <textarea class="autoComplete" style="width: 100%" placeholder="Requette"
+                                              [(ngModel)]="selectedViewSection.query" nbInput></textarea>
+
+
+
+                                    <br><br>
+                                    <button nbButton size="xsmall" (click)="refrechViewField()">Refrech</button>
+                                    <br><br>
+
+                                    <nb-list full-heigth full-heigth-all-child>
+                                        <nb-list-item *ngFor="let viewHead of selectedViewSection.viewHead">
+                                            {{viewHead.fieldName}} : <input nbInput=""
+                                                                            [(ngModel)]="viewHead.fieldInterfaceName">
+                                        </nb-list-item>
+                                    </nb-list>
+
+
+                                    <br> <br>
+
+                                    <textarea class="autoComplete" style="width: 100%" placeholder="php expression"
+                                    [(ngModel)]="selectedViewSection.expression" nbInput></textarea>
+
+                                    <button nbButton size="xsmall" (click)="addViewConfigCustomField()">Ajouter</button>
+
+
+                                    <br>
+
+                                    <select  [(ngModel)]="TableViewFieldType"  >
+                                        <option value="s">Valeur</option>
+                                        <option value="t">Tableau</option>
+                                    </select>
+
+
+                                    <br>
+                                    <button nbButton size="xsmall" (click)="saveViewConfig()">Sauvegarder</button>
+
+                                </nb-accordion-item-body>
+                            </nb-accordion-item>
+                        </nb-accordion>
+
 
                         <nb-accordion #fieldparam *ngIf="paramPanel=='expression'" (click)="onSettingClick($event)"
                                       full-heigth full-heigth-all-child>
@@ -1185,7 +1380,6 @@
                         </nb-accordion>
 
 
-
                         <nb-accordion #fieldparam *ngIf="paramPanel=='query'" (click)="onSettingClick($event)"
                                       full-heigth full-heigth-all-child>
 
@@ -1208,7 +1402,7 @@
                                            fieldSize="xsmall" placeholder="Enoncé de requette "><br>
 
                                     <button style="margin-right: 10px;"
-                                           (click)="updateQuery()"
+                                            (click)="updateQuery()"
                                             nbButton
                                             type="submit" size="xsmall">
                                         Valider
@@ -1423,7 +1617,7 @@
 
                                             <div *ngIf="actionform.actionType != 5">
 
-                                                Go to step: <select type="text"
+                                                Go to step: <select
                                                                     [(ngModel)]="actionform.actionNextStep"
                                                                     formControlName="actionNextStep"
                                                                     nbInput
@@ -1436,6 +1630,33 @@
                                                 </option>
 
                                             </select>
+
+                                            </div>
+
+
+
+                                            <div *ngIf="actionform.actionLevelDepth == 2 ">
+
+                                                Dissocier les sous entité: <input type="checkbox"   [(ngModel)]="actionform.actionDissociateSubEntity"  formControlName="actionDissociateSubEntity"
+                                                                                    nbInput
+                                                                                    fieldSize="xsmall"  > <br>
+
+                                                Titre boutton dissociation :          <input type="text" formControlName="actionDissociateSubbtnName"
+                                                                                             [(ngModel)]="actionform.actionDissociateSubbtnName" nbInput fullWidth
+                                                                                             fieldSize="xsmall" placeholder="Btn dissociation">  <br><br>
+
+                                                Sub Entité Step :
+                                                <select   [(ngModel)]="actionform.actionSubentityNextStepOndissociation"
+                                                          formControlName="actionSubentityNextStepOndissociation"
+                                                          nbInput
+                                                          fullWidth
+                                                          fieldSize="xsmall">
+                                                    <option value="">-</option>
+                                                    <option [value]="stp.stepId" *ngFor="let stp of getSubentityStep()" >{{stp.stepName}}</option>
+
+                                            </select>
+
+
 
                                             </div>
 
@@ -1555,12 +1776,16 @@
 
                                         <br>
 
-                                        Nom de la liste <input nbInput fullWidth fieldSize="xsmall" paramInput
+                                        Nom de la liste : <input nbInput fullWidth fieldSize="xsmall" paramInput
                                                                type="text" [(ngModel)]="selectedList.listName"> <br>
 
                                         <br>
+<div *ngIf="selectedList.listIsMain != 1">
+                                        Attaché à la liste principale: <input [(ngModel)]="selectedList.listIsLinked" type="checkbox" nbInput>
+</div>
+                                        <br>
+                                        <br>
                                         <button style="margin-right: 10px;"
-
                                                 nbButton
                                                 (click)="saveListe()" size="xsmall">
                                             Sauvegarder
@@ -1940,5 +2165,14 @@
         </table>
     </div>
     <button type="button" nbButton size="xsmall" (click)="stopClick($event);displayDataModal.close()">Close</button>
+</ngx-smart-modal>
+
+
+<ngx-smart-modal #displayVarsModal identifier="displayVarsModal" customClass="medium-modal" (click)="stopClick($event)">
+    <h1>Affichage des variable</h1>
+    <div>
+        <textarea style="width: 100%;height: 500px;">{{displayVarContent}}</textarea>
+    </div>
+    <button type="button" nbButton size="xsmall" (click)="stopClick($event);displayVarsModal.close()">Close</button>
 </ngx-smart-modal>
 

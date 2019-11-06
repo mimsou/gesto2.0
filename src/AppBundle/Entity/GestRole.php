@@ -115,7 +115,7 @@ class GestRole
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="GestroleData", mappedBy="role" , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="GestRoleData", mappedBy="role" , cascade={"persist"})
      */
 
 
