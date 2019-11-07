@@ -435,4 +435,8 @@ export class ManagerService {
         return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/dissociateentity/`, JSON.stringify(param));
     }
 
+    isadmin(param){
+      return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/isadmin/`, JSON.stringify(param));
+  }
+
 }

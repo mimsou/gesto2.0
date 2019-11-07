@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Jour
 {
 	/**
-	 * @var datetime
+	 * @var string
 	 * @ORM\Column(name="jour", type="datetime", length=10, nullable=false)
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="NONE")

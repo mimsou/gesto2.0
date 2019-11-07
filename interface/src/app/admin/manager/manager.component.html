@@ -19,12 +19,12 @@
 
                                 <ngx-one-input-form [placeholder]="roleplaceholder"
                                                     (newItem)="onAddRole($event)"></ngx-one-input-form>
+
                                                     <br>
-                                                    <div style="width:100%" >
-                                                      <input type="checkbox" nbInput > Asscoier à un l'adiminstration d'un module :<br>
-                                                      <select  >
-                                                        <option></option>
-                                                      </select>
+                                                    <div style="width:100%"   *ngIf="userIsSuperAdmin()" >
+
+                                                      <input type="checkbox"  [(ngModel)]="userIsAdmin" nbInput ><span style="font-size: 14px;"> Asscoier au administrations des modules selectionnées : </span> <br>
+
                                                     </div>
 
                             </nb-card-header>
@@ -36,9 +36,9 @@
 
 
                                     <nb-list-item (click)="ToggleSelectedRole(role,$event)"
-                                                  [ngClass]="{'selectedListr' : role.roleId == selectedrole ,'adminRole' : role.roleGroup == 1   }"
+                                                  [ngClass]="{'selectedListr' : role.roleId == selectedrole ,'adminRole' : role.roleGroup == 1 }"
                                                   menuPadding
-                                                  *ngFor="let role of roles" forceOverFlow>
+                                                  *ngFor="let role of roles" forceOverFlow >
 
 
                                         <div containerFlex>

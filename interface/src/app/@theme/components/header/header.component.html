@@ -5,14 +5,14 @@
     <a (click)="toggleSidebar()" href="#" class="navigation"><i class="nb-menu"></i></a>
     <div class="logo" (click)="goToHome()">Ges<span>to </span> <span moduleTitle> Module {{moduleDesignation}}</span></div>
   </div>
- 
+
 </div>
 
 <div class="header-container">
   <div *ngIf="admin==true" style="display: inline-block">
     <select nbInput size="xsmall" (click)="stopClick($event)" (change)="setModule($event)">
     <option  >Selectioner un module</option>
-    <option *ngFor="let module of modules"  [value]="module.moduleId">{{module.moduleLibelle}}</option>
+    <option *ngFor="let module of modules" [selected]="currentmodule.moduleId == module.moduleId"  [value]="module.moduleId">{{module.moduleLibelle}}</option>
   </select> <button nbButton   type="submit" size="xsmall" (click)="AddModuleDialog($event)" >Ajouter un Module</button></div>
   <nb-actions
     size="small"

@@ -7,13 +7,16 @@ import {
     CanLoad, Route
 } from '@angular/router';
 
+import {ManagerService} from "./manager.service";
 import {NbAuthService } from '@nebular/auth';
-import {take} from "rxjs/internal/operators";
+
+import {take, map, catchError} from "rxjs/internal/operators";
+import { of } from 'rxjs';
 
 @Injectable()
 export class AuthGuardAdmin implements CanActivate, CanActivateChild, CanLoad {
 
-    constructor(private router: Router, private authService: NbAuthService) {
+    constructor(private router: Router, private authService: NbAuthService, private manager: ManagerService) {
 
     }
 
@@ -24,8 +27,6 @@ export class AuthGuardAdmin implements CanActivate, CanActivateChild, CanLoad {
 
         let url: string = state.url;
 
-        console.log("ss",route);
-
         let obsValue = undefined
 
         this.authService.onTokenChange().pipe(take(1)).
@@ -33,12 +34,40 @@ export class AuthGuardAdmin implements CanActivate, CanActivateChild, CanLoad {
                     obsValue  = token.getPayload();
             })
 
-       if(this.authService.isAuthenticated() && obsValue.roles.includes("ROLE_ADMIN")){
-           return true;
-       }else{
-           this.router.navigate(['auth/login']);
-       }
 
+
+           return this.getAdminAccesGrant(obsValue.roles,this.authService.isAuthenticated());
+
+
+    }
+
+     getAdminAccesGrant(role,isAuthenticated){
+
+      let param = {};
+
+      param.role = role;
+
+      return  this.manager.isadmin(param).pipe(
+
+        map(data => {
+
+          console.log("yesf",data );
+
+          if (data === true && isAuthenticated) {
+
+            return true;
+
+          }
+
+          return false;
+
+        }),
+
+        catchError(() => {
+          return of(false);
+        }),
+
+      );
 
     }
 
