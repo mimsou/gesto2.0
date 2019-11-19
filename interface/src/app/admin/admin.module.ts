@@ -9,6 +9,7 @@ import {AuthGuardAdmin} from "../@core/data/auth.guard.admin.service";
 import { CallbackdirDirective } from '../callbackdir.directive';
 import { ExpressionComponent } from './manager/expression/expression.component';
 import { FormsModule } from '@angular/forms';
+import { AceEditorModule } from 'ng2-ace-editor'
 
 
 
@@ -28,7 +29,8 @@ const DIRECTIVE_DEC = [
     AdminRoutingModule,
     CommonModule,
     ThemeModule,
-      FormsModule
+      FormsModule,
+      AceEditorModule
   ],
   declarations: [...ADMIN_COMPONENTS,...DIRECTIVE_DEC, ExpressionComponent],
   providers:[
@@ -36,4 +38,3 @@ const DIRECTIVE_DEC = [
   ]
 })
 export class adminModule { }
- 

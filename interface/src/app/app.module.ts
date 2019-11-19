@@ -49,8 +49,8 @@ import {ModulestateService} from "./@core/data/modulestate.service";
             key: 'token',
           },
 
-             baseEndpoint: 'http://10.0.2.13/AGL/api/web/api/',
-            //baseEndpoint: 'http://127.0.0.1/AFRREST/web/api/',
+            //baseEndpoint: 'http://10.0.2.13/AGL/api/web/api/',
+            baseEndpoint: 'http://127.0.0.1/AFRREST/web/api/',
            login: {
              endpoint: 'login_check',
              method: 'post',

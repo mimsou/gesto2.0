@@ -6,11 +6,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Emplacement
- * @ORM\Table(name="Emplacement")
+ * DepEmplacement
+ * @ORM\Table(name="DepEmplacement")
  * @ORM\Entity
  */
-class Emplacement
+class DepEmplacement
 {
 	/**
 	 * @var string

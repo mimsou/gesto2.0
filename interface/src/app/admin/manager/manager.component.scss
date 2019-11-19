@@ -231,6 +231,7 @@ nb-card-header{
 /*Stepper CSS */
 
 
+
 .stepper { clear: left; float: left; margin: 20px; width: max-content; }
 
 .step { float: left; font-size: 15px; margin: 0 12px; }
@@ -302,10 +303,12 @@ nb-card-header{
 
 [linkToModule]{
   display: inline-block;
-  position: absolute;
+
   top: 0px;
   right: 0px;
   margin: 2px;
+  width: 10px;
+  height: 10px;
 }
 
 [requestWarper]{

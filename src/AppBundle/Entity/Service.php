@@ -1,54 +1,52 @@
-<?php 
+<?php
+
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Service
- * @ORM\Table(name="service")
+ *
+ * @ORM\Table(name="service", indexes={@ORM\Index(name="IDX_2E20A34E42BDE7F4", columns={"service_type_fond"}), @ORM\Index(name="IDX_2E20A34E1A33DBFC", columns={"service_code_crb"})})
  * @ORM\Entity
  */
 class Service
 {
-	/**
-	 * @var string
-	 * @ORM\Column(name="service_code", type="string", length=10, nullable=false)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="NONE")
-	 */
-	private $serviceCode;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="service_code", type="string", length=10, nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $serviceCode;
 
-	/**
-	 * @var string|null
-	 * @ORM\Column(name="service_libelle", type="string", length=100, nullable=true)
-	 */
-	private $serviceLibelle;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="service_libelle", type="string", length=100, nullable=true)
+     */
+    private $serviceLibelle;
 
-	/**
-	 * @var \Crb
-	 * @ORM\ManyToOne(targetEntity="Crb")
-	 * @ORM\JoinColumns({
-	 * @ORM\JoinColumn(name="service_code_crb", referencedColumnName="crb_code")
-	 * })
-	 */
-	private $serviceCodeCrb;
+    /**
+     * @var \Crb
+     *
+     * @ORM\ManyToOne(targetEntity="Crb")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="service_code_crb", referencedColumnName="crb_code")
+     * })
+     */
+    private $serviceCodeCrb;
 
-	/**
-	 * @var \FondType
-	 * @ORM\ManyToOne(targetEntity="FondType",inversedBy="serviceTypeFondColl")
-	 * @ORM\JoinColumns({
-	 * @ORM\JoinColumn(name="service_type_fond", referencedColumnName="font_type_code")
-	 * })
-	 */
-	private $serviceTypeFond;
-
-
-	public function setServiceCode($serviceCode)
-                     	{
-                     		$this->serviceCode = $serviceCode; return $this;
-                     	}
+    /**
+     * @var \Fondtype
+     *
+     * @ORM\ManyToOne(targetEntity="Fondtype")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="service_type_fond", referencedColumnName="font_type_code")
+     * })
+     */
+    private $serviceTypeFond;
 
     public function getServiceCode(): ?string
     {
@@ -79,15 +77,17 @@ class Service
         return $this;
     }
 
-    public function getServiceTypeFond(): ?FondType
+    public function getServiceTypeFond(): ?Fondtype
     {
         return $this->serviceTypeFond;
     }
 
-    public function setServiceTypeFond(?FondType $serviceTypeFond): self
+    public function setServiceTypeFond(?Fondtype $serviceTypeFond): self
     {
         $this->serviceTypeFond = $serviceTypeFond;
 
         return $this;
     }
+
+
 }

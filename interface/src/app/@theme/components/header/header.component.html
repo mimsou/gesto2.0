@@ -13,7 +13,7 @@
     <select nbInput size="xsmall" (click)="stopClick($event)" (change)="setModule($event)">
     <option  >Selectioner un module</option>
     <option *ngFor="let module of modules" [selected]="currentmodule.moduleId == module.moduleId"  [value]="module.moduleId">{{module.moduleLibelle}}</option>
-  </select> <button nbButton   type="submit" size="xsmall" (click)="AddModuleDialog($event)" >Ajouter un Module</button></div>
+  </select> <button nbButton *ngIf="userIsSuperAdmin()"    type="submit" size="xsmall" (click)="AddModuleDialog($event)" >Ajouter un Module</button></div>
   <nb-actions
     size="small"
     [class.right]="position === 'normal'"

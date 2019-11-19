@@ -72,7 +72,7 @@
               "src/assets/js/select2.min.js",
               "src/assets/js/ckeditor.js",
               "node_modules/tinymce/tinymce.min.js",
-              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js",
+              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js"
 
             ]
           },
@@ -133,7 +133,7 @@
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/ng2-select2/select2.min.js",
               "node_modules/tinymce/tinymce.min.js",
-              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js",
+              "node_modules/ngx-smart-modal/bundles/ngx-smart-modal.umd.js"
 
             ],
             "styles": [

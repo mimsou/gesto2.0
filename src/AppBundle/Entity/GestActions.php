@@ -157,18 +157,21 @@ class GestActions
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="action_next_step", referencedColumnName="step_id")
      * })
+     * 
      */
+
     private $actionNextStep;
 
 
     /**
      * @var \GestSteps
      *
-     * @ORM\ManyToOne(targetEntity="GestSteps"  )
+     * @ORM\ManyToOne(targetEntity="GestSteps")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="action_subentity_next_step_ondissociation", referencedColumnName="step_id")
      * })
      */
+
     private $actionSubentityNextStepOndissociation;
 
 
@@ -243,6 +246,13 @@ class GestActions
      * @ORM\Column(name="action_print_footer", type="string", length=50000, nullable=true)
      */
     private $actionPrintFooter;
+
+     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_custom_code", type="string", length=999999, nullable=true)
+     */
+    private $actionCustomCode;
 
     /**
      * Constructor
@@ -668,6 +678,18 @@ class GestActions
     public function setActionSubentityNextStepOndissociation(?GestSteps $actionSubentityNextStepOndissociation): self
     {
         $this->actionSubentityNextStepOndissociation = $actionSubentityNextStepOndissociation;
+
+        return $this;
+    }
+
+    public function getActionCustomCode(): ?string
+    {
+        return $this->actionCustomCode;
+    }
+
+    public function setActionCustomCode(?string $actionCustomCode): self
+    {
+        $this->actionCustomCode = $actionCustomCode;
 
         return $this;
     }

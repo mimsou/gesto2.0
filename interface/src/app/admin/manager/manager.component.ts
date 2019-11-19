@@ -14,6 +14,16 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subject } from "rxjs/Rx";
 import { MessageService } from '../../message.service'
 import { ModulestateService } from "../../@core/data/modulestate.service";
+import 'brace/index';
+import 'brace/theme/chrome';
+import 'brace/theme/textmate';
+import 'brace/mode/typescript';
+import 'brace/mode/javascript';
+import 'brace/mode/html';
+import 'brace/mode/php';
+import 'brace/snippets/php';
+import 'brace/ext/language_tools.js';
+declare var ace: any;
 
 
 import { Observable, Subject } from "rxjs/Rx";
@@ -46,6 +56,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderView') renderView: any;
   @ViewChild('#edfs') edfs: any;
   @ViewChild('#edfsv') edfsv: any;
+  @ViewChild('editor') editor;
 
 
   jsPlumbInstance;
@@ -144,7 +155,9 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   TableViewFieldType: any = '';
   selectedViewSectionExpression = "";
   tokerolen: any = "";
-  userIsAdmin:any = false;
+  userIsAdmin: any = false;
+  editortext: any = "";
+  options: any = { maxLines: 1000, printMargin: false, enableBasicAutocompletion: true, enableLiveAutocompletion: true };
 
   constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private msgService: MessageService, private selectedMdule: ModulestateService, private NgxSmartModalServices: NgxSmartModalService) {
     this.initializeMessgae();
@@ -202,13 +215,47 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-
     this.ngUnsubscribea.next();
     this.ngUnsubscribea.complete();
   }
 
   ngAfterViewInit() {
+
     this.jsPlumbInstance = jsPlumb.getInstance(this.userService);
+    let editor = this.editor.getEditor();
+
+
+
+    editor.setOptions({
+      enableBasicAutocompletion: true
+    });
+
+    editor.getSession().setMode("ace/mode/php");
+    editor.setTheme("ace/theme/textmate");
+    editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+
+
+    var staticWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+        console.log(session,pos,prefix,callback)
+        var wordList = ["appBundle::Article", "appBundle::ArticleBcn", "appBundle::Bcn"];
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: word,
+            value: word,
+            meta: "static"
+          };
+        }));
+
+      }
+    }
+
+
+    editor.completers = [staticWordCompleter]
 
   }
 

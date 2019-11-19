@@ -846,6 +846,13 @@
 
 
                             </nb-tab>
+                          <nb-tab #customTab tabTitle="Action avancé" full-heigth full-heigth-all-child>
+
+                              <ace-editor
+                                 [(text)]="text"
+                                     #editor style="height:150px;"></ace-editor>
+
+                        </nb-tab  >
 
                         </nb-tabset>
 

@@ -6,11 +6,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Emplacement
- * @ORM\Table(name="Emplacement")
+ * DepMateriel
+ * @ORM\Table(name="DepMateriel")
  * @ORM\Entity
  */
-class Emplacement
+class DepMateriel
 {
 	/**
 	 * @var string
@@ -19,6 +19,12 @@ class Emplacement
 	 * @ORM\GeneratedValue(strategy="NONE")
 	 */
 	private $id;
+
+
+	public function setId($id)
+   	{
+   		$this->id = $id; return $this;
+   	}
 
     public function getId(): ?string
     {

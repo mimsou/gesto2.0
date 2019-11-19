@@ -3328,21 +3328,26 @@ class managerController extends FOSRestController
 
             $acexp = $regle->acregExpression;
             $message = $regle->acregErrormessage;
+
             $params = new \stdClass();
             $params->expression = $acexp;
             $params->type = "boolean";
             $params->entity = $param->entity;
+
             $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
 
             if (!$rs) {
                 $res = json_encode(array("error" => true, "message" => $message));
                 return new View($res, Response::HTTP_OK);
             }
+            
         }
 
 
         if ($param->action->actionType == 1) {
+
             $entityAction = new $class;
+
         } else {
 
             $arr = (array) $param->data;
@@ -3350,6 +3355,7 @@ class managerController extends FOSRestController
             $arrfirst = (array) $param->firstData;
 
             $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arrfirst[$param->entity->entityKey]);
+
         }
 
         if ($param->action->actionIsmainLevel == 1) {
@@ -3412,9 +3418,7 @@ class managerController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-
         $em->persist($entityAction);
-
 
         $subentity = $param->subentity->entityEntity;
 
@@ -3481,10 +3485,13 @@ class managerController extends FOSRestController
                 }
 
                 $em = $this->getDoctrine()->getManager();
+
                 $em->persist($subEentityAction);
+
             }
 
             $em->flush();
+
         } else if ($subentityprocess !== null) {
 
             $em->flush();
@@ -3515,15 +3522,20 @@ class managerController extends FOSRestController
                 if (method_exists($subentdat, $functionName)) {
                     $subentdat->$functionName($entityAction);
                 }
+
             }
 
             $em->flush();
+
         } else {
+
             $em->flush();
+
         }
 
         $res = json_encode(array("error" => false, "message" => "entity updated Successfully"));
         return new View($res, Response::HTTP_OK);
+
     }
 
     private function _getExpressionRestult($param, $req, $dim, $id = null)
@@ -3547,7 +3559,6 @@ class managerController extends FOSRestController
         $expression->expression = $this->resolve_dim_expression($expression->expression, $dim);
 
         $expression->expression = $this->resolve_get_expression($expression->expression, $entity, $type, $dim, $id);
-
 
         $expression->expression = $this->resolve_get_where_expression($expression->expression, $entity, $type, $dim, $id);
 
@@ -4744,7 +4755,7 @@ class managerController extends FOSRestController
         $classfile = ucfirst($param->className) . '.php';
 
         $handle = fopen($path . $classfile, 'w') or die('Cannot open file:  ' . $classfile);
-
+      
         fwrite($handle, "<?php \n" . $namespace);
 
         fclose($handle);
@@ -4756,8 +4767,8 @@ class managerController extends FOSRestController
 
         $ret .= $this->updateDatabase();
 
-
         return new View($ret, Response::HTTP_OK);
+        
     }
 
 
@@ -5182,6 +5193,7 @@ class managerController extends FOSRestController
 
     public function getAllModuleAction()
     {
+         
 
         $user = $this->getCurrentUser();
 
