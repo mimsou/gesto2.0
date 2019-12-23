@@ -1,12 +1,12 @@
 {
-    "remotePath": "./",
-    "host": "host",
-    "username": "username",
-    "password": "password",
+    "remotePath": "./api/",
+    "host": "10.0.2.13",
+    "username": "souhaib",
+    "password": "Sou19633",
     "port": 21,
     "secure": false,
     "protocol": "ftp",
-    "uploadOnSave": false,
+    "uploadOnSave": true,
     "passive": false,
     "debug": false,
     "privateKeyPath": null,
@@ -16,7 +16,9 @@
     "ignore": [
         "\\.vscode",
         "\\.git",
-        "\\.DS_Store"
+        "\\.DS_Store",
+        "\\interface",
+        "\\var"
     ],
     "generatedFiles": {
         "extensionsToInclude": [

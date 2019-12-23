@@ -70,6 +70,36 @@ class GestActions
      */
     private $actionEntity;
 
+
+    
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="action_affectation", type="integer", length=2, nullable=true)
+     */
+    private $actionAffectation; 
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestActions", mappedBy="actionSubActions" , cascade={"persist"})
+     */
+
+    private  $actionParent;
+
+
+
+    /**
+     * @var \GestProcess
+     *
+     * @ORM\ManyToOne(targetEntity="GestActions",inversedBy="actionParent")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="action_sub_action", referencedColumnName="action_id"  )
+     * })
+     */
+    private  $actionSubActions;
+
     /**
      * @var string|null
      *
@@ -82,7 +112,7 @@ class GestActions
      *
      * @ORM\Column(name="action_type", type="integer", nullable=true)
      */
-    private $actionType;
+    private $actionType; 
 
     /**
      * @var int|null
@@ -131,6 +161,14 @@ class GestActions
     private $actionLevelDepth;
 
 
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="action_delete_sub_entity", type="integer", nullable=true)
+     */
+    private $actionDeleteSubEntity;
+
+
 
     /**
      * @var \GestProcess
@@ -140,7 +178,7 @@ class GestActions
      *   @ORM\JoinColumn(name="action_process", referencedColumnName="process_id"  )
      * })
      */
-    private $actionProcess;
+    private $actionProcess;  
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -199,6 +237,15 @@ class GestActions
      */
     private $actionAcreg;
 
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="GestCustomCode", mappedBy="customCodeAction")
+     */
+    private $actionCustomCode;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -212,6 +259,10 @@ class GestActions
      *   }
      * )
      */
+
+     
+
+
     private $viewField;
 
 
@@ -247,12 +298,66 @@ class GestActions
      */
     private $actionPrintFooter;
 
+
+
      /**
      * @var string|null
      *
-     * @ORM\Column(name="action_custom_code", type="string", length=999999, nullable=true)
+     * @ORM\Column(name="action_inner_custom_code_befor_main_persist", type="string", length=10000000, nullable=true)
      */
-    private $actionCustomCode;
+    private $actionInnerCustomCodeBeforMainPersist;
+
+
+     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_inner_custom_code_after_main_persist", type="string", length=10000000, nullable=true)
+     */
+    private $actionInnerCustomCodeAfterMainPersist;
+
+
+      /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_inner_custom_code_befor_sub_persist", type="string", length=10000000, nullable=true)
+     */
+    private $actionInnerCustomCodeBeforSubPersist;
+
+
+    
+      /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_inner_custom_code_after_sub_persist", type="string", length=10000000, nullable=true)
+     */
+    private $actionInnerCustomCodeAfterSubPersist;
+
+
+    
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_inner_custom_code", type="string", length=10000000, nullable=true)
+     */
+    private $actionInnerCustomCode;
+
+
+       /**
+     * @var string|null
+     *
+     * @ORM\Column(name="action_sub_check_custom_code", type="string", length=10000000, nullable=true)
+     */
+    private $actionSubCheckCustomCode;
+
+     
+
+
+     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="action_custom_code_mode", type="integer", length=2, nullable=true)
+     */
+    private $actionCustomCodeMode;
 
     /**
      * Constructor
@@ -264,6 +369,8 @@ class GestActions
         $this->viewField = new \Doctrine\Common\Collections\ArrayCollection();
         $this->role = new ArrayCollection();
         $this->actionAcreg = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->actionCustomCode = new ArrayCollection();
+        $this->actionParent = new ArrayCollection();
     }
 
     public function getActionId(): ?int
@@ -367,7 +474,7 @@ class GestActions
         return $this;
     }
 
-    public function removeViewField(GestFields $viewField): self
+    public function removeViewField(GestFields $viewField): self 
     {
         if ($this->viewField->contains($viewField)) {
             $this->viewField->removeElement($viewField);
@@ -690,6 +797,180 @@ class GestActions
     public function setActionCustomCode(?string $actionCustomCode): self
     {
         $this->actionCustomCode = $actionCustomCode;
+
+        return $this;
+    }
+
+    public function getActionCustomCodeMode(): ?int
+    {
+        return $this->actionCustomCodeMode;
+    }
+
+    public function setActionCustomCodeMode(?int $actionCustomCodeMode): self
+    {
+        $this->actionCustomCodeMode = $actionCustomCodeMode;
+
+        return $this;
+    }
+
+    public function addActionCustomCode(GestCustomCode $actionCustomCode): self
+    {
+        if (!$this->actionCustomCode->contains($actionCustomCode)) {
+            $this->actionCustomCode[] = $actionCustomCode;
+            $actionCustomCode->setCustomCodeAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionCustomCode(GestCustomCode $actionCustomCode): self
+    {
+        if ($this->actionCustomCode->contains($actionCustomCode)) {
+            $this->actionCustomCode->removeElement($actionCustomCode);
+            // set the owning side to null (unless already changed)
+            if ($actionCustomCode->getCustomCodeAction() === $this) {
+                $actionCustomCode->setCustomCodeAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getActionInnerCustomCode(): ?string
+    {
+        return $this->actionInnerCustomCode;
+    }
+
+    public function setActionInnerCustomCode(?string $actionInnerCustomCode): self
+    {
+        $this->actionInnerCustomCode = $actionInnerCustomCode;
+
+        return $this;
+    }
+
+    public function getActionInnerCustomCodeBeforMainPersist(): ?string
+    {
+        return $this->actionInnerCustomCodeBeforMainPersist;
+    }
+
+    public function setActionInnerCustomCodeBeforMainPersist(?string $actionInnerCustomCodeBeforMainPersist): self
+    {
+        $this->actionInnerCustomCodeBeforMainPersist = $actionInnerCustomCodeBeforMainPersist;
+
+        return $this;
+    }
+
+    public function getActionInnerCustomCodeAfterMainPersist(): ?string
+    {
+        return $this->actionInnerCustomCodeAfterMainPersist;
+    }
+
+    public function setActionInnerCustomCodeAfterMainPersist(?string $actionInnerCustomCodeAfterMainPersist): self
+    {
+        $this->actionInnerCustomCodeAfterMainPersist = $actionInnerCustomCodeAfterMainPersist;
+
+        return $this;
+    }
+
+    public function getActionInnerCustomCodeBeforSubPersist(): ?string
+    {
+        return $this->actionInnerCustomCodeBeforSubPersist;
+    }
+
+    public function setActionInnerCustomCodeBeforSubPersist(?string $actionInnerCustomCodeBeforSubPersist): self
+    {
+        $this->actionInnerCustomCodeBeforSubPersist = $actionInnerCustomCodeBeforSubPersist;
+
+        return $this;
+    }
+
+    public function getActionInnerCustomCodeAfterSubPersist(): ?string
+    {
+        return $this->actionInnerCustomCodeAfterSubPersist;
+    }
+
+    public function setActionInnerCustomCodeAfterSubPersist(?string $actionInnerCustomCodeAfterSubPersist): self
+    {
+        $this->actionInnerCustomCodeAfterSubPersist = $actionInnerCustomCodeAfterSubPersist;
+
+        return $this;
+    }
+
+    public function getActionSubCheckCustomCode(): ?string
+    {
+        return $this->actionSubCheckCustomCode;
+    }
+
+    public function setActionSubCheckCustomCode(?string $actionSubCheckCustomCode): self
+    {
+        $this->actionSubCheckCustomCode = $actionSubCheckCustomCode;
+
+        return $this;
+    }
+
+    public function getActionAffectation(): ?int
+    {
+        return $this->actionAffectation;
+    }
+
+    public function setActionAffectation(?int $actionAffectation): self
+    {
+        $this->actionAffectation = $actionAffectation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GestActions[]
+     */
+    public function getActionParent(): Collection
+    {
+        return $this->actionParent;
+    }
+
+    public function addActionParent(GestActions $actionParent): self
+    {
+        if (!$this->actionParent->contains($actionParent)) {
+            $this->actionParent[] = $actionParent;
+            $actionParent->setActionSubActions($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActionParent(GestActions $actionParent): self
+    {
+        if ($this->actionParent->contains($actionParent)) {
+            $this->actionParent->removeElement($actionParent);
+            // set the owning side to null (unless already changed)
+            if ($actionParent->getActionSubActions() === $this) {
+                $actionParent->setActionSubActions(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getActionSubActions(): ?self
+    {
+        return $this->actionSubActions;
+    }
+
+    public function setActionSubActions(?self $actionSubActions): self
+    {
+        $this->actionSubActions = $actionSubActions;
+
+        return $this;
+    }
+
+    public function getActionDeleteSubEntity(): ?int
+    {
+        return $this->actionDeleteSubEntity;
+    }
+
+    public function setActionDeleteSubEntity(?int $actionDeleteSubEntity): self
+    {
+        $this->actionDeleteSubEntity = $actionDeleteSubEntity;
 
         return $this;
     }

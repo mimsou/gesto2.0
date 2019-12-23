@@ -439,4 +439,16 @@ export class ManagerService {
       return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/isadmin/`, JSON.stringify(param));
   }
 
+  checksubentity(param){
+    return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/checksubdata`, JSON.stringify(param));
+  }
+
+  savemodulehelp(param){
+    return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/savemodulehelp`, JSON.stringify(param));
+  }
+
+  getModuleHelper(param){
+    return this.http.patch(`${this.apiLink.MANAGER_BASE_URL}/getmodulehelper`, JSON.stringify(param));
+  }
+
 }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Renouvellement
- * @ORM\Table(name="Renouvellement")
+ * @ORM\Table(name="renouvellement")
  * @ORM\Entity
  */
 class Renouvellement
@@ -24,14 +24,14 @@ class Renouvellement
 	 * @var integer|null
 	 * @ORM\Column(name="renouvellement_etat", type="integer", length=100, nullable=true)
 	 */
-	private $renouvellementEtat;
+	private $renouvellementEtat;  
 
 	/**
 	 * @var \Exercice
 	 * @ORM\ManyToOne(targetEntity="Exercice",inversedBy="renouvellement")
 	 * @ORM\JoinColumns({
 	 * @ORM\JoinColumn(name="renouvellement_exercice", referencedColumnName="exercice_code")
-	 * })
+	 * }) 
 	 */
 	private $renouvellementExercice;
 

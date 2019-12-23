@@ -16,13 +16,14 @@ import { MessageService } from '../../message.service'
 import { ModulestateService } from "../../@core/data/modulestate.service";
 import 'brace/index';
 import 'brace/theme/chrome';
-import 'brace/theme/textmate';
+import 'brace/theme/twilight';
 import 'brace/mode/typescript';
 import 'brace/mode/javascript';
 import 'brace/mode/html';
 import 'brace/mode/php';
 import 'brace/snippets/php';
 import 'brace/ext/language_tools.js';
+import 'brace/ext/beautify.js';
 declare var ace: any;
 
 
@@ -57,6 +58,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('#edfs') edfs: any;
   @ViewChild('#edfsv') edfsv: any;
   @ViewChild('editor') editor;
+  @ViewChild('editorSubEntity') editorSubEntity;
 
 
   jsPlumbInstance;
@@ -157,7 +159,9 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   tokerolen: any = "";
   userIsAdmin: any = false;
   editortext: any = "";
+  modulehelp: any = "";
   options: any = { maxLines: 1000, printMargin: false, enableBasicAutocompletion: true, enableLiveAutocompletion: true };
+  actionCustomCodeSelection:any = 1;
 
   constructor(private authService: NbAuthService, private menuService: ManagerService, private userService: UserService, private fb: FormBuilder, private msgService: MessageService, private selectedMdule: ModulestateService, private NgxSmartModalServices: NgxSmartModalService) {
     this.initializeMessgae();
@@ -222,8 +226,8 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
 
     this.jsPlumbInstance = jsPlumb.getInstance(this.userService);
-    let editor = this.editor.getEditor();
 
+    let editor = this.editor.getEditor();
 
 
     editor.setOptions({
@@ -231,7 +235,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     editor.getSession().setMode("ace/mode/php");
-    editor.setTheme("ace/theme/textmate");
+    editor.setTheme("ace/theme/twilight");
     editor.setOptions({
       enableBasicAutocompletion: true,
       enableSnippets: true,
@@ -239,25 +243,280 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
 
-    var staticWordCompleter = {
+
+    var entitieWordCompleter = {
       getCompletions: function (editor, session, pos, prefix, callback) {
-        console.log(session,pos,prefix,callback)
-        var wordList = ["appBundle::Article", "appBundle::ArticleBcn", "appBundle::Bcn"];
+
+        var wordList = this.entities;
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: 'AppBundle:' + word.entityEntity,
+            value: 'AppBundle:' + word.entityEntity,
+            meta: "Entité base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+    var entitieWordCompleterField = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var fieldlist = [];
+
+        for(let ent of this.entities){
+          for(let fld of ent.fields){
+            fieldlist.push(fld.fieldEntityName);
+          }
+        }
+
+        var wordList = fieldlist;
+
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: word,
+            value:  word,
+            meta: "champ base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+
+
+
+    var entityManagerWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var wordList = [
+          "$em->createQuery(",
+          "$em->createQueryBuilder(",
+          "$em->persist(",
+          "$em->flush(",
+          "",
+          "",
+          "",
+          "",
+          "",
+        ];
+
         callback(null, wordList.map(function (word) {
           return {
             caption: word,
             value: word,
-            meta: "static"
+            meta: "Entité base de donnée"
           };
         }));
 
-      }
+      }.bind(this)
     }
 
 
-    editor.completers = [staticWordCompleter]
+    editor.completers.push (entitieWordCompleter);
+    editor.completers.push (entityManagerWordCompleter);
+    editor.completers.push (entitieWordCompleterField);
 
   }
+
+  async setUpEditor(){
+
+    console.log("yes yes")
+
+    await this.delay(500);
+
+    let editor = this.editor.getEditor();
+
+
+    editor.setOptions({
+      enableBasicAutocompletion: true
+    });
+
+    editor.getSession().setMode("ace/mode/php");
+    editor.setTheme("ace/theme/twilight");
+    editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+
+
+
+    var entitieWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var wordList = this.entities;
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: 'AppBundle:' + word.entityEntity,
+            value: 'AppBundle:' + word.entityEntity,
+            meta: "Entité base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+
+    var entitieWordCompleterField = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var fieldlist = [];
+
+        for(let ent of this.entities){
+          for(let fld of ent.fields){
+            fieldlist.push(fld.fieldEntityName);
+          }
+        }
+
+        var wordList = fieldlist;
+
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: word,
+            value:  word,
+            meta: "champ base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+    var entityManagerWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var wordList = [
+          "$em->createQuery(",
+          "$em->createQueryBuilder(",
+          "$em->persist(",
+          "$em->flush(",
+          "",
+          "",
+          "",
+          "",
+          "",
+        ];
+
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: word,
+            value: word,
+            meta: "Entité base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+
+    editor.completers.push (entitieWordCompleter);
+    editor.completers.push (entityManagerWordCompleter);
+    editor.completers.push (entitieWordCompleterField);
+
+
+  }
+
+
+  async setUpEditorSubEntity(){
+
+    console.log("yes yes ")
+
+    await this.delay(500);
+
+    let editor = this.editorSubEntity.getEditor();
+
+
+    editor.setOptions({
+      enableBasicAutocompletion: true
+    });
+
+    editor.getSession().setMode("ace/mode/php");
+    editor.setTheme("ace/theme/twilight");
+    editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+
+
+
+    var entitieWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var wordList = this.entities;
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: 'AppBundle:' + word.entityEntity,
+            value: 'AppBundle:' + word.entityEntity,
+            meta: "Entité base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+
+    var entitieWordCompleterField = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var fieldlist = [];
+
+        for(let ent of this.entities){
+          for(let fld of ent.fields){
+            fieldlist.push(fld.fieldEntityName);
+          }
+        }
+
+        var wordList = fieldlist;
+
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: word,
+            value:  word,
+            meta: "champ base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+    var entityManagerWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+
+        var wordList = [
+          "$em->createQuery(",
+          "$em->createQueryBuilder(",
+          "$em->persist(",
+          "$em->flush(",
+          "",
+          "",
+          "",
+          "",
+          "",
+        ];
+
+        callback(null, wordList.map(function (word) {
+          return {
+            caption: word,
+            value: word,
+            meta: "Entité base de donnée"
+          };
+        }));
+
+      }.bind(this)
+    }
+
+
+    editor.completers.push (entitieWordCompleter);
+    editor.completers.push (entityManagerWordCompleter);
+    editor.completers.push (entitieWordCompleterField);
+
+
+  }
+
+   delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+   }
 
 
   ngOnInit() {
@@ -309,8 +568,13 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
       actionNextStep: [''],
       actionFromStep: [''],
       actionDissociateSubEntity: [''],
+      actionCustomCodeMode: [''],
+      actionInnerCustomCode: [''],
       actionDissociateSubbtnName: [''],
-      actionSubentityNextStepOndissociation: ['']
+      actionSubentityNextStepOndissociation: [''],
+      actionAffectation: [''],
+      actionSubActions: [''],
+      actionDeleteSubEntity: ['']
     });
 
     this.listformcontrole = this.fb.group({
@@ -384,6 +648,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribea))
       .subscribe((modules) => {
         this.setModule(modules);
+
       });
   }
 
@@ -396,7 +661,14 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadLink(true)
     this.loadSchema()
     this.getAllconnection(false)
+    this.getModuleHelper()
 
+  }
+
+  getModuleHelper(){
+    var param = {};
+    param.module = this.module;
+    this.menuService.getModuleHelper(param).subscribe(module => this.modulehelp = module[0].moduleHelp);
   }
 
   onRoleOptionClick($event) {
@@ -450,6 +722,12 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     var param = {};
     this.actionform.actionEntity = this.selectedProcess.gestEntity[0].entityId;
     param.process = this.selectedProcess;
+    this.actionform.actionInnerCustomCode = this.selectedActions.actionInnerCustomCode;
+    this.actionform.actionSubCheckCustomCode = this.selectedActions.actionSubCheckCustomCode;
+    this.actionform.actionInnerCustomCodeBeforMainPersist = this.selectedActions.actionInnerCustomCodeBeforMainPersist;
+    this.actionform.actionInnerCustomCodeafterMainPersist = this.selectedActions.actionInnerCustomCodeafterMainPersist;
+    this.actionform.actionInnerCustomCodeBeforSubPersist = this.selectedActions.actionInnerCustomCodeBeforSubPersist;
+    this.actionform.actionInnerCustomCodeAfterSubPersist = this.selectedActions.actionInnerCustomCodeAfterSubPersist;
     param.action = this.actionform;
     this.menuService.addAction(param).subscribe(action => this.loadProcess());
 
@@ -1425,11 +1703,14 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     $event.stopPropagation();
     this.paramPanel = 'action';
+
     if (this.selectedSteps.length == 0) {
 
       this.EntityAction = [];
 
       this.selectedActions = action;
+
+
 
       var mainEnityId = this.selectedProcess.gestEntity[0].entityId;
 
@@ -1448,7 +1729,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.EntityAction.push(action.actionSubEntity);
       }
-
+      console.log("hedhi",this.EntityAction , action);
       this.onUpdateAction(action);
 
     } else {
@@ -1476,14 +1757,20 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }
 
+    console.log("fin",this.selectedActions);
     console.log(this.selectedActions);
 
 
   }
 
+  getActionStatus(){
+     return typeof this.selectedActions.actionId !== 'undefined';
+  }
+
   onUpdateAction(act) {
 
     this.actionform = new Action();
+
     this.actionform = JSON.parse(JSON.stringify(act));
     if (typeof act.actionExistingSubEntity !== 'undefined') {
       if (act.actionExistingSubEntity !== 1) {
@@ -1505,6 +1792,7 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.actionform.actionNextStep = this.copyObj(act.actionNextStep.stepId);
       }
     }
+
 
 
     if (act.actionType == 1) {
@@ -2398,6 +2686,15 @@ export class ManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return false;
+
+  }
+
+  saveModuleHelper(){
+
+    var param = {};
+    param.module = this.module
+    param.modulehelp = this.modulehelp;
+    this.menuService.savemodulehelp(param).subscribe(list => this.loadProcess());
 
   }
 

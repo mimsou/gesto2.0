@@ -77,7 +77,8 @@ ligne Details :
             <tr *ngFor="let datasub of actionsubdatacollection"  (click)="onUpdateSubEntiy(datasub)">
                 <td *ngFor="let flds of subfield"><span *ngIf="flds.fieldNature !== 1">{{datasub[flds.fieldEntityName]}}</span> <span *ngIf="flds.fieldNature == 1">{{datasub[flds.fieldEntityName].data[0].text}}</span></td>
                 <td *ngIf="action.actionDissociateSubEntity == 1"><button type="button" nbButton size="xsmall" (click)="openDissciationModal(datasub[subentity.entityKey])" >{{action.actionDissociateSubbtnName}}</button></td>
-            </tr>
+                <td *ngIf="action.actionDeleteSubEntity == 1"><button type="button" nbButton size="xsmall" (click)="deleteSubEntity(datasub,$event)" > Supprimer </button></td>
+              </tr>
             </tbody>
 
         </table>

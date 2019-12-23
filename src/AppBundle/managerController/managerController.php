@@ -30,7 +30,7 @@ use JMS\Serializer\Handler\StdClassHandler;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\View\View;
+use FOS\RestBundle\View\View as View;
 use AppBundle\Entity\GestMenu;
 use AppBundle\Menu;
 use Nette\PhpGenerator\PhpNamespace;
@@ -59,7 +59,7 @@ class managerController extends FOSRestController
     private $foundedRoute = array();
     private $routecount = 0;
     private $currentProcess;
-
+    
 
     /**
      * @Rest\Get("/role/{id}")
@@ -621,14 +621,14 @@ class managerController extends FOSRestController
     {
         $data = new GestRole();
 
-        $param = json_decode($request->getContent());  
+        $param = json_decode($request->getContent());
 
         $module = $this->getDoctrine()->getRepository('AppBundle:GestModule')->find($param->module);
 
         foreach ($param as $key => $prm) {
 
-            if($key == "roleLibelle"){
-                if($prm == "ROLE_ADMIN"){
+            if ($key == "roleLibelle") {
+                if ($prm == "ROLE_ADMIN") {
                     return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("Designation du role non authorisé"), "Access-Control-Expose-Headers" => "message"));
                 }
             }
@@ -642,12 +642,12 @@ class managerController extends FOSRestController
 
         $data->setRoleModule($module);
 
-        if($param->userIsAdmin){
+        if ($param->userIsAdmin) {
             $data->setRoleGroup(2);
-        }else{
+        } else {
             $data->setRoleGroup(3);
         }
-        
+
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
@@ -1636,7 +1636,7 @@ class managerController extends FOSRestController
             ->andWhere('x.stepFromProcess =:proc')->setParameter('proc', $id)->getQuery()->getArrayResult();
 
         $qb = $em->createQueryBuilder();
-        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'ro', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba', 'ri')->from('AppBundle:GestActions', 'k')
+        $process[0]["actions"] = $qb->select('k', 'yp', 'xa', 'ry', 'ro', 'l', 'y', 'z', 'h', 'ha', 'n', 'j', 'b', 'ba', 'ri', 'xx')->from('AppBundle:GestActions', 'k')
             ->leftJoin('k.actionAcreg', 'yp')
             ->leftJoin('k.role', 'xa')
             ->leftJoin('k.actionSubentityNextStepOndissociation', 'ro')
@@ -1646,6 +1646,7 @@ class managerController extends FOSRestController
             ->leftJoin('k.actionSubEntity', 'y')
             ->leftJoin('k.actionSubProcess', 'z')
             ->leftJoin('k.updateField', 'h')
+            ->leftJoin('k.actionCustomCode', 'xx')
             ->leftJoin('h.updateFieldId', 'ha')
             ->leftJoin('ha.fieldEntity', 'n')
             ->leftJoin('k.viewField', 'j')
@@ -1845,6 +1846,9 @@ class managerController extends FOSRestController
     public function postActionAction(Request $request)
     {
 
+
+
+
         $em = $this->getDoctrine()->getManager();
 
         $param = json_decode($request->getContent());
@@ -1862,6 +1866,13 @@ class managerController extends FOSRestController
         $action->setActionName($param->action->actionName);
         $action->setActionBtnName($param->action->actionName);
         $action->setActionType($param->action->actionType);
+        $action->setActionCustomCodeMode($param->action->actionCustomCodeMode);
+        $action->setActionInnerCustomCode($param->action->actionInnerCustomCode);
+        $action->setActionInnerCustomCodeBeforMainPersist($param->action->actionInnerCustomCodeBeforMainPersist);
+        $action->setActionInnerCustomCodeAfterMainPersist($param->action->actionInnerCustomCodeafterMainPersist);
+        $action->setActionInnerCustomCodeBeforSubPersist($param->action->actionInnerCustomCodeBeforSubPersist);
+        $action->setActionInnerCustomCodeAfterSubPersist($param->action->actionInnerCustomCodeAfterSubPersist);
+        $action->setActionSubCheckCustomCode($param->action->actionSubCheckCustomCode);
         $action->setActionEntity($this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->action->actionEntity));
 
         if ($param->action->actionType !== "4") {
@@ -1874,6 +1885,7 @@ class managerController extends FOSRestController
         if ((($param->action->actionLevelDepth == 2 || $param->action->actionIsmainLevel == 0) && $param->action->actionExistingSubEntity == 0) || $param->action->actionIsmainLevel == 0) {
             $action->setActionSubEntity($this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->action->actionSubEntity));
             $action->setActionExistingSubEntity($param->action->actionExistingSubEntity);
+            $action->setActionDeleteSubEntity($param->action->actionDeleteSubEntity); 
         }
 
         if (($param->action->actionLevelDepth == 2 || $param->action->actionIsmainLevel == 0) && $param->action->actionExistingSubEntity == 1) {
@@ -1910,10 +1922,50 @@ class managerController extends FOSRestController
 
         $em->persist($process);
 
+
         $em->flush();
+
+        $id = $action->getActionId();
+
+        $idprocess = $process->getProcessId();
+
+
+        $file =  $idprocess . "_" . $id . "_" . "1" . ".php";
+        $this->save_custom_code_file($file, $param->action->actionInnerCustomCodeBeforMainPersist);
+
+        $file =  $idprocess . "_" . $id . "_" . "2" . ".php";
+        $this->save_custom_code_file($file, $param->action->actionInnerCustomCodeafterMainPersist);
+
+        $file =  $idprocess . "_" . $id . "_" . "3" . ".php";
+        $this->save_custom_code_file($file, $param->action->actionInnerCustomCodeBeforSubPersist);
+
+        $file =  $idprocess . "_" . $id . "_" . "4" . ".php";
+        $this->save_custom_code_file($file, $param->action->actionInnerCustomCodeAfterSubPersist);
+
+        $file =  $idprocess . "_" . $id . "_" . "5" . ".php";
+        $this->save_custom_code_file($file, $param->action->actionInnerCustomCode);
+
+        $file =  $idprocess . "_" . $id . "_check_" . "6" . ".php";
+        $this->save_custom_code_file($file, $param->action->actionSubCheckCustomCode);
+
+
+
 
         //return new View("Action Added Successfully", Response::HTTP_OK);
         return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("l'action " . $action->getActionName() . " a été ajouté avec success"), "Access-Control-Expose-Headers" => "message"));
+    }
+
+
+    private function save_custom_code_file($file, $content)
+    {
+
+        $path = __DIR__ . '/../../../customcode/';
+
+        $handle = fopen($path . $file, 'w') or die('Cannot open file:  ' . $classfile);
+
+        fwrite($handle, $content);
+
+        fclose($handle);
     }
 
     /**
@@ -3310,232 +3362,389 @@ class managerController extends FOSRestController
 
         $param = json_decode($request->getContent());
 
+        $mode = $param->action->actionCustomCodeMode;
+
+        $path = __DIR__ . '/../../../customcode/';
+
+
+        $rootapp = $this->get('kernel')->getRootDir();
+        $rootdir = str_replace("\app", "", $rootapp);
+        $dirpath = $rootdir . "/src/AppBundle/Entity";
+        $this->requireAllFileClass($dirpath);
+
         $action = $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($param->action->actionId);
 
         $this->currentProcess = $action->getActionProcess();
 
-        $entity = $param->entity->entityEntity;
+        $processId = $this->currentProcess->getProcessId();
 
-        $class = "\AppBundle\Entity\\" . $entity;
+        $module = $this->currentProcess->getProcessModule();
 
-        if (property_exists($param, "dimfilter")) {
-            $dimfilter = $param->dimfilter;
-        } else {
-            $dimfilter = array();
+        $moduleName = $module->getModuleLibelle();
+
+        $mouduleId= $module->getModuleId();
+
+        $moduleName  = $this->sainitisenames($moduleName);
+
+        $fileModuleHelper = "helper" ."_".$mouduleId."_".$moduleName. ".php";
+
+        if (file_exists($path .  $fileModuleHelper)) {
+
+            include($path .  $fileModuleHelper);
+
+            $className = $moduleName.$mouduleId;
+
+            $helper = new  $className();
+             
         }
 
-        foreach ($param->action->actionAcreg as $regle) {
+ 
 
-            $acexp = $regle->acregExpression;
-            $message = $regle->acregErrormessage;
+        $actionId = $action->getActionId();
+        
+        $message = array(
+            "exist" => false,
+            "message" => ""
+        );
 
-            $params = new \stdClass();
-            $params->expression = $acexp;
-            $params->type = "boolean";
-            $params->entity = $param->entity;
+        if ($mode == 0 ||  $mode == 2) {
 
-            $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
 
-            if (!$rs) {
-                $res = json_encode(array("error" => true, "message" => $message));
-                return new View($res, Response::HTTP_OK);
+            $entity = $param->entity->entityEntity;
+
+            $class = "\AppBundle\Entity\\" . $entity;
+
+            if (property_exists($param, "dimfilter")) {
+                $dimfilter = $param->dimfilter;
+            } else {
+                $dimfilter = array();
             }
-            
-        }
+
+            foreach ($param->action->actionAcreg as $regle) {
+
+                $acexp = $regle->acregExpression;
+                $messages = $regle->acregErrormessage;
+
+                $params = new \stdClass();
+                $params->expression = $acexp;
+                $params->type = "boolean";
+                $params->entity = $param->entity;
+
+                $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
+           
+                if (!$rs) {
+                    $res = json_encode(array("error" => true, "message" => $messages));
+                    return new View($res, Response::HTTP_OK);
+                    die();
+                }
+            }
+
+            if (file_exists($path . $processId . "_" . $actionId . "_" . "1" . ".php")) {
+                include($path . $processId . "_" . $actionId . "_" . "1" . ".php"); 
+            }
 
 
-        if ($param->action->actionType == 1) {
+            if ($param->action->actionType == 1) {
 
-            $entityAction = new $class;
+                $entityAction = new $class;
+            } else {
 
-        } else {
+                $arr = (array) $param->data;
 
-            $arr = (array) $param->data;
+                $arrfirst = (array) $param->firstData;
 
-            $arrfirst = (array) $param->firstData;
+                $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arrfirst[$param->entity->entityKey]);
+            }
 
-            $entityAction = $this->getDoctrine()->getRepository('AppBundle:' . $entity)->find($arrfirst[$param->entity->entityKey]);
+            if ($param->action->actionIsmainLevel == 1) {
 
-        }
+                foreach ($param->data as $key => $prm) {
 
-        if ($param->action->actionIsmainLevel == 1) {
+                    $functionName = "set" . ucfirst($key);
 
-            foreach ($param->data as $key => $prm) {
+                    if (method_exists($entityAction, $functionName)) {
 
-                $functionName = "set" . ucfirst($key);
+                        $field = $this->_get_field_nature($param->action->viewField, $key);
 
-                if (method_exists($entityAction, $functionName)) {
+                        if ($field->fieldNature !== 1) {
 
-                    $field = $this->_get_field_nature($param->action->viewField, $key);
+                            $params = $this->_field_update_param($param->action->updateField, $key);
+                            if (!empty($prm) || $params->updateExpression !== "") {
 
-                    if ($field->fieldNature !== 1) {
+                              
 
-                        $params = $this->_field_update_param($param->action->updateField, $key);
-                        if (!empty($prm) || $params->updateExpression !== "") {
+                                if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
 
-                            if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
-
-                                if (isset($params->updateExpression)) {
-                                    if ($params->updateExpression !== "") {
-                                        $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
-                                        $entityAction->$functionName($rs);
+                                    if (isset($params->updateExpression)) {
+                                        if ($params->updateExpression !== "") {
+                                            $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
+                                            $entityAction->$functionName($rs);
+                                        } else {
+                                            $entityAction->$functionName($prm);
+                                        }
                                     } else {
                                         $entityAction->$functionName($prm);
                                     }
-                                } else {
-                                    $entityAction->$functionName($prm);
-                                }
-                            } else if (($this->_get_field_type($param->action->viewField, $key) == "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
-
-                                if ($params->updateExpression !== null) {
-                                    $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
-                                    $entityAction->$functionName($rs);
-                                } else {
-                                    $entityAction->$functionName(new \DateTime($prm));
-                                }
-                            }
-                        }
-                    } else {
-
-                        if (!empty($prm->value)) {
-                            if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
-                                $entityAction->$functionName($this->getDoctrine()->getRepository('AppBundle:' . $field->fieldTargetEntity)->find($prm->value));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($param->action->actionNextStep->stepId !== null) {
-            if ($param->entity->entityStepperField !== null || $param->entity->entityStepperField !== "") {
-                $functionName = "set" . ucfirst($param->entity->entityStepperField);
-                if (method_exists($entityAction, $functionName)) {
-                    $entityAction->$functionName($param->action->actionNextStep->stepId);
-                }
-            }
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($entityAction);
-
-        $subentity = $param->subentity->entityEntity;
-
-        $subentityprocess = $param->subprocess[0]->gestEntity[0]->entityEntity;
-
-        if ($subentity !== null) {
-
-            $relation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findBy(
-                array(
-                    "relationEntitie" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->subentity->entityId),
-                    "relationsTable" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId)
-                )
-            );
-
-            $relationKeyName = $relation[0]->getRelationKey();
-
-            $mainEntityIdName = $param->entity->entityKey;
-
-            $subclass = "\AppBundle\Entity\\" . $subentity;
-
-
-            foreach ($param->subdata as $subdatas) {
-
-                if ($param->action->actionType == 1) {
-                    $subEentityAction = new $subclass;
-                } else {
-                    $arrsub = (array) $subdatas;
-
-                    if ($arrsub[$param->subentity->entityKey] !== null && $arrsub[$param->subentity->entityKey] !== "") {
-                        $subEentityAction = $this->getDoctrine()->getRepository('AppBundle:' . $subentity)->find($arrsub[$param->subentity->entityKey]);
-                    } else {
-                        $subEentityAction = new $subclass;
-                    }
-                }
-
-                $functionName = "set" . ucfirst($relationKeyName);
-
-
-                if (method_exists($subEentityAction, $functionName)) {
-                    $subEentityAction->$functionName($entityAction);
-                }
-
-                foreach ($subdatas as $key => $subdata) {
-                    $functionName = "set" . ucfirst($key);
-                    if (method_exists($subEentityAction, $functionName)) {
-                        $field = $this->_get_field_nature($param->action->viewField, $key);
-                        if ($field->fieldNature !== 1) {
-                            if (!empty($subdata)) {
-                                if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
-                                    $subEentityAction->$functionName($subdata);
                                 } else if (($this->_get_field_type($param->action->viewField, $key) == "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
-                                    $subEentityAction->$functionName(new \DateTime($subdata));
+
+                                    if ($params->updateExpression !== null) {
+                                        $rs = $this->_getExpressionRestult($params, $param, $dimfilter);
+                                        $entityAction->$functionName($rs);
+                                    } else {
+                                        $entityAction->$functionName(new \DateTime($prm));
+                                    }
                                 }
                             }
                         } else {
 
-                            if (!empty($subdata->value)) {
+                            if (!empty($prm->value)) {
                                 if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
-                                    $subEentityAction->$functionName($this->getDoctrine()->getRepository('AppBundle:' . $field->fieldTargetEntity)->find($subdata->value));
+                                    $entityAction->$functionName($this->getDoctrine()->getRepository('AppBundle:' . $field->fieldTargetEntity)->find($prm->value));
                                 }
                             }
                         }
                     }
                 }
-
-                $em = $this->getDoctrine()->getManager();
-
-                $em->persist($subEentityAction);
-
             }
 
-            $em->flush();
+            if ($param->action->actionNextStep->stepId !== null) {
+                if ($param->entity->entityStepperField !== null || $param->entity->entityStepperField !== "") {
+                    $functionName = "set" . ucfirst($param->entity->entityStepperField);
+                    if (method_exists($entityAction, $functionName)) {
+                        $entityAction->$functionName($param->action->actionNextStep->stepId);
+                    }
+                }
+            }
 
-        } else if ($subentityprocess !== null) {
+            $em = $this->getDoctrine()->getManager();
 
-            $em->flush();
+            $em->persist($entityAction);
 
-            $ent = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->subprocess[0]->gestEntity[0]->entityId);
 
-            $entKey = $ent->getEntityKey();
+            if (file_exists($path . $processId . "_" . $actionId . "_" . "2" . ".php")) {
+                include($path . $processId . "_" . $actionId . "_" . "2" . ".php");
+            }
 
-            $relation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findBy(
-                array(
-                    "relationEntitie" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->subprocess[0]->gestEntity[0]->entityId),
-                    "relationsTable" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId)
-                )
-            );
 
-            $relationKeyName = $relation[0]->getRelationKey();
-            //$relationInverseKeyName = $relation[0]->getRelationInverseKey();
+            $subentity = $param->subentity->entityEntity;
 
-            foreach ($param->subdata as $subdatas) {
+            $subentityprocess = $param->subprocess[0]->gestEntity[0]->entityEntity;
 
-                $subdataarray = (array) $subdatas;
-                $subdataarray_a = (array) $subdataarray[0];
-                $id = $subdataarray_a[$entKey];
+            if ($subentity !== null) {
 
-                $subentdat = $this->getDoctrine()->getRepository('AppBundle:' . $ent->getEntityEntity())->find($id);
-                $functionName = "set" . ucfirst($relationKeyName);
+                $relation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findBy(
+                    array(
+                        "relationEntitie" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->subentity->entityId),
+                        "relationsTable" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId)
+                    )
+                );
 
-                if (method_exists($subentdat, $functionName)) {
-                    $subentdat->$functionName($entityAction);
+                $relationKeyName = $relation[0]->getRelationKey();
+
+                $mainEntityIdName = $param->entity->entityKey;
+
+                $subclass = "\AppBundle\Entity\\" . $subentity;
+
+
+                foreach ($param->subdata as $subdatas) {
+
+                    if (file_exists($path . $processId . "_" . $actionId . "_" . "3" . ".php")) {
+                        include($path . $processId . "_" . $actionId . "_" . "3" . ".php");
+                    }
+
+                    if ($param->action->actionType == 1) {
+                        $subEentityAction = new $subclass;
+                    } else {
+                        $arrsub = (array) $subdatas;
+
+                        if ($arrsub[$param->subentity->entityKey] !== null && $arrsub[$param->subentity->entityKey] !== "") {
+                            $subEentityAction = $this->getDoctrine()->getRepository('AppBundle:' . $subentity)->find($arrsub[$param->subentity->entityKey]);
+                        } else {
+                            $subEentityAction = new $subclass;
+                        }
+                    }
+
+                    $functionName = "set" . ucfirst($relationKeyName);
+
+
+                    if (method_exists($subEentityAction, $functionName)) {
+                        $subEentityAction->$functionName($entityAction);
+                    }
+
+                    foreach ($subdatas as $key => $subdata) {
+                        $functionName = "set" . ucfirst($key);
+                        if (method_exists($subEentityAction, $functionName)) {
+                            $field = $this->_get_field_nature($param->action->viewField, $key);
+                            if ($field->fieldNature !== 1) {
+                                if (!empty($subdata)) {
+                                    if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
+                                        $subEentityAction->$functionName($subdata);
+                                    } else if (($this->_get_field_type($param->action->viewField, $key) == "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
+                                        $subEentityAction->$functionName(new \DateTime($subdata));
+                                    }
+                                }
+                            } else {
+
+                                if (!empty($subdata->value)) {
+                                    if (($this->_get_field_type($param->action->viewField, $key) !== "datetime") && $this->_field_updateble($param->action->updateField, $key)) {
+                                        $subEentityAction->$functionName($this->getDoctrine()->getRepository('AppBundle:' . $field->fieldTargetEntity)->find($subdata->value));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $em = $this->getDoctrine()->getManager();
+
+                    $em->persist($subEentityAction);
+
+                    if (file_exists($path . $processId . "_" . $actionId . "_" . "4" . ".php")) {
+                        include($path . $processId . "_" . $actionId . "_" . "4" . ".php");
+                    }
                 }
 
+                //$em->flush();
+
+            } else if ($subentityprocess !== null) {
+
+                //$em->flush();
+
+                $ent = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->subprocess[0]->gestEntity[0]->entityId);
+
+                $entKey = $ent->getEntityKey();
+
+                $relation = $this->getDoctrine()->getRepository('AppBundle:GestRelations')->findBy(
+                    array(
+                        "relationEntitie" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->subprocess[0]->gestEntity[0]->entityId),
+                        "relationsTable" => $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId)
+                    )
+                );
+
+                $relationKeyName = $relation[0]->getRelationKey();
+                //$relationInverseKeyName = $relation[0]->getRelationInverseKey();
+
+                foreach ($param->subdata as $subdatas) {
+
+                    if (file_exists($path . $processId . "_" . $actionId . "_" . "3" . ".php")) {
+                        include($path . $processId . "_" . $actionId . "_" . "3" . ".php");
+                    }
+
+                    $subdataarray = (array) $subdatas;
+                    $subdataarray_a = (array) $subdataarray[0];
+                    $id = $subdataarray_a[$entKey];
+
+                    $subentdat = $this->getDoctrine()->getRepository('AppBundle:' . $ent->getEntityEntity())->find($id);
+                    $functionName = "set" . ucfirst($relationKeyName);
+
+                    if (method_exists($subentdat, $functionName)) {
+                        $subentdat->$functionName($entityAction);
+                    }
+
+                    if (file_exists($path . $processId . "_" . $actionId . "_" . "4" . ".php")) {
+                        include($path . $processId . "_" . $actionId . "_" . "4" . ".php");
+                    }
+                }
+
+                //$em->flush();
+
+            } else {
+
+                //$em->flush();
+
             }
 
+            if ($mode == 2) {
+                if (file_exists($path . $processId . "_" . $actionId . "_" . "5" . ".php")) {
+                    include($path . $processId . "_" . $actionId . "_" . "5" . ".php");
+                }
+            }
+
+            if ($message["exist"]) {
+                return new View("ok", Response::HTTP_FORBIDDEN, array("message" => utf8_decode($message["message"]), "Access-Control-Expose-Headers" => "message"));
+                die();
+            }
+
+
             $em->flush();
 
-        } else {
+
+            $res = json_encode(array("error" => false, "message" => "entity updated Successfully"));
+            return new View($res, Response::HTTP_OK);
+
+        } else if ($mode == 1) {
+
+            if (file_exists($path . $processId . "_" . $actionId . "_" . "5" . ".php")) {
+                include($path . $processId . "_" . $actionId . "_" . "5" . ".php");
+            }
+
+            if ($message["exist"]) {
+                return new View("ok", Response::HTTP_FORBIDDEN, array("message" => utf8_decode($message["message"]), "Access-Control-Expose-Headers" => "message"));
+                die();
+            }
+
 
             $em->flush();
 
+            $res = json_encode(array("error" => false, "message" => "entity updated Successfully"));
+            return new View($res, Response::HTTP_OK);
         }
+    }
 
-        $res = json_encode(array("error" => false, "message" => "entity updated Successfully"));
-        return new View($res, Response::HTTP_OK);
+    /**
+     * @Rest\Patch("/savemodulehelp")
+     */
+    public function savemodulehelpAction(Request $request)
+    {
+        $param = json_decode($request->getContent());
 
+        $em = $this->getDoctrine()->getManager();
+
+       $mouduleId =  $param->module;
+
+       $mouduleHelp =  $param->modulehelp;
+
+        $module = $this->getDoctrine()->getRepository('AppBundle:GestModule')->find($mouduleId);
+
+        $moduleName = $module->getModuleLibelle();
+
+        $module->setModuleHelp($mouduleHelp);
+
+        $em->persist($module);
+
+        $em->flush();
+
+        $moduleName  = $this->sainitisenames($moduleName);
+
+        $classHelperContent = "<?php  "."\n \n";
+
+        $classHelperContent .= " class $moduleName"."$mouduleId"."{"."\n \n";
+
+        $classHelperContent .= $this->sainitiseInnerCode($mouduleHelp);  
+
+        $classHelperContent .="\n \n";
+
+        $classHelperContent .= "}";
+
+       
+
+        $file = "helper" ."_".$mouduleId."_".$moduleName. ".php";
+
+        $this->save_custom_code_file($file, $classHelperContent);
+
+        return new View("ok", Response::HTTP_OK, array("message" => utf8_decode("les functions du module ".$module->getModuleLibelle()." on été mises à jour"), "Access-Control-Expose-Headers" => "message"));
+
+
+    }
+
+    private function sainitisenames($name){
+        return strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','',  $name));
+    }
+
+    private function sainitiseInnerCode($code)
+    {
+        $removedPhpWrap = preg_replace('/^<\?php(.*)(\?>)?$/s', '$1', $code);
+        $removedPhpWrap = preg_replace('/^<\?(.*)(\?>)?$/s', '$1', $removedPhpWrap);
+        return $removedPhpWrap;
     }
 
     private function _getExpressionRestult($param, $req, $dim, $id = null)
@@ -4392,6 +4601,70 @@ class managerController extends FOSRestController
 
 
     /**
+     * @Rest\Patch("/checksubdata")
+     */
+
+    public
+    function getChecksubdataAction(Request $request)
+    {
+
+        $param = json_decode($request->getContent());
+
+        $mode = $param->action->actionCustomCodeMode;
+
+        $action = $this->getDoctrine()->getRepository('AppBundle:GestActions')->find($param->action->actionId);
+
+        $this->currentProcess = $action->getActionProcess();
+
+        $path = __DIR__ . '/../../../customcode/';
+
+        $module = $this->currentProcess->getProcessModule();
+
+        $moduleName = $module->getModuleLibelle();
+
+        $mouduleId= $module->getModuleId();
+
+        $moduleName  = $this->sainitisenames($moduleName);
+
+        $fileModuleHelper = "helper" ."_".$mouduleId."_".$moduleName. ".php";
+
+        if (file_exists($path .  $fileModuleHelper)) {
+            include($path .  $fileModuleHelper);
+        }
+
+        $className = $moduleName.$mouduleId;
+
+        $helper = new  $className();
+
+        $processId  =  $this->currentProcess->getProcessId();
+
+        $id = $action->getActionId();
+
+        $file =  $processId  . "_" . $id . "_check_" . "6" . ".php";
+
+        $em = $this->getDoctrine()->getManager();
+
+        $message = array(
+            "exist" => false,
+            "message" => ""
+        );
+
+
+        if (file_exists($path .  $file)) {
+            require $path .  $file;
+        }
+
+        if ($message["exist"]) {
+         
+            return new View("ok", Response::HTTP_FORBIDDEN, array("message" => utf8_decode($message["message"]), "Access-Control-Expose-Headers" => "message"));
+            die();
+        }
+
+        return new View("ok", Response::HTTP_OK);
+    }
+
+
+    /**
      * @Rest\Patch("/combo")
      */
 
@@ -4755,7 +5028,7 @@ class managerController extends FOSRestController
         $classfile = ucfirst($param->className) . '.php';
 
         $handle = fopen($path . $classfile, 'w') or die('Cannot open file:  ' . $classfile);
-      
+
         fwrite($handle, "<?php \n" . $namespace);
 
         fclose($handle);
@@ -4768,7 +5041,6 @@ class managerController extends FOSRestController
         $ret .= $this->updateDatabase();
 
         return new View($ret, Response::HTTP_OK);
-        
     }
 
 
@@ -4782,7 +5054,7 @@ class managerController extends FOSRestController
         set_time_limit(0);
 
         $param = json_decode($request->getContent());
-
+    
         $em = $this->getDoctrine()->getManager();
 
         $mainEntity = $entity = $this->getDoctrine()->getRepository('AppBundle:GestEntity')->find($param->entity->entityId);
@@ -5193,12 +5465,12 @@ class managerController extends FOSRestController
 
     public function getAllModuleAction()
     {
-         
+
 
         $user = $this->getCurrentUser();
 
         $iduser = $user->getId();
- 
+
 
         $em = $this->getDoctrine()->getManager();
 
@@ -5477,15 +5749,45 @@ class managerController extends FOSRestController
     }
 
 
+    
+
+    
+    /**
+     * @Rest\Patch("/getmodulehelper")
+     */
+
+     
+    public function patchGetmodulehelperAction(Request $request)
+
+    {
+
+        $param = json_decode($request->getContent()); 
+
+        
+
+        $em = $this->getDoctrine()->getManager();
+
+        $qba = $em->createQueryBuilder();
+
+        $qba->select('u')
+            ->from('AppBundle:GestModule', 'u')->where("u.moduleId = :moduleid")->setParameter('moduleid',  $param->module);
+
+        $module = $qba->getQuery()->getArrayResult();
+ 
+       return $module;
+    }
+
+
     /**
      * @Rest\Patch("/addconnectionconfig/")
      */
+
 
     public function patchAddconnectionconfigAction(Request $request)
 
     {
 
-        $param = json_decode($request->getContent());
+        $param = json_decode($request->getContent()); 
 
         $em = $this->getDoctrine()->getManager();
 
@@ -5517,6 +5819,8 @@ class managerController extends FOSRestController
 
         $dirpath = $this->getDirPath($param);
 
+
+
         $this->requireAllFileClass($dirpath);
 
 
@@ -5540,6 +5844,22 @@ class managerController extends FOSRestController
 
     private function requireAllFileClass($paths)
     {
+        foreach (scandir($paths) as $filename) {
+            $path = $paths . '/' . $filename;
+            if (is_file($path)) {
+                require_once $path;
+            }
+        }
+    }
+
+
+    public function requireDefaulClass()
+    {
+      
+        $rootapp = $this->get('kernel')->getRootDir();
+        $rootdir = str_replace("\app", "", $rootapp);
+        $paths = $rootdir . "/src/AppBundle/Entity";
+  
         foreach (scandir($paths) as $filename) {
             $path = $paths . '/' . $filename;
             if (is_file($path)) {
@@ -5751,7 +6071,6 @@ class managerController extends FOSRestController
         $rs = $this->getQueryExpressionVal($rs, $expression);
 
         return $rs;
-
     }
 
     private function getQueryExpressionVal($rs, $exp)
@@ -5762,15 +6081,14 @@ class managerController extends FOSRestController
                 $rss = $val;
             }
         }
- 
-        $exp = str_replace("&this",'$rss',$exp);
- 
-        if($exp!=""){
-          return eval($exp);
-        }else{
-          return $rs;
+
+        $exp = str_replace("&this", '$rss', $exp);
+
+        if ($exp != "") {
+            return eval($exp);
+        } else {
+            return $rs;
         }
-     
     }
 
 
@@ -5855,7 +6173,7 @@ class managerController extends FOSRestController
 
     public function patchIsadminAction(Request $request)
     {
-  
+
         $param = json_decode($request->getContent());
 
         $roles = $param->role;
@@ -5864,18 +6182,17 @@ class managerController extends FOSRestController
 
         $qb = $em->createQueryBuilder();
 
-        $restresult = $qb->select('a') ->from('AppBundle:GestRole', 'a')
-        ->where($qb->expr()->in('a.' . "roleLibelle", '?1'))->setParameter(1, $roles)
-        ->getQuery()->getArrayResult();
+        $restresult = $qb->select('a')->from('AppBundle:GestRole', 'a')
+            ->where($qb->expr()->in('a.' . "roleLibelle", '?1'))->setParameter(1, $roles)
+            ->getQuery()->getArrayResult();
 
-       foreach($restresult as $rs){
-           if($rs["roleGroup"] == 2 || $rs["roleGroup"] == 1){
-               return true;
-           }
-       }
-        
-      return false;
+        foreach ($restresult as $rs) {
+            if ($rs["roleGroup"] == 2 || $rs["roleGroup"] == 1) {
+                return true;
+            }
+        }
 
+        return false;
     }
 
 

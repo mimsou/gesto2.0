@@ -30,6 +30,14 @@ class GestModule
      */
     private $moduleLibelle;
 
+    
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="module_help", type="string", length=99999999, nullable=true)
+     */
+    private $moduleHelp;
+
     /**
      * @var string|null
      *
@@ -336,6 +344,18 @@ class GestModule
                 $connection->setConnectionModule(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getModuleHelp(): ?string
+    {
+        return $this->moduleHelp;
+    }
+
+    public function setModuleHelp(?string $moduleHelp): self
+    {
+        $this->moduleHelp = $moduleHelp;
 
         return $this;
     }

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
 use AppBundle\Entity\Article;
 
-class articleController extends FOSRestController {
+class articleController extends FOSRestController {  
 
     /**
      * @Rest\Get("/article")
